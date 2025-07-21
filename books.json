@@ -15,7 +15,10 @@
     "image": {
       "link": "https://m.media-amazon.com/images/I/81U7rDDkknL.jpg"
     },
-    "link": "https://www.amazon.de/How-Recognize-Cults-Protecting-Manipulation-ebook/dp/B0DNBSQXXL"
+    "link": "https://www.amazon.de/How-Recognize-Cults-Protecting-Manipulation-ebook/dp/B0DNBSQXXL",
+    "links": {
+      "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929"
+    }
   },
   {
     "asin": "B0DY7K1148",
@@ -33,7 +36,10 @@
     "image": {
       "link": "https://m.media-amazon.com/images/I/81jq2h0h4mL.jpg"
     },
-    "link": "https://www.amazon.de/Key-Enlightened-English-Dirk-Werner-ebook/dp/B0DV56DC5P"
+    "link": "https://www.amazon.de/Key-Enlightened-English-Dirk-Werner-ebook/dp/B0DV56DC5P",
+    "links": {
+      "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929"
+    }
   },
   {
     "asin": "B0DT7F2VVS",
@@ -42,7 +48,10 @@
     "image": {
       "link": "https://m.media-amazon.com/images/I/714ARxqExxL.jpg"
     },
-    "link": "https://www.amazon.de/Instructions-Staying-Matrix-Forever-English-ebook/dp/B0DT7F2VVS"
+    "link": "https://www.amazon.de/Instructions-Staying-Matrix-Forever-English-ebook/dp/B0DT7F2VVS",
+    "links": {
+      "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929"
+    }
   },
   {
     "asin": "B0DS9Y8W5V",
@@ -69,7 +78,10 @@
     "image": {
       "link": "https://m.media-amazon.com/images/I/81AoFGBLsmL.jpg"
     },
-    "link": "https://www.amazon.de/Deadly-Echo-Seelmanns-Mysterious-English-ebook/dp/B0DJL6VXDJ"
+    "link": "https://www.amazon.de/Deadly-Echo-Seelmanns-Mysterious-English-ebook/dp/B0DJL6VXDJ",
+    "links": {
+      "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929"
+    }
   },
   {
     "asin": "B0DJY7S893",
@@ -78,7 +90,10 @@
     "image": {
       "link": "https://m.media-amazon.com/images/I/712Ox66YbtL.jpg"
     },
-    "link": "https://www.amazon.de/Legacy-Lodges-Seelmanns-Mysterious-English-ebook/dp/B0DJY7S893"
+    "link": "https://www.amazon.de/Legacy-Lodges-Seelmanns-Mysterious-English-ebook/dp/B0DJY7S893",
+    "links": {
+      "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929"
+    }
   },
   {
     "asin": "B0DHG8WCDK",
@@ -141,7 +156,10 @@
     "image": {
       "link": "https://m.media-amazon.com/images/I/81LKWtbbD0L.jpg"
     },
-    "link": "https://www.amazon.de/American-Shadows-Hecates-Intervention-Unofficial-ebook/dp/B0DCTZF166"
+    "link": "https://www.amazon.de/American-Shadows-Hecates-Intervention-Unofficial-ebook/dp/B0DCTZF166",
+    "links": {
+      "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929"
+    }
   },
   {
     "asin": "B0DC28N8WZ",
@@ -159,7 +177,10 @@
     "image": {
       "link": "https://m.media-amazon.com/images/I/81k1jQeXgbL.jpg"
     },
-    "link": "https://www.amazon.de/Nanogenesis-Superhumans-English-Dirk-Werner-ebook/dp/B0CW1JS3B5"
+    "link": "https://www.amazon.de/Nanogenesis-Superhumans-English-Dirk-Werner-ebook/dp/B0CW1JS3B5",
+    "links": {
+      "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929"
+    }
   },
   {
     "asin": "B0D9J2X8D3",
@@ -168,7 +189,10 @@
     "image": {
       "link": "https://m.media-amazon.com/images/I/71D0-qTLOuL.jpg"
     },
-    "link": "https://www.amazon.de/Self-Love-Over-Perfection-Overcoming-Narcissism-ebook/dp/B0D9J2X8D3"
+    "link": "https://www.amazon.de/Self-Love-Over-Perfection-Overcoming-Narcissism-ebook/dp/B0D9J2X8D3",
+    "links": {
+      "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929"
+    }
   },
   {
     "asin": "B0D9762V4T",
@@ -222,7 +246,10 @@
     "image": {
       "link": "https://m.media-amazon.com/images/I/81S1MQ4bhkL.jpg"
     },
-    "link": "https://www.amazon.de/Battle-Within-Guide-Overcoming-Struggles-ebook/dp/B0CNPY5PJH"
+    "link": "https://www.amazon.de/Battle-Within-Guide-Overcoming-Struggles-ebook/dp/B0CNPY5PJH",
+    "links": {
+      "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929"
+    }
   },
   {
     "asin": "B0C9ZYHD9T",
@@ -250,5 +277,19 @@
       "link": "https://m.media-amazon.com/images/I/71RnxxsHRyL.jpg"
     },
     "link": "https://www.amazon.de/Malen-gegen-Schmerz-Ausgangsmotiven-Traumabew%C3%A4ltigung/dp/B0D7Q4BF74"
+  },
+  {
+    "asin": "B0DGRS4PQW",
+    "title": "The Simulation Chronicles",
+    "author": "Dirk Werner",
+    "image": {
+      "link": "https://m.media-amazon.com/images/I/81KlVMcAm0L._SY522_.jpg"
+    },
+    "links": {
+      "amazon_de": "https://www.amazon.de/Simulation-Chronicles-English-Dirk-Werner-ebook/dp/B0DGRS4PQW?ref_=ast_author_dp",
+      "amazon_us": "https://www.amazon.com/-/de/dp/B0DGRS4PQW/ref=sr_1_1?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=NLE4QBKNMFSZ&dib=eyJ2IjoiMSJ9.heWsGzIhvoGxOjQTXgwmZtLfUAHzFuKMAqu4sDOaOB21JbnFO7Oqhj1YHOiDwgQW.QUYkgPKNYUxU7Ya6AsqE8Y0Yyj4PPFBKKQwIu0K-IXQ&dib_tag=se&keywords=The+Simulation+Chronicles&qid=1753019010&s=digital-text&sprefix=the+simulation+chronicles%2Cdigital-text%2C293&sr=1-1#detailBullets_feature_div",
+      "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929",
+      "books2read": "https://www.books2read.com/Dirk-Werner-Author"
+    }
   }
 ]

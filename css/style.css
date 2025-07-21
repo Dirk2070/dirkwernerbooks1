@@ -443,6 +443,17 @@ body {
     color: white;
 }
 
+.audiobook-button.apple-books {
+  background-color: #9333ea;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  display: inline-block;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
 .book-link:hover {
     transform: translateY(-2px);
     opacity: 0.9;

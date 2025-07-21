@@ -18,6 +18,7 @@ const translations = {
         'Bei Apple Books': 'Bei Apple Books',
         'Bei Books2Read': 'Bei Books2Read',
         'Hörbuch': 'Hörbuch',
+        'Hörbuch bei Apple Books': '🎧 Hörbuch bei Apple Books',
         
         // Placeholders
         'Suche nach Titel...': 'Suche nach Titel...',
@@ -46,6 +47,7 @@ const translations = {
         'Bei Apple Books': 'On Apple Books',
         'Bei Books2Read': 'On Books2Read',
         'Hörbuch': 'Audiobook',
+        'Hörbuch bei Apple Books': '🎧 Experience the Audiobook on Apple',
         
         // Placeholders
         'Suche nach Titel...': 'Search by title...',
@@ -99,18 +101,29 @@ function classifyGenre(title) {
 // Generate purchase links
 function generatePurchaseLinks(book) {
     const links = [];
-    
-    // Amazon DE (always available from the JSON)
-    if (book.link) {
+    // Amazon DE
+    if (book.links && book.links.amazon_de) {
+        links.push({
+            url: book.links.amazon_de,
+            text: translations[currentLanguage]['Auf Amazon DE ansehen'],
+            class: 'amazon-de'
+        });
+    } else if (book.link) {
         links.push({
             url: book.link,
             text: translations[currentLanguage]['Auf Amazon DE ansehen'],
             class: 'amazon-de'
         });
     }
-    
-    // Amazon US (convert DE link to US)
-    if (book.link) {
+    // Amazon US
+    if (book.links && book.links.amazon_us) {
+        links.push({
+            url: book.links.amazon_us,
+            text: translations[currentLanguage]['Auf Amazon US ansehen'],
+            class: 'amazon-com'
+        });
+    } else if (book.link) {
+        // Ersetze amazon.de durch amazon.com für US-Link
         const usLink = book.link.replace('amazon.de', 'amazon.com');
         links.push({
             url: usLink,
@@ -118,33 +131,99 @@ function generatePurchaseLinks(book) {
             class: 'amazon-com'
         });
     }
-    
-    // Apple Books (construct link)
-    const appleSearchTitle = encodeURIComponent(book.title.replace(/[^\w\s]/gi, ''));
-    links.push({
-        url: `https://books.apple.com/search?term=${appleSearchTitle}%20dirk%20werner`,
-        text: translations[currentLanguage]['Bei Apple Books'],
-        class: 'apple-books'
-    });
-    
-    // Books2Read (construct link)
-    links.push({
-        url: 'https://books2read.com/dirk-werner-author/',
-        text: translations[currentLanguage]['Bei Books2Read'],
-        class: 'books2read'
-    });
-    
+    // Apple Books
+    if (book.links && book.links.apple_books) {
+        links.push({
+            url: book.links.apple_books,
+            text: translations[currentLanguage]['Bei Apple Books'],
+            class: 'apple-books'
+        });
+    } else if (!book.links) {
+        links.push({
+            url: 'https://books.apple.com/de/author/dirk-werner/id316714929',
+            text: translations[currentLanguage]['Bei Apple Books'],
+            class: 'apple-books'
+        });
+    }
+    // Books2Read
+    if (book.links && book.links.books2read) {
+        links.push({
+            url: book.links.books2read,
+            text: translations[currentLanguage]['Bei Books2Read'],
+            class: 'books2read'
+        });
+    } else if (!book.links) {
+        links.push({
+            url: 'https://books2read.com/dirk-werner-author/',
+            text: translations[currentLanguage]['Bei Books2Read'],
+            class: 'books2read'
+        });
+    }
+    // Der Platzhalter-Link 'Hörbuch erleben' wird entfernt!
     return links;
 }
 
+// Funktion für IP-basierte geolokationsbasierte Apple Books-Links
+async function setAudiobookLinksByCountry() {
+  const fallback = "https://books.apple.com/de/author/dirk-werner/id316714929?see-all=audio-books";
+  const linksByCountry = {
+    US: "https://books.apple.com/us/author/dirk-werner/id316714929?see-all=audio-books",
+    GB: "https://books.apple.com/gb/author/dirk-werner/id316714929?see-all=audio-books",
+    DE: fallback
+  };
+
+  let link = fallback;
+
+  try {
+    const res = await fetch("https://ipapi.co/json/");
+    const data = await res.json();
+    const countryCode = (data.country_code || "").toUpperCase();
+    if (linksByCountry[countryCode]) {
+      link = linksByCountry[countryCode];
+    }
+  } catch (e) {
+    console.warn("Geolocation failed. Using fallback link.");
+  }
+
+  // Alle Buttons auf der Seite setzen
+  document.querySelectorAll('.btn-audiobook-link').forEach(btn => {
+    btn.setAttribute('href', link);
+  });
+
+  // Auch Hero-Button setzen
+  const heroBtn = document.querySelector('.btn-audiobook-hero');
+  if (heroBtn) {
+    heroBtn.setAttribute('href', link);
+    // Zusätzlich: Event Listener entfernen und neu hinzufügen
+    heroBtn.removeEventListener('click', heroBtn._audiobookClickHandler);
+    heroBtn._audiobookClickHandler = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.open(link, '_blank', 'noopener,noreferrer');
+    };
+    heroBtn.addEventListener('click', heroBtn._audiobookClickHandler);
+    console.log('Hero button updated with link:', link);
+  } else {
+    console.warn('Hero button not found in DOM');
+  }
+  
+  return link;
+}
+
 // Create book card HTML
-function createBookCard(book) {
+async function createBookCard(book) {
     const genre = classifyGenre(book.title);
     const links = generatePurchaseLinks(book);
     
     const linksHTML = links.map(link => 
         `<a href="${link.url}" target="_blank" class="book-link ${link.class}">${link.text}</a>`
     ).join('');
+    
+    // Hörbuch-Button mit IP-basierter Geolocation
+    let audiobookHTML = '';
+    if (book.hasAudiobook && book.links && book.links.apple_books) {
+        audiobookHTML = `<a class="book-link audiobook btn-audiobook-link" href="#" target="_blank" rel="noopener noreferrer">${translations[currentLanguage]['Hörbuch bei Apple Books']}</a>`;
+    }
     
     return `
         <div class="book-card fade-in" data-genre="${genre}" data-title="${book.title.toLowerCase()}">
@@ -156,6 +235,7 @@ function createBookCard(book) {
                 <div class="book-links">
                     ${linksHTML}
                 </div>
+                ${audiobookHTML}
             </div>
         </div>
     `;
@@ -166,10 +246,19 @@ async function loadBooks() {
     try {
         const response = await fetch('books.json');
         allBooks = await response.json();
+        // Filterfunktion: hasAudiobook setzen
+        allBooks = allBooks.map(book => {
+            if (book.links && book.links.apple_books) {
+                book.hasAudiobook = true;
+            } else {
+                book.hasAudiobook = false;
+            }
+            return book;
+        });
         filteredBooks = [...allBooks];
         
-        displayFeaturedBooks();
-        displayAllBooks();
+        await displayFeaturedBooks();
+        await displayAllBooks();
         
     } catch (error) {
         console.error('Error loading books:', error);
@@ -179,17 +268,19 @@ async function loadBooks() {
 }
 
 // Display featured books (first 6)
-function displayFeaturedBooks() {
+async function displayFeaturedBooks() {
     const featuredContainer = document.getElementById('featuredBooks');
     const featuredBooks = allBooks.slice(0, 6);
     
-    featuredContainer.innerHTML = featuredBooks.map(book => createBookCard(book)).join('');
+    const bookCards = await Promise.all(featuredBooks.map(book => createBookCard(book)));
+    featuredContainer.innerHTML = bookCards.join('');
 }
 
 // Display all books
-function displayAllBooks() {
+async function displayAllBooks() {
     const allBooksContainer = document.getElementById('allBooks');
-    allBooksContainer.innerHTML = filteredBooks.map(book => createBookCard(book)).join('');
+    const bookCards = await Promise.all(filteredBooks.map(book => createBookCard(book)));
+    allBooksContainer.innerHTML = bookCards.join('');
     
     // Add fade-in animation
     setTimeout(() => {
@@ -229,7 +320,7 @@ function searchBooks(query) {
 }
 
 // Language switching functionality
-function switchLanguage(lang) {
+async function switchLanguage(lang) {
     currentLanguage = lang;
     
     // Update active language button
@@ -265,8 +356,11 @@ function switchLanguage(lang) {
     document.documentElement.lang = lang;
     
     // Reload books to update button texts
-    displayFeaturedBooks();
-    displayAllBooks();
+    await displayFeaturedBooks();
+    await displayAllBooks();
+    
+    // Update audiobook links after language switch
+    await setAudiobookLinksByCountry();
 }
 
 // Smooth scrolling for navigation links
@@ -274,12 +368,16 @@ function initSmoothScrolling() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+            const href = this.getAttribute('href');
+            // Nur für interne Links (die mit # beginnen)
+            if (href && href.startsWith('#')) {
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             }
         });
     });
@@ -310,8 +408,8 @@ function initGenreFilter() {
 // Initialize language switching
 function initLanguageSwitching() {
     document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            switchLanguage(this.dataset.lang);
+        btn.addEventListener('click', async function() {
+            await switchLanguage(this.dataset.lang);
         });
     });
 }
@@ -357,7 +455,7 @@ function initResponsiveNav() {
 }
 
 // Initialize everything when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     // Show loading animation
     showLoading('featuredBooks');
     showLoading('allBooks');
@@ -372,7 +470,17 @@ document.addEventListener('DOMContentLoaded', function() {
     initResponsiveNav();
     
     // Set initial language
-    switchLanguage('de');
+    await switchLanguage('de');
+    
+    // Set audiobook links by country (mit Verzögerung für Hero-Button)
+    setTimeout(async () => {
+        await setAudiobookLinksByCountry();
+    }, 100);
+    
+    // Zusätzliche Sicherheit: Hero-Button nach 500ms nochmal prüfen
+    setTimeout(async () => {
+        await setAudiobookLinksByCountry();
+    }, 500);
     
     console.log('Dirk Werner Author Website initialized successfully!');
 });

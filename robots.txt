@@ -29,4 +29,7 @@ User-agent: Bytespider
 Disallow: /
 
 # Sitemap-Hinweis für alle Bots
+Sitemap: https://dirkwernerbooks.com/sitemap.xml
+
+# Allow Google access to sitemap
 Sitemap: https://dirkwernerbooks.com/sitemap.xml 

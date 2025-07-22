@@ -9,12 +9,7 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-# Blockiere nur unerwünschte Bots
-User-agent: meta-externalagent
-Disallow: /
-
-User-agent: CCBot
-Disallow: /
+# Alle Bots erlaubt
 
 # Sitemap-Hinweis für alle Bots
 Sitemap: https://dirkwernerbooks.com/sitemap.xml

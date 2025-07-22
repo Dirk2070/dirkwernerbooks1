@@ -17,4 +17,6 @@ Sitemap: https://dirkwernerbooks.com/sitemap.xml
 # Allow Google access to sitemap
 Sitemap: https://dirkwernerbooks.com/sitemap.xml
 
+Sitemap: https://dirkwernerbooks.com/sitemap.xml
+
 Sitemap: https://dirkwernerbooks.com/sitemap.xml 

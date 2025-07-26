@@ -3,10 +3,19 @@
     "asin": "B0CW1G3XR6",
     "title": "Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke",
     "author": "Dirk Werner",
+    "description": "Ein praktischer Ratgeber für den Umgang mit Eifersucht in Beziehungen. Hilft dabei, innere Stärke zu bewahren und gesunde Grenzen zu setzen.",
     "image": {
       "link": "https://m.media-amazon.com/images/I/7120r0YodfL.jpg"
     },
-    "link": "https://www.amazon.de/Umgang-mit-Eifers%C3%BCchtigen-bewahrst-innere-ebook/dp/B0CW1G3XR6"
+    "link": "https://www.amazon.de/Umgang-mit-Eifers%C3%BCchtigen-bewahrst-innere-ebook/dp/B0CW1G3XR6",
+    "links": {
+      "amazon_de": "https://www.amazon.de/Umgang-mit-Eifers%C3%BCchtigen-bewahrst-innere-ebook/dp/B0CW1G3XR6",
+      "amazon_us": "https://www.amazon.com/Umgang-mit-Eifers%C3%BCchtigen-bewahrst-innere-ebook/dp/B0CW1G3XR6",
+      "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929",
+      "books2read": "https://books2read.com/Dirk-Werner-Author"
+    },
+    "language": "de",
+    "bookFormat": "EBook"
   },
   {
     "asin": "B0DNBSQXXL",

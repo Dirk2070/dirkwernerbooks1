@@ -18,7 +18,7 @@ const translations = {
         'Bei Apple Books': 'Bei Apple Books',
         'Bei Books2Read': 'Bei Books2Read',
         'Hörbuch': 'Hörbuch',
-        'Hörbuch bei Apple Books': '🎧 Hörbuch bei Apple Books',
+        'Hörbuch bei Apple Books': 'Hörbuch bei Apple Books',
         
         // Placeholders
         'Suche nach Titel...': 'Suche nach Titel...',
@@ -47,7 +47,7 @@ const translations = {
         'Bei Apple Books': 'On Apple Books',
         'Bei Books2Read': 'On Books2Read',
         'Hörbuch': 'Audiobook',
-        'Hörbuch bei Apple Books': '🎧 Experience the Audiobook on Apple',
+        'Hörbuch bei Apple Books': 'Experience the Audiobook on Apple',
         
         // Placeholders
         'Suche nach Titel...': 'Search by title...',
@@ -98,6 +98,33 @@ function classifyGenre(title) {
     return 'psychology'; // Default to psychology
 }
 
+// Generate Schema.org Book markup
+function generateBookSchema(book) {
+    const schema = {
+        "@context": "https://schema.org",
+        "@type": "Book",
+        "name": book.title,
+        "author": {
+            "@type": "Person",
+            "name": book.author || "Dirk Werner"
+        },
+        "bookFormat": book.bookFormat || "EBook",
+        "inLanguage": book.language || "de",
+        "description": book.description || "",
+        "offers": {
+            "@type": "Offer",
+            "url": book.links?.amazon_de || book.link,
+            "priceCurrency": "EUR"
+        }
+    };
+    
+    if (book.asin) {
+        schema.isbn = book.asin;
+    }
+    
+    return schema;
+}
+
 // Generate purchase links
 function generatePurchaseLinks(book) {
     const links = [];
@@ -105,13 +132,13 @@ function generatePurchaseLinks(book) {
     if (book.links && book.links.amazon_de) {
         links.push({
             url: book.links.amazon_de,
-            text: translations[currentLanguage]['Auf Amazon DE ansehen'],
+            text: `📚 ${translations[currentLanguage]['Auf Amazon DE ansehen']}`,
             class: 'amazon-de'
         });
     } else if (book.link) {
         links.push({
             url: book.link,
-            text: translations[currentLanguage]['Auf Amazon DE ansehen'],
+            text: `📚 ${translations[currentLanguage]['Auf Amazon DE ansehen']}`,
             class: 'amazon-de'
         });
     }
@@ -119,7 +146,7 @@ function generatePurchaseLinks(book) {
     if (book.links && book.links.amazon_us) {
         links.push({
             url: book.links.amazon_us,
-            text: translations[currentLanguage]['Auf Amazon US ansehen'],
+            text: `🛒 ${translations[currentLanguage]['Auf Amazon US ansehen']}`,
             class: 'amazon-com'
         });
     } else if (book.link) {
@@ -127,7 +154,7 @@ function generatePurchaseLinks(book) {
         const usLink = book.link.replace('amazon.de', 'amazon.com');
         links.push({
             url: usLink,
-            text: translations[currentLanguage]['Auf Amazon US ansehen'],
+            text: `🛒 ${translations[currentLanguage]['Auf Amazon US ansehen']}`,
             class: 'amazon-com'
         });
     }
@@ -135,27 +162,27 @@ function generatePurchaseLinks(book) {
     if (book.links && book.links.apple_books) {
         links.push({
             url: book.links.apple_books,
-            text: translations[currentLanguage]['Bei Apple Books'],
+            text: `📱 ${translations[currentLanguage]['Bei Apple Books']}`,
             class: 'apple-books'
         });
     } else if (!book.links) {
         links.push({
             url: 'https://books.apple.com/de/author/dirk-werner/id316714929',
-            text: translations[currentLanguage]['Bei Apple Books'],
+            text: `📱 ${translations[currentLanguage]['Bei Apple Books']}`,
             class: 'apple-books'
         });
     }
-    // Books2Read
+    // Books2Read - immer hinzufügen
     if (book.links && book.links.books2read) {
         links.push({
             url: book.links.books2read,
-            text: translations[currentLanguage]['Bei Books2Read'],
+            text: `🌍 ${translations[currentLanguage]['Bei Books2Read']}`,
             class: 'books2read'
         });
-    } else if (!book.links) {
+    } else {
         links.push({
             url: 'https://books2read.com/dirk-werner-author/',
-            text: translations[currentLanguage]['Bei Books2Read'],
+            text: `🌍 ${translations[currentLanguage]['Bei Books2Read']}`,
             class: 'books2read'
         });
     }
@@ -210,32 +237,54 @@ async function setAudiobookLinksByCountry() {
   return link;
 }
 
+// Generate aria-label for accessibility
+function getAriaLabel(linkClass, bookTitle) {
+    const labels = {
+        'amazon-de': `Buch "${bookTitle}" bei Amazon Deutschland ansehen`,
+        'amazon-com': `Buch "${bookTitle}" bei Amazon USA ansehen`,
+        'apple-books': `Buch "${bookTitle}" bei Apple Books ansehen`,
+        'books2read': `Buch "${bookTitle}" bei Books2Read ansehen`
+    };
+    return labels[linkClass] || `Buch "${bookTitle}" ansehen`;
+}
+
 // Create book card HTML
 async function createBookCard(book) {
     const genre = classifyGenre(book.title);
     const links = generatePurchaseLinks(book);
     
-    const linksHTML = links.map(link => 
-        `<a href="${link.url}" target="_blank" class="book-link ${link.class}">${link.text}</a>`
-    ).join('');
+    // Shop-Links (Amazon DE, Amazon US, Apple Books, Books2Read)
+    const shopLinks = links.filter(link => link.class !== 'audiobook');
+    const shopLinksHTML = shopLinks.map(link => {
+        const ariaLabel = getAriaLabel(link.class, book.title);
+        return `<a href="${link.url}" target="_blank" class="book-link ${link.class}" aria-label="${ariaLabel}">${link.text}</a>`;
+    }).join('');
     
     // Hörbuch-Button mit IP-basierter Geolocation
     let audiobookHTML = '';
     if (book.hasAudiobook && book.links && book.links.apple_books) {
-        audiobookHTML = `<a class="book-link audiobook btn-audiobook-link" href="#" target="_blank" rel="noopener noreferrer">${translations[currentLanguage]['Hörbuch bei Apple Books']}</a>`;
+        const ariaLabel = `Hörbuch "${book.title}" bei Apple Books anhören`;
+        audiobookHTML = `<a class="book-link audiobook btn-audiobook-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="${ariaLabel}">🎧 ${translations[currentLanguage]['Hörbuch bei Apple Books']}</a>`;
     }
+    
+    // Generate Schema.org markup
+    const schema = generateBookSchema(book);
+    const schemaScript = `<script type="application/ld+json">${JSON.stringify(schema)}</script>`;
     
     return `
         <div class="book-card fade-in" data-genre="${genre}" data-title="${book.title.toLowerCase()}">
+            ${schemaScript}
             <div class="book-image">
-                <img src="${book.image.link}" alt="${book.title}" loading="lazy">
+                <img src="${book.image.link}" alt="Buchcover: ${book.title} von Dirk Werner" loading="lazy">
             </div>
             <div class="book-content">
                 <h3 class="book-title">${book.title}</h3>
+                <p class="book-author">${book.author || 'Dirk Werner'}</p>
+                ${book.description ? `<p class="book-description">${book.description}</p>` : ''}
                 <div class="book-links">
-                    ${linksHTML}
+                    ${shopLinksHTML}
                 </div>
-                ${audiobookHTML}
+                ${audiobookHTML ? `<div class="audiobook-links">${audiobookHTML}</div>` : ''}
             </div>
         </div>
     `;

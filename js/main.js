@@ -383,10 +383,11 @@ async function createBookCard(book) {
     let hasDetailPage = false;
     
     // Robust title comparison for "Umgang mit Eifersüchtigen"
-    const normalizedTitle = book.title.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+    const titleString = getLocalizedText(book.title, currentLang);
+    const normalizedTitle = titleString.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
     const eifersuchtKeywords = ['eifersüchtigen', 'eifersucht', 'umgang mit eifersüchtigen'];
     
-    console.log('🔍 [Debug] Checking title:', book.title);
+    console.log('🔍 [Debug] Checking title:', titleString);
     console.log('🔍 [Debug] Normalized title:', normalizedTitle);
     console.log('🔍 [Debug] Keywords to check:', eifersuchtKeywords);
     console.log('🔍 [Debug] User Agent:', navigator.userAgent);
@@ -398,19 +399,19 @@ async function createBookCard(book) {
     if (hasKeyword) {
         slug = "umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke";
         hasDetailPage = true;
-        console.log('🔗 [Link] Book has detail page:', book.title, '→', slug);
+        console.log('🔗 [Link] Book has detail page:', titleString, '→', slug);
         
         // Log decision for debugging
         if (window.linkDebugger) {
             window.linkDebugger.logLinkDecision(
-                book.title, 
+                titleString, 
                 hasDetailPage, 
                 `/buecher/${slug}`, 
                 'Eifersucht book detected'
             );
         }
         
-        console.log('🔗 [Link] Final decision for', book.title, ':', {
+        console.log('🔗 [Link] Final decision for', titleString, ':', {
             hasDetailPage,
             detailLink: `/buecher/${slug}`,
             userAgent: navigator.userAgent,
@@ -420,19 +421,19 @@ async function createBookCard(book) {
         // All other books use Books2Read fallback
         slug = null;
         hasDetailPage = false;
-        console.log('🔗 [Link] Book uses Books2Read fallback:', book.title);
+        console.log('🔗 [Link] Book uses Books2Read fallback:', titleString);
         
         // Log decision for debugging
         if (window.linkDebugger) {
             window.linkDebugger.logLinkDecision(
-                book.title, 
+                titleString, 
                 hasDetailPage, 
                 'https://books2read.com/Dirk-Werner-Author', 
                 'No detail page available'
             );
         }
         
-        console.log('🔗 [Link] Final decision for', book.title, ':', {
+        console.log('🔗 [Link] Final decision for', titleString, ':', {
             hasDetailPage,
             detailLink: 'https://books2read.com/Dirk-Werner-Author',
             userAgent: navigator.userAgent,
@@ -446,34 +447,34 @@ async function createBookCard(book) {
     
     // Validate URLs before creating HTML
     if (hasDetailPage && (!slug || slug.length === 0)) {
-        console.warn('⚠️ [Link] Invalid slug detected, falling back to Books2Read:', book.title);
+        console.warn('⚠️ [Link] Invalid slug detected, falling back to Books2Read:', titleString);
         hasDetailPage = false;
     }
     
     // FORCE consistency: If this is the Eifersucht book, always use detail page
-    const isEifersuchtBook = book.title.toLowerCase().includes('eifersüchtigen') || 
-                            book.title.toLowerCase().includes('eifersucht') ||
-                            book.title.toLowerCase().includes('umgang mit eifersüchtigen');
+    const isEifersuchtBook = titleString.toLowerCase().includes('eifersüchtigen') || 
+                            titleString.toLowerCase().includes('eifersucht') ||
+                            titleString.toLowerCase().includes('umgang mit eifersüchtigen');
     
     if (isEifersuchtBook) {
         hasDetailPage = true;
-        console.log('🔧 [Link] FORCING detail page for Eifersucht book:', book.title);
+        console.log('🔧 [Link] FORCING detail page for Eifersucht book:', titleString);
     }
     
     // CRITICAL FIX: Only set data-fallback="true" for books WITHOUT detail pages
     const shouldUseFallback = !hasDetailPage;
-    console.log('🔧 [Link] Book:', book.title, 'hasDetailPage:', hasDetailPage, 'shouldUseFallback:', shouldUseFallback);
+    console.log('🔧 [Link] Book:', titleString, 'hasDetailPage:', hasDetailPage, 'shouldUseFallback:', shouldUseFallback);
     
     return `
-        <div class="book-card fade-in" data-genre="${genre}" data-title="${book.title.toLowerCase()}" data-asin="${book.asin || ''}" data-has-audiobook="${hasAudiobook}" data-has-detail-page="${hasDetailPage}">
+        <div class="book-card fade-in" data-genre="${genre}" data-title="${titleString.toLowerCase()}" data-asin="${book.asin || ''}" data-has-audiobook="${hasAudiobook}" data-has-detail-page="${hasDetailPage}">
             ${schemaScript}
             <div class="book-image">
                 ${hasDetailPage ? 
-                    `<a href="${detailPageUrl}" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren">
-                        <img src="${book.image.link}" alt="Buchcover: ${book.title}" loading="lazy">
+                    `<a href="${detailPageUrl}" class="book-detail-link" aria-label="Mehr über ${titleString} erfahren">
+                        <img src="${book.image.link}" alt="Buchcover: ${titleString}" loading="lazy">
                     </a>` :
-                    `<a href="${books2readUrl}" target="_blank" rel="noopener noreferrer" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren" data-fallback="true">
-                        <img src="${book.image.link}" alt="Buchcover: ${book.title}" loading="lazy">
+                    `<a href="${books2readUrl}" target="_blank" rel="noopener noreferrer" class="book-detail-link" aria-label="Mehr über ${titleString} erfahren" data-fallback="true">
+                        <img src="${book.image.link}" alt="Buchcover: ${titleString}" loading="lazy">
                     </a>`
                 }
             </div>
@@ -488,10 +489,10 @@ async function createBookCard(book) {
                 <p class="book-description">${getLocalizedText(book.description, currentLang)}</p>
                 <div class="book-links">
                     ${hasDetailPage ? 
-                        `<a href="${detailPageUrl}" class="book-link detail-link" aria-label="Mehr über ${book.title} erfahren">
+                        `<a href="${detailPageUrl}" class="book-link detail-link" aria-label="Mehr über ${titleString} erfahren">
                             📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
                         </a>` :
-                        `<a href="${books2readUrl}" target="_blank" rel="noopener noreferrer" class="book-link detail-link" aria-label="Mehr über ${book.title} erfahren" data-fallback="true">
+                        `<a href="${books2readUrl}" target="_blank" rel="noopener noreferrer" class="book-link detail-link" aria-label="Mehr über ${titleString} erfahren" data-fallback="true">
                             📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
                         </a>`
                     }
@@ -592,7 +593,7 @@ async function loadBooks() {
                             const normalizedTitle = bookTitle.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
                             
                             shouldHaveAudiobook = window.appleAudiobookList.audiobooks.some(book => {
-                                const whitelistTitle = book.title.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+                                const whitelistTitle = getLocalizedText(book.title, window.currentLanguage || 'de').toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
                                 return whitelistTitle === normalizedTitle || whitelistTitle.includes(normalizedTitle) || normalizedTitle.includes(whitelistTitle);
                             });
                         }
@@ -675,15 +676,15 @@ function removeDuplicateBooks(books) {
             const newIsEbook = book.bookFormat === 'EBook' || !book.bookFormat;
             
             if (newIsEbook && !existingIsEbook) {
-                console.log(`📚 [Duplicate] Replacing "${existingBook.title}" with "${book.title}" (E-Book preferred)`);
+                console.log(`📚 [Duplicate] Replacing "${getLocalizedText(existingBook.title, window.currentLanguage || 'de')}" with "${getLocalizedText(book.title, window.currentLanguage || 'de')}" (E-Book preferred)`);
                 bookMap.set(baseTitle, book);
             } else if (existingIsEbook && !newIsEbook) {
-                console.log(`📚 [Duplicate] Skipping "${book.title}" (E-Book preferred)`);
+                console.log(`📚 [Duplicate] Skipping "${getLocalizedText(book.title, window.currentLanguage || 'de')}" (E-Book preferred)`);
             } else if (newLinksCount > existingLinksCount) {
-                console.log(`📚 [Duplicate] Replacing "${existingBook.title}" with "${book.title}" (more links: ${newLinksCount} vs ${existingLinksCount})`);
+                console.log(`📚 [Duplicate] Replacing "${getLocalizedText(existingBook.title, window.currentLanguage || 'de')}" with "${getLocalizedText(book.title, window.currentLanguage || 'de')}" (more links: ${newLinksCount} vs ${existingLinksCount})`);
                 bookMap.set(baseTitle, book);
             } else {
-                console.log(`📚 [Duplicate] Skipping "${book.title}" (fewer links: ${newLinksCount} vs ${existingLinksCount})`);
+                console.log(`📚 [Duplicate] Skipping "${getLocalizedText(book.title, window.currentLanguage || 'de')}" (fewer links: ${newLinksCount} vs ${existingLinksCount})`);
             }
         }
     });

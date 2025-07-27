@@ -622,6 +622,24 @@ a[href*="books2read"] img:not([src*="arrow"]):not([src*="check"]):not([src*="fal
     display: none !important;
 }
 
+/* Optimize audiobook button styling for consistent length */
+.book-link.audiobook {
+    min-width: 200px;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    padding: 10px 15px;
+}
+
+/* Ensure consistent button sizing across languages */
+.book-link.audiobook[data-lang="en"] {
+    min-width: 220px;
+}
+
+.book-link.audiobook[data-lang="de"] {
+    min-width: 200px;
+}
+
 /* PRESERVE other SVG icons (like book icons, etc.) */
 .book-link svg:not([data-fallback="true"]):not(.fallback-icon),
 .book-detail-link svg:not([data-fallback="true"]):not(.fallback-icon),

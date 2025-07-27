@@ -368,7 +368,7 @@ async function createBookCard(book) {
     
     if (hasAudiobook) {
         const ariaLabel = `Hörbuch "${titleString}" bei Apple Books anhören`;
-        audiobookHTML = `<a class="book-link audiobook btn-audiobook-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="${ariaLabel}" data-audiobook-allowed="true">🎧 ${window.translations[currentLang]['Hörbuch bei Apple Books']}</a>`;
+        audiobookHTML = `<a class="book-link audiobook btn-audiobook-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="${ariaLabel}" data-audiobook-allowed="true" data-lang="${currentLang}">🎧 ${window.translations[currentLang]['Hörbuch bei Apple Books']}</a>`;
         console.log('🎧 [Audiobook] ADDING audiobook button for:', titleString);
     } else {
         console.log('🎧 [Audiobook] NO audiobook button for:', titleString);
@@ -768,7 +768,7 @@ function translatePage(lang) {
                 'Auf Amazon DE ansehen': 'View on Amazon DE',
                 'Bei Apple Books': 'On Apple Books',
                 'Bei Books2Read': 'On Books2Read',
-                'Hörbuch bei Apple Books': 'Audiobook on Apple Books'
+                'Hörbuch bei Apple Books': '🎧 Audiobook on Apple Books'
             }
         };
     }

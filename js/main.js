@@ -376,8 +376,13 @@ async function createBookCard(book) {
     console.log('🔍 [Debug] Checking title:', book.title);
     console.log('🔍 [Debug] Normalized title:', normalizedTitle);
     console.log('🔍 [Debug] Keywords to check:', eifersuchtKeywords);
+    console.log('🔍 [Debug] User Agent:', navigator.userAgent);
+    console.log('🔍 [Debug] Is Mobile:', /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
     
-    if (eifersuchtKeywords.some(keyword => normalizedTitle.includes(keyword))) {
+    const hasKeyword = eifersuchtKeywords.some(keyword => normalizedTitle.includes(keyword));
+    console.log('🔍 [Debug] Keyword match found:', hasKeyword);
+    
+    if (hasKeyword) {
         slug = "umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke";
         hasDetailPage = true;
         console.log('🔗 [Link] Book has detail page:', book.title, '→', slug);
@@ -391,6 +396,13 @@ async function createBookCard(book) {
                 'Eifersucht book detected'
             );
         }
+        
+        console.log('🔗 [Link] Final decision for', book.title, ':', {
+            hasDetailPage,
+            detailLink: `/buecher/${slug}`,
+            userAgent: navigator.userAgent,
+            isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        });
     } else {
         // All other books use Books2Read fallback
         slug = null;
@@ -406,6 +418,13 @@ async function createBookCard(book) {
                 'No detail page available'
             );
         }
+        
+        console.log('🔗 [Link] Final decision for', book.title, ':', {
+            hasDetailPage,
+            detailLink: 'https://books2read.com/Dirk-Werner-Author',
+            userAgent: navigator.userAgent,
+            isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        });
     }
     
     // Ensure we have valid URLs

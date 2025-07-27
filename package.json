@@ -1,0 +1,22 @@
+{
+  "name": "dirk-werner-books-website",
+  "version": "1.0.0",
+  "description": "Official website for Dirk Werner - Psychologist & Author",
+  "main": "generate-sitemap.js",
+  "scripts": {
+    "generate-sitemap": "node generate-sitemap.js",
+    "test": "node -e \"const { generateSlug } = require('./generate-sitemap.js'); console.log(generateSlug('Test: Äöüß & Special (Characters)'));\""
+  },
+  "keywords": [
+    "author",
+    "books",
+    "psychology",
+    "website",
+    "sitemap"
+  ],
+  "author": "Dirk Werner",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+} 

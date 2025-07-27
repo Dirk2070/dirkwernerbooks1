@@ -1098,6 +1098,12 @@ function initResponsiveNav() {
         validateAndFixLinks();
     }, 500);
     
+    // Additional validation after content is fully loaded
+    setTimeout(() => {
+        validateAndFixLinks();
+        console.log('🔧 [Main] Second link validation completed');
+    }, 2000);
+    
     // WEB COMPONENT: Custom audiobook button element
     if (!customElements.get('audiobook-button')) {
         class AudiobookButton extends HTMLElement {
@@ -1354,12 +1360,27 @@ function validateAndFixLinks() {
     console.log('🔧 [LinkFix] Link validation completed');
 }
 
+// Manual trigger for link validation (for debugging)
+window.fixGreenArrows = function() {
+    console.log('🔧 [Manual] Manually fixing green arrows...');
+    validateAndFixLinks();
+    
+    // Force remove all data-fallback attributes
+    document.querySelectorAll('[data-fallback="true"]').forEach(element => {
+        console.log('🔧 [Manual] Removing data-fallback from:', element);
+        element.removeAttribute('data-fallback');
+    });
+    
+    console.log('🔧 [Manual] Green arrows should be fixed now!');
+};
+
 // Export functions for potential external use
 window.DirkWernerSite = {
     translatePage,
     filterByGenre,
     searchBooks,
     validateAndFixLinks,
+    fixGreenArrows,
     // loadBooks removed to prevent external calls on detail pages
 };
 

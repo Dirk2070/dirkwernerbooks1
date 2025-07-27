@@ -643,8 +643,14 @@ body {
     font-weight: 600;
 }
 
-.footer-section p,
-.footer-section a {
+.footer-section p {
+    color: #bdc3c7;
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.footer-section a:not(.social-link) {
     color: #bdc3c7;
     text-decoration: none;
     margin-bottom: 0.5rem;

@@ -158,7 +158,7 @@ function generatePurchaseLinks(book) {
             class: 'amazon-com'
         });
     }
-    // Apple Books - intelligente Anzeige
+    // Apple Books - nur anzeigen wenn explizit vorhanden
     if (book.links && book.links.apple_books) {
         // Spezifischer Apple Books Link vorhanden
         links.push({
@@ -166,14 +166,8 @@ function generatePurchaseLinks(book) {
             text: `📱 ${translations[currentLanguage]['Bei Apple Books']}`,
             class: 'apple-books'
         });
-    } else if (!book.links) {
-        // Fallback: Allgemeiner Apple Books Link für Bücher ohne spezifische Links
-        links.push({
-            url: 'https://books.apple.com/de/author/dirk-werner/id316714929',
-            text: `📱 ${translations[currentLanguage]['Bei Apple Books']}`,
-            class: 'apple-books'
-        });
     }
+    // Entfernt: Fallback für alle Bücher ohne spezifische Apple Books Links
     // Books2Read - immer hinzufügen
     if (book.links && book.links.books2read) {
         links.push({
@@ -385,6 +379,11 @@ function removeDuplicateBooks(books) {
             }
         });
         
+        // Special case: "Umgang mit Eifersüchtigen" - always prefer the E-Book version
+        if (baseTitle.includes('Umgang mit Eifersüchtigen')) {
+            baseTitle = 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke';
+        }
+        
         // If we haven't seen this base title before, add the book
         if (!bookMap.has(baseTitle)) {
             bookMap.set(baseTitle, book);
@@ -394,7 +393,16 @@ function removeDuplicateBooks(books) {
             const existingLinksCount = existingBook.links ? Object.keys(existingBook.links).length : 0;
             const newLinksCount = book.links ? Object.keys(book.links).length : 0;
             
-            if (newLinksCount > existingLinksCount) {
+            // Special priority for E-Book over Paperback
+            const existingIsEbook = existingBook.bookFormat === 'EBook' || !existingBook.bookFormat;
+            const newIsEbook = book.bookFormat === 'EBook' || !book.bookFormat;
+            
+            if (newIsEbook && !existingIsEbook) {
+                console.log(`📚 [Duplicate] Replacing "${existingBook.title}" with "${book.title}" (E-Book preferred)`);
+                bookMap.set(baseTitle, book);
+            } else if (existingIsEbook && !newIsEbook) {
+                console.log(`📚 [Duplicate] Skipping "${book.title}" (E-Book preferred)`);
+            } else if (newLinksCount > existingLinksCount) {
                 console.log(`📚 [Duplicate] Replacing "${existingBook.title}" with "${book.title}" (more links: ${newLinksCount} vs ${existingLinksCount})`);
                 bookMap.set(baseTitle, book);
             } else {
@@ -502,11 +510,17 @@ async function switchLanguage(lang) {
     document.documentElement.lang = lang;
     
     // Reload books to update button texts (only if elements exist)
-    try {
-        await displayFeaturedBooks();
-        await displayAllBooks();
-    } catch (error) {
-        // Elements don't exist on book detail pages, which is fine
+    const featuredContainer = document.getElementById('featuredBooks');
+    const allBooksContainer = document.getElementById('allBooks');
+    
+    if (featuredContainer || allBooksContainer) {
+        try {
+            await displayFeaturedBooks();
+            await displayAllBooks();
+        } catch (error) {
+            console.log('Error updating book display:', error);
+        }
+    } else {
         console.log('Book display elements not found - likely on book detail page');
     }
     

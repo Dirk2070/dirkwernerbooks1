@@ -158,10 +158,18 @@ function generatePurchaseLinks(book) {
             class: 'amazon-com'
         });
     }
-    // Apple Books - nur anzeigen wenn explizit vorhanden
+    // Apple Books - intelligente Anzeige
     if (book.links && book.links.apple_books) {
+        // Spezifischer Apple Books Link vorhanden
         links.push({
             url: book.links.apple_books,
+            text: `📱 ${translations[currentLanguage]['Bei Apple Books']}`,
+            class: 'apple-books'
+        });
+    } else if (!book.links) {
+        // Fallback: Allgemeiner Apple Books Link für Bücher ohne spezifische Links
+        links.push({
+            url: 'https://books.apple.com/de/author/dirk-werner/id316714929',
             text: `📱 ${translations[currentLanguage]['Bei Apple Books']}`,
             class: 'apple-books'
         });

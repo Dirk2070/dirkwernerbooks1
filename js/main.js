@@ -373,6 +373,10 @@ async function createBookCard(book) {
     const normalizedTitle = book.title.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
     const eifersuchtKeywords = ['eifersüchtigen', 'eifersucht', 'umgang mit eifersüchtigen'];
     
+    console.log('🔍 [Debug] Checking title:', book.title);
+    console.log('🔍 [Debug] Normalized title:', normalizedTitle);
+    console.log('🔍 [Debug] Keywords to check:', eifersuchtKeywords);
+    
     if (eifersuchtKeywords.some(keyword => normalizedTitle.includes(keyword))) {
         slug = "umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke";
         hasDetailPage = true;

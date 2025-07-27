@@ -271,20 +271,41 @@ async function createBookCard(book) {
     const schema = generateBookSchema(book);
     const schemaScript = `<script type="application/ld+json">${JSON.stringify(schema)}</script>`;
     
+    // Generate slug for book detail page
+    const slug = book.title
+        .toLowerCase()
+        .replace(/ä/g, 'ae')
+        .replace(/ö/g, 'oe')
+        .replace(/ü/g, 'ue')
+        .replace(/ß/g, 'ss')
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    
     return `
         <div class="book-card fade-in" data-genre="${genre}" data-title="${book.title.toLowerCase()}">
             ${schemaScript}
             <div class="book-image">
-                <img src="${book.image.link}" alt="Buchcover: ${book.title} von Dirk Werner" loading="lazy">
+                <a href="/buecher/${slug}" aria-label="Mehr über ${book.title} erfahren">
+                    <img src="${book.image.link}" alt="Buchcover: ${book.title} von Dirk Werner" loading="lazy">
+                </a>
             </div>
             <div class="book-content">
-                <h3 class="book-title">${book.title}</h3>
+                <h3 class="book-title">
+                    <a href="/buecher/${slug}" aria-label="Mehr über ${book.title} erfahren">${book.title}</a>
+                </h3>
                 <p class="book-author">${book.author || 'Dirk Werner'}</p>
                 ${book.description ? `<p class="book-description">${book.description}</p>` : ''}
                 <div class="book-links">
                     ${shopLinksHTML}
                 </div>
                 ${audiobookHTML ? `<div class="audiobook-links">${audiobookHTML}</div>` : ''}
+                <div class="book-detail-link">
+                    <a href="/buecher/${slug}" class="btn-detail-link" aria-label="Mehr über ${book.title} erfahren">
+                        📖 Mehr über dieses Buch
+                    </a>
+                </div>
             </div>
         </div>
     `;

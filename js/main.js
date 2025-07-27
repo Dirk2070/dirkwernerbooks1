@@ -437,6 +437,16 @@ async function createBookCard(book) {
         hasDetailPage = false;
     }
     
+    // FORCE consistency: If this is the Eifersucht book, always use detail page
+    const isEifersuchtBook = book.title.toLowerCase().includes('eifersüchtigen') || 
+                            book.title.toLowerCase().includes('eifersucht') ||
+                            book.title.toLowerCase().includes('umgang mit eifersüchtigen');
+    
+    if (isEifersuchtBook) {
+        hasDetailPage = true;
+        console.log('🔧 [Link] FORCING detail page for Eifersucht book:', book.title);
+    }
+    
     return `
         <div class="book-card fade-in" data-genre="${genre}" data-title="${book.title.toLowerCase()}" data-asin="${book.asin || ''}" data-has-audiobook="${hasAudiobook}" data-has-detail-page="${hasDetailPage}">
             ${schemaScript}
@@ -1079,6 +1089,11 @@ function initResponsiveNav() {
     
     console.log('✅ Dirk Werner Author Website initialized successfully!');
     
+    // Validate and fix links after initialization
+    setTimeout(() => {
+        validateAndFixLinks();
+    }, 500);
+    
     // WEB COMPONENT: Custom audiobook button element
     if (!customElements.get('audiobook-button')) {
         class AudiobookButton extends HTMLElement {
@@ -1288,11 +1303,57 @@ window.addEventListener('resize', function() {
     // This can be expanded for more responsive features
 });
 
+// Validate and fix inconsistent links
+function validateAndFixLinks() {
+    console.log('🔧 [LinkFix] Starting link validation...');
+    
+    const eifersuchtBook = document.querySelector('.book-card[data-title*="eifersüchtigen"]');
+    
+    if (eifersuchtBook) {
+        console.log('🔧 [LinkFix] Found Eifersucht book, validating links...');
+        
+        // Check title link
+        const titleLink = eifersuchtBook.querySelector('.book-title a');
+        if (titleLink && !titleLink.href.includes('/buecher/')) {
+            console.log('🔧 [LinkFix] Fixing title link for Eifersucht book');
+            titleLink.href = '/buecher/umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke';
+            titleLink.removeAttribute('target');
+            titleLink.removeAttribute('rel');
+            titleLink.removeAttribute('data-fallback');
+        }
+        
+        // Check "Mehr erfahren" button
+        const mehrErfahrenBtn = eifersuchtBook.querySelector('.detail-link');
+        if (mehrErfahrenBtn && !mehrErfahrenBtn.href.includes('/buecher/')) {
+            console.log('🔧 [LinkFix] Fixing "Mehr erfahren" button for Eifersucht book');
+            mehrErfahrenBtn.href = '/buecher/umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke';
+            mehrErfahrenBtn.removeAttribute('target');
+            mehrErfahrenBtn.removeAttribute('rel');
+            mehrErfahrenBtn.removeAttribute('data-fallback');
+        }
+        
+        // Check cover image link
+        const coverLink = eifersuchtBook.querySelector('.book-image a');
+        if (coverLink && !coverLink.href.includes('/buecher/')) {
+            console.log('🔧 [LinkFix] Fixing cover link for Eifersucht book');
+            coverLink.href = '/buecher/umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke';
+            coverLink.removeAttribute('target');
+            coverLink.removeAttribute('rel');
+            coverLink.removeAttribute('data-fallback');
+        }
+        
+        console.log('🔧 [LinkFix] Eifersucht book links validated and fixed');
+    }
+    
+    console.log('🔧 [LinkFix] Link validation completed');
+}
+
 // Export functions for potential external use
 window.DirkWernerSite = {
     translatePage,
     filterByGenre,
     searchBooks,
+    validateAndFixLinks,
     // loadBooks removed to prevent external calls on detail pages
 };
 

@@ -1094,19 +1094,47 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Show whitelist status
         console.log('🐞 [DEBUG PANEL] Whitelist Status:', {
             totalAudiobooks: window.appleAudiobookList?.audiobooks?.length || 0,
-            isbnList: window.appleAudiobookIds || [],
-            slugList: window.appleAudiobookSlugs || [],
-            functionAvailable: typeof window.isAppleAudiobook === 'function'
+            audiobookTitles: window.appleAudiobookTitles || [],
+            appleIds: window.appleAudiobookIds || [],
+            functionAvailable: typeof window.isAppleAudiobook === 'function',
+            whitelistLoaded: !!window.appleAudiobookList
+        });
+        
+        // Test specific books
+        const testBooks = [
+            "The Key of the Enlightened",
+            "How to Recognize Cults: A Guide to Protecting Yourself from Manipulation and Control",
+            "Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke",
+            "Psychotainment: Wie du auf jeder Party glänzt"
+        ];
+        
+        testBooks.forEach(book => {
+            const hasAudiobook = typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(book);
+            console.log(`🐞 [Test] "${book}": ${hasAudiobook ? '✅ HAS audiobook' : '❌ NO audiobook'}`);
         });
     }, 3000);
     
     // EMERGENCY FIX: Remove audiobook buttons for books not in whitelist
     setTimeout(() => {
         console.log('🔧 [Emergency Fix] Checking all audiobook buttons...');
+        console.log('🔧 [Emergency Fix] Whitelist loaded:', !!window.appleAudiobookList);
+        console.log('🔧 [Emergency Fix] Audiobooks in whitelist:', window.appleAudiobookList?.audiobooks?.length || 0);
+        
         document.querySelectorAll('.book-card').forEach(card => {
-            const bookTitle = card.querySelector('.book-title')?.textContent;
+            const bookTitle = card.querySelector('.book-title')?.textContent?.trim();
             if (bookTitle) {
-                const shouldHaveAudiobook = typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(bookTitle);
+                // Direct whitelist check
+                let shouldHaveAudiobook = false;
+                
+                if (window.appleAudiobookList && window.appleAudiobookList.audiobooks) {
+                    const normalizedTitle = bookTitle.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+                    
+                    shouldHaveAudiobook = window.appleAudiobookList.audiobooks.some(book => {
+                        const whitelistTitle = book.title.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+                        return whitelistTitle === normalizedTitle || whitelistTitle.includes(normalizedTitle) || normalizedTitle.includes(whitelistTitle);
+                    });
+                }
+                
                 const audiobookButton = card.querySelector('.book-link.audiobook');
                 
                 if (audiobookButton && !shouldHaveAudiobook) {
@@ -1116,6 +1144,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     console.log('🔧 [Emergency Fix] KEEPING audiobook button for:', bookTitle);
                     // Ensure button has correct attributes
                     audiobookButton.setAttribute('data-audiobook-allowed', 'true');
+                    audiobookButton.style.display = 'inline-flex';
                 }
             }
         });

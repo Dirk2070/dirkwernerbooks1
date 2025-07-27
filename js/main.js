@@ -359,11 +359,50 @@ async function loadBooks() {
     }
 }
 
+// Remove duplicate books based on base title (without format suffix)
+function removeDuplicateBooks(books) {
+    const uniqueBooks = [];
+    const seenTitles = new Set();
+    
+    books.forEach(book => {
+        // Extract base title by removing format suffixes
+        let baseTitle = book.title;
+        
+        // Remove common format suffixes
+        const formatSuffixes = [
+            ' (Taschenbuch)',
+            ' (Paperback)',
+            ' (E-Book)',
+            ' (Kindle)',
+            ' (English Edition)',
+            ' (German Edition)'
+        ];
+        
+        formatSuffixes.forEach(suffix => {
+            if (baseTitle.endsWith(suffix)) {
+                baseTitle = baseTitle.slice(0, -suffix.length);
+            }
+        });
+        
+        // If we haven't seen this base title before, add the book
+        if (!seenTitles.has(baseTitle)) {
+            uniqueBooks.push(book);
+            seenTitles.add(baseTitle);
+        } else {
+            console.log(`📚 [Duplicate] Skipping duplicate: "${book.title}" (base: "${baseTitle}")`);
+        }
+    });
+    
+    return uniqueBooks;
+}
+
 // Display featured books (first 6)
 async function displayFeaturedBooks() {
     const featuredContainer = document.getElementById('featuredBooks');
     if (featuredContainer && allBooks) {
-        const featuredBooks = allBooks.slice(0, 6);
+        // Remove duplicates before displaying
+        const uniqueBooks = removeDuplicateBooks(allBooks);
+        const featuredBooks = uniqueBooks.slice(0, 6);
         const bookCards = await Promise.all(featuredBooks.map(book => createBookCard(book)));
         featuredContainer.innerHTML = bookCards.join('');
     }
@@ -373,7 +412,9 @@ async function displayFeaturedBooks() {
 async function displayAllBooks() {
     const allBooksContainer = document.getElementById('allBooks');
     if (allBooksContainer && filteredBooks) {
-        const bookCards = await Promise.all(filteredBooks.map(book => createBookCard(book)));
+        // Remove duplicates before displaying
+        const uniqueBooks = removeDuplicateBooks(filteredBooks);
+        const bookCards = await Promise.all(uniqueBooks.map(book => createBookCard(book)));
         allBooksContainer.innerHTML = bookCards.join('');
         
         // Add fade-in animation

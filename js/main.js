@@ -768,7 +768,7 @@ function translatePage(lang) {
                 'Auf Amazon DE ansehen': 'View on Amazon DE',
                 'Bei Apple Books': 'On Apple Books',
                 'Bei Books2Read': 'On Books2Read',
-                'Hörbuch bei Apple Books': '🎧 Audiobook on Apple Books'
+                'Hörbuch bei Apple Books': '🎧 Listen to Audiobook on Apple Books'
             }
         };
     }

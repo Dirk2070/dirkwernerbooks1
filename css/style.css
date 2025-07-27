@@ -633,7 +633,7 @@ a[href*="books2read"] img:not([src*="arrow"]):not([src*="check"]):not([src*="fal
 
 /* Ensure consistent button sizing across languages */
 .book-link.audiobook[data-lang="en"] {
-    min-width: 220px;
+    min-width: 250px;
 }
 
 .book-link.audiobook[data-lang="de"] {

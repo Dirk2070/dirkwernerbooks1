@@ -754,7 +754,18 @@ body {
 .book-detail-author {
     font-size: 1.2rem;
     color: #666;
+    margin-bottom: 1rem;
+}
+
+.book-detail-subtitle {
+    font-size: 1.1rem;
+    color: #555;
+    font-style: italic;
     margin-bottom: 2rem;
+    text-align: center;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .book-detail-description {
@@ -771,6 +782,42 @@ body {
     font-size: 1.1rem;
     line-height: 1.7;
     color: #555;
+}
+
+.book-features {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin: 1.5rem 0;
+    border-left: 4px solid #3498db;
+}
+
+.book-features h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.book-features ul {
+    list-style: none;
+    padding: 0;
+}
+
+.book-features li {
+    padding: 0.5rem 0;
+    font-size: 1rem;
+    color: #555;
+}
+
+.book-cta {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+    margin: 2rem 0;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
 .book-detail-meta {
@@ -806,6 +853,18 @@ body {
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
     min-width: 120px;
+}
+
+.book-detail-links .book-link.primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.book-detail-links .book-link.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
 .related-books {
@@ -1039,5 +1098,32 @@ html {
 /* Hidden class for filtering */
 .hidden {
     display: none !important;
+}
+
+/* Social Media Links */
+.social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.social-link {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #f8f9fa;
+    color: #555;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.social-link:hover {
+    background: #3498db;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
 }
 

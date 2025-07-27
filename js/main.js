@@ -433,9 +433,14 @@ async function switchLanguage(lang) {
     // Update HTML lang attribute
     document.documentElement.lang = lang;
     
-    // Reload books to update button texts
-    await displayFeaturedBooks();
-    await displayAllBooks();
+    // Reload books to update button texts (only if elements exist)
+    try {
+        await displayFeaturedBooks();
+        await displayAllBooks();
+    } catch (error) {
+        // Elements don't exist on book detail pages, which is fine
+        console.log('Book display elements not found - likely on book detail page');
+    }
     
     // Update audiobook links after language switch
     await setAudiobookLinksByCountry();
@@ -495,7 +500,9 @@ function initLanguageSwitching() {
 // Add loading animation
 function showLoading(containerId) {
     const container = document.getElementById(containerId);
-    container.innerHTML = '<div class="loading"></div>';
+    if (container) {
+        container.innerHTML = '<div class="loading"></div>';
+    }
 }
 
 // Initialize intersection observer for animations
@@ -534,7 +541,7 @@ function initResponsiveNav() {
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', async function() {
-    // Show loading animation
+    // Show loading animation only if elements exist
     showLoading('featuredBooks');
     showLoading('allBooks');
     

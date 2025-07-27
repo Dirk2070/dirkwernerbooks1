@@ -367,39 +367,49 @@ async function createBookCard(book) {
     
     // Generate slug for book detail page
     let slug;
+    let hasDetailPage = false;
+    
     if (book.title.includes("Umgang mit Eifersüchtigen")) {
         slug = "umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke";
+        hasDetailPage = true;
     } else {
-        slug = book.title
-            .toLowerCase()
-            .replace(/ä/g, 'ae')
-            .replace(/ö/g, 'oe')
-            .replace(/ü/g, 'ue')
-            .replace(/ß/g, 'ss')
-            .replace(/[^\w\s-]/g, '')
-            .replace(/\s+/g, '-')
-            .replace(/-+/g, '-')
-            .replace(/^-+|-+$/g, '');
+        // For now, only "Umgang mit Eifersüchtigen" has a detail page
+        // Other books will use Books2Read fallback
+        slug = null;
+        hasDetailPage = false;
     }
     
     return `
         <div class="book-card fade-in" data-genre="${genre}" data-title="${book.title.toLowerCase()}" data-asin="${book.asin || ''}" data-has-audiobook="${hasAudiobook}">
             ${schemaScript}
             <div class="book-image">
-                <a href="/buecher/${slug}" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren">
-                    <img src="${book.image.link}" alt="Buchcover: ${book.title}" loading="lazy">
-                </a>
+                ${hasDetailPage ? 
+                    `<a href="/buecher/${slug}" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren">
+                        <img src="${book.image.link}" alt="Buchcover: ${book.title}" loading="lazy">
+                    </a>` :
+                    `<a href="https://books2read.com/Dirk-Werner-Author" target="_blank" rel="noopener noreferrer" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren" data-fallback="true">
+                        <img src="${book.image.link}" alt="Buchcover: ${book.title}" loading="lazy">
+                    </a>`
+                }
             </div>
             <div class="book-info">
                 <h3 class="book-title">
-                    <a href="/buecher/${slug}" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren">${book.title}</a>
+                    ${hasDetailPage ? 
+                        `<a href="/buecher/${slug}" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren">${book.title}</a>` :
+                        `<a href="https://books2read.com/Dirk-Werner-Author" target="_blank" rel="noopener noreferrer" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren" data-fallback="true">${book.title}</a>`
+                    }
                 </h3>
                 <p class="book-author">${book.author}</p>
                 <p class="book-description">${book.description}</p>
                 <div class="book-links">
-                    <a href="/buecher/${slug}" class="book-link detail-link" aria-label="Mehr über ${book.title} erfahren">
-                        📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
-                    </a>
+                    ${hasDetailPage ? 
+                        `<a href="/buecher/${slug}" class="book-link detail-link" aria-label="Mehr über ${book.title} erfahren">
+                            📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
+                        </a>` :
+                        `<a href="https://books2read.com/Dirk-Werner-Author" target="_blank" rel="noopener noreferrer" class="book-link detail-link" aria-label="Mehr über ${book.title} erfahren" data-fallback="true">
+                            📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
+                        </a>`
+                    }
                     ${shopLinksHTML}
                     ${audiobookHTML}
                 </div>

@@ -539,6 +539,38 @@ body {
     text-decoration: none;
 }
 
+/* Fallback link styling (Books2Read) */
+.detail-link[data-fallback="true"] {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.detail-link[data-fallback="true"]:hover {
+    background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.book-detail-link[data-fallback="true"] {
+    position: relative;
+}
+
+.book-detail-link[data-fallback="true"]::after {
+    content: "↗";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(40, 167, 69, 0.9);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
 /* Make book titles clickable */
 .book-title a {
     color: inherit;

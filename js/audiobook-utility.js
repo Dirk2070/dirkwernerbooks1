@@ -48,7 +48,16 @@ class AudiobookUtility {
     // Wait for whitelist to be loaded
     async waitForWhitelist() {
         if (window.appleAudiobookList && window.appleAudiobookList.audiobooks) {
-            this.whitelist = window.appleAudiobookList.audiobooks.map(book => book.title);
+            this.whitelist = window.appleAudiobookList.audiobooks.map(book => {
+                // Handle multilingual title objects
+                if (typeof book.title === 'string') {
+                    return book.title;
+                }
+                if (book.title && typeof book.title === 'object') {
+                    return book.title['de'] || book.title['en'] || 'Unknown Title';
+                }
+                return 'Unknown Title';
+            });
             console.log('🎧 [Utility] Whitelist loaded:', this.whitelist.length, 'audiobooks');
             return;
         }
@@ -59,7 +68,16 @@ class AudiobookUtility {
             const checkInterval = setInterval(() => {
                 if (window.appleAudiobookList && window.appleAudiobookList.audiobooks) {
                     clearInterval(checkInterval);
-                    this.whitelist = window.appleAudiobookList.audiobooks.map(book => book.title);
+                    this.whitelist = window.appleAudiobookList.audiobooks.map(book => {
+                        // Handle multilingual title objects
+                        if (typeof book.title === 'string') {
+                            return book.title;
+                        }
+                        if (book.title && typeof book.title === 'object') {
+                            return book.title['de'] || book.title['en'] || 'Unknown Title';
+                        }
+                        return 'Unknown Title';
+                    });
                     console.log('✅ [Utility] Whitelist loaded successfully:', this.whitelist.length, 'audiobooks');
                     resolve();
                 }

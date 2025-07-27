@@ -341,7 +341,7 @@ async function createBookCard(book) {
     // Shop-Links (Amazon DE, Amazon US, Apple Books, Books2Read)
     const shopLinks = links.filter(link => link.class !== 'audiobook');
     const shopLinksHTML = shopLinks.map(link => {
-        const ariaLabel = getAriaLabel(link.class, book.title);
+        const ariaLabel = getAriaLabel(link.class, getLocalizedText(book.title, currentLang));
         return `<a href="${link.url}" target="_blank" class="book-link ${link.class}" aria-label="${ariaLabel}">${link.text}</a>`;
     }).join('');
     
@@ -349,28 +349,29 @@ async function createBookCard(book) {
     let audiobookHTML = '';
     
     // Try multiple identification methods: JSON field first, then ISBN, then title
+    const titleString = getLocalizedText(book.title, currentLang);
     const hasAudiobook = (
         (book.hasAudiobook === true) ||
         (book.asin && typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(book.asin)) ||
-        (typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(book.title))
+        (typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(titleString))
     );
     
-    console.log('🎧 [Audiobook] Checking book:', book.title, 'ASIN:', book.asin, 'JSON hasAudiobook:', book.hasAudiobook, 'Final result:', hasAudiobook, 'Whitelist loaded:', !!window.appleAudiobookList);
+    console.log('🎧 [Audiobook] Checking book:', titleString, 'ASIN:', book.asin, 'JSON hasAudiobook:', book.hasAudiobook, 'Final result:', hasAudiobook, 'Whitelist loaded:', !!window.appleAudiobookList);
     console.log('🎧 [Audiobook] Whitelist details:', {
         whitelistExists: !!window.appleAudiobookList,
         whitelistLength: window.appleAudiobookList?.audiobooks?.length || 0,
         isAppleAudiobookFunction: typeof window.isAppleAudiobook === 'function',
-        bookTitle: book.title,
+        bookTitle: titleString,
         asinCheck: book.asin && typeof window.isAppleAudiobook === 'function' ? window.isAppleAudiobook(book.asin) : 'N/A',
-        titleCheck: typeof window.isAppleAudiobook === 'function' ? window.isAppleAudiobook(book.title) : 'N/A'
+        titleCheck: typeof window.isAppleAudiobook === 'function' ? window.isAppleAudiobook(titleString) : 'N/A'
     });
     
     if (hasAudiobook) {
-        const ariaLabel = `Hörbuch "${book.title}" bei Apple Books anhören`;
+        const ariaLabel = `Hörbuch "${titleString}" bei Apple Books anhören`;
         audiobookHTML = `<a class="book-link audiobook btn-audiobook-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="${ariaLabel}" data-audiobook-allowed="true">🎧 ${window.translations[currentLang]['Hörbuch bei Apple Books']}</a>`;
-        console.log('🎧 [Audiobook] ADDING audiobook button for:', book.title);
+        console.log('🎧 [Audiobook] ADDING audiobook button for:', titleString);
     } else {
-        console.log('🎧 [Audiobook] NO audiobook button for:', book.title);
+        console.log('🎧 [Audiobook] NO audiobook button for:', titleString);
         // NO HTML for audiobook button - completely prevent rendering
     }
     
@@ -383,7 +384,6 @@ async function createBookCard(book) {
     let hasDetailPage = false;
     
     // Robust title comparison for "Umgang mit Eifersüchtigen"
-    const titleString = getLocalizedText(book.title, currentLang);
     const normalizedTitle = titleString.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
     const eifersuchtKeywords = ['eifersüchtigen', 'eifersucht', 'umgang mit eifersüchtigen'];
     
@@ -1255,7 +1255,7 @@ function initResponsiveNav() {
                     const normalizedTitle = bookTitle.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
                     
                     shouldHaveAudiobook = window.appleAudiobookList.audiobooks.some(book => {
-                        const whitelistTitle = book.title.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+                        const whitelistTitle = getLocalizedText(book.title, window.currentLanguage || 'de').toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
                         return whitelistTitle === normalizedTitle || whitelistTitle.includes(normalizedTitle) || normalizedTitle.includes(whitelistTitle);
                     });
                 }

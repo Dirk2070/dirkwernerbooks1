@@ -871,14 +871,35 @@ function initResponsiveNav() {
     }
 }
 
-// Initialize everything when DOM is loaded
-document.addEventListener('DOMContentLoaded', async function() {
-    console.log('🚀 [Init] DOMContentLoaded event fired');
-    
-    // STRICT URL-based book detail page detection
-    const currentPath = window.location.pathname;
-    const isBookDetailPage = currentPath.startsWith('/buecher/') && currentPath !== '/buecher/';
-    const isOverviewPage = currentPath === '/' || currentPath === '/index.html';
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', async function() {
+        console.log('🚀 [Init] DOMContentLoaded event fired');
+        
+        // WAIT FOR WHITELIST TO LOAD
+        if (!window.appleAudiobookList) {
+            console.log('⏳ [Init] Waiting for whitelist to load...');
+            await new Promise(resolve => {
+                const checkInterval = setInterval(() => {
+                    if (window.appleAudiobookList) {
+                        clearInterval(checkInterval);
+                        console.log('✅ [Init] Whitelist loaded successfully');
+                        resolve();
+                    }
+                }, 100);
+                
+                // Timeout after 5 seconds
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    console.warn('⚠️ [Init] Whitelist loading timeout - using fallback');
+                    resolve();
+                }, 5000);
+            });
+        }
+        
+        // STRICT URL-based book detail page detection
+        const currentPath = window.location.pathname;
+        const isBookDetailPage = currentPath.startsWith('/buecher/') && currentPath !== '/buecher/';
+        const isOverviewPage = currentPath === '/' || currentPath === '/index.html';
     
     // Check for page elements
     const featuredContainer = document.getElementById('featuredBooks');
@@ -936,11 +957,28 @@ document.addEventListener('DOMContentLoaded', async function() {
                 btn.style.display = 'inline-flex';
             });
             
-            // FALLBACK: Remove audiobook buttons for books not in whitelist
+            // ROBUST BUTTON REMOVAL: Remove audiobook buttons for books not in whitelist
+            console.log('🔧 [Robust] Starting audiobook button cleanup...');
+            console.log('🔧 [Robust] Whitelist status:', {
+                loaded: !!window.appleAudiobookList,
+                audiobooks: window.appleAudiobookList?.audiobooks?.length || 0
+            });
+            
             document.querySelectorAll('.book-card').forEach(card => {
-                const bookTitle = card.querySelector('.book-title')?.textContent?.trim();
+                // Try multiple title selectors
+                const titleSelectors = ['.book-title', 'h3', '.title', '[data-title]'];
+                let bookTitle = null;
+                
+                for (const selector of titleSelectors) {
+                    const element = card.querySelector(selector);
+                    if (element) {
+                        bookTitle = element.textContent?.trim() || element.getAttribute('data-title')?.trim();
+                        if (bookTitle) break;
+                    }
+                }
+                
                 if (bookTitle) {
-                    console.log('🎧 [Fallback] Checking book:', bookTitle);
+                    console.log('🔧 [Robust] Checking book:', bookTitle);
                     
                     // Direct whitelist check
                     let shouldHaveAudiobook = false;
@@ -954,16 +992,31 @@ document.addEventListener('DOMContentLoaded', async function() {
                         });
                     }
                     
-                    const audiobookButton = card.querySelector('.book-link.audiobook');
+                    // Try multiple button selectors
+                    const buttonSelectors = ['.book-link.audiobook', '.audiobook-button', '.btn-audiobook-link'];
+                    let audiobookButton = null;
+                    
+                    for (const selector of buttonSelectors) {
+                        audiobookButton = card.querySelector(selector);
+                        if (audiobookButton) break;
+                    }
                     
                     if (audiobookButton && !shouldHaveAudiobook) {
-                        console.log('🎧 [Fallback] REMOVING audiobook button for:', bookTitle);
+                        console.log('🔧 [Robust] REMOVING audiobook button for:', bookTitle);
                         audiobookButton.remove();
                     } else if (audiobookButton && shouldHaveAudiobook) {
-                        console.log('🎧 [Fallback] KEEPING audiobook button for:', bookTitle);
+                        console.log('🔧 [Robust] KEEPING audiobook button for:', bookTitle);
+                        audiobookButton.setAttribute('data-audiobook-allowed', 'true');
+                        audiobookButton.style.display = 'inline-flex';
+                    } else if (!audiobookButton && shouldHaveAudiobook) {
+                        console.log('🔧 [Robust] No button found for whitelisted book:', bookTitle);
                     }
+                } else {
+                    console.warn('🔧 [Robust] No title found for card:', card);
                 }
             });
+            
+            console.log('🔧 [Robust] Audiobook button cleanup completed');
         }, 1000);
     } else {
         console.log('📚 [Init] Initializing book detail page - SKIPPING loadBooks()');

@@ -17,20 +17,29 @@ class AudiobookUtility {
             "Self-Love Over Perfection: A Guide to Overcoming Female Narcissism"
         ];
         this.isInitialized = false;
+        this.safetyChecks = {
+            maxCardRemovals: 0,
+            maxButtonRemovals: 0,
+            protectedElements: new Set()
+        };
     }
 
     // Initialize the utility
     async init() {
         console.log('🎧 [Utility] Initializing Audiobook Utility...');
         
-        // Wait for whitelist to load
-        await this.waitForWhitelist();
-        
-        // Process buttons
-        this.processAudiobookButtons();
-        
-        this.isInitialized = true;
-        console.log('🎧 [Utility] Audiobook Utility initialized successfully');
+        try {
+            // Wait for whitelist to load
+            await this.waitForWhitelist();
+            
+            // Process buttons with safety wrapper
+            this.processAudiobookButtonsSafe();
+            
+            this.isInitialized = true;
+            console.log('🎧 [Utility] Audiobook Utility initialized successfully');
+        } catch (error) {
+            console.error('❌ [Utility] Initialization failed:', error);
+        }
     }
 
     // Wait for whitelist to be loaded
@@ -109,110 +118,224 @@ class AudiobookUtility {
         return false;
     }
 
-    // Get title from card using multiple selectors
-    getBookTitle(card) {
+    // SAFE: Get title from card using multiple selectors
+    getBookTitleSafe(card) {
+        if (!card || !card.querySelector) {
+            console.warn('⚠️ [Utility] Invalid card element provided');
+            return null;
+        }
+
         const titleSelectors = ['.book-title', 'h3', '.title', '[data-title]'];
         
         for (const selector of titleSelectors) {
-            const element = card.querySelector(selector);
-            if (element) {
-                const title = element.textContent?.trim() || element.getAttribute('data-title')?.trim();
-                if (title && title !== 'undefined') {
-                    return title;
+            try {
+                const element = card.querySelector(selector);
+                if (element) {
+                    const title = element.textContent?.trim() || element.getAttribute('data-title')?.trim();
+                    if (title && title !== 'undefined' && title.length > 0) {
+                        return title;
+                    }
                 }
+            } catch (error) {
+                console.warn('⚠️ [Utility] Error getting title with selector:', selector, error);
             }
         }
         
+        console.warn('⚠️ [Utility] No valid title found for card:', card);
         return null;
     }
 
-    // Get audiobook button from card using multiple selectors
-    getAudiobookButton(card) {
+    // SAFE: Get audiobook button from card using multiple selectors
+    getAudiobookButtonSafe(card) {
+        if (!card || !card.querySelector) {
+            console.warn('⚠️ [Utility] Invalid card element provided');
+            return null;
+        }
+
         const buttonSelectors = ['.book-link.audiobook', '.audiobook-button', '.btn-audiobook-link'];
         
         for (const selector of buttonSelectors) {
-            const button = card.querySelector(selector);
-            if (button) {
-                return button;
+            try {
+                const button = card.querySelector(selector);
+                if (button) {
+                    return button;
+                }
+            } catch (error) {
+                console.warn('⚠️ [Utility] Error getting button with selector:', selector, error);
             }
         }
         
         return null;
     }
 
-    // Process all audiobook buttons
-    processAudiobookButtons() {
-        console.log('🔧 [Utility] Processing audiobook buttons...');
-        
-        document.querySelectorAll('.book-card').forEach(card => {
-            const bookTitle = this.getBookTitle(card);
-            
-            if (!bookTitle) {
-                console.warn('🔧 [Utility] No title found for card');
-                return;
-            }
-            
-            const hasAudiobook = this.hasAudiobook(bookTitle);
-            const audiobookButton = this.getAudiobookButton(card);
-            
-            if (audiobookButton) {
-                if (hasAudiobook) {
-                    // Keep and enable button
-                    audiobookButton.style.display = 'inline-flex';
-                    audiobookButton.setAttribute('data-audiobook-allowed', 'true');
-                    console.log('✅ [Utility] KEEPING audiobook button for:', bookTitle);
-                } else {
-                    // Remove button
-                    audiobookButton.remove();
-                    console.log('❌ [Utility] REMOVING audiobook button for:', bookTitle);
-                }
-            } else if (hasAudiobook) {
-                // Create button if missing
-                this.createAudiobookButton(card, bookTitle);
-                console.log('🛠️ [Utility] CREATED audiobook button for:', bookTitle);
-            }
-        });
-        
-        console.log('🔧 [Utility] Audiobook button processing completed');
-    }
+    // SAFE: Remove button without affecting card structure
+    removeButtonSafe(button, bookTitle) {
+        if (!button) {
+            console.warn('⚠️ [Utility] No button to remove for:', bookTitle);
+            return false;
+        }
 
-    // Create audiobook button
-    createAudiobookButton(card, bookTitle) {
-        const button = document.createElement('a');
-        button.className = 'book-link audiobook btn-audiobook-link';
-        button.href = 'https://books.apple.com/de/author/dirk-werner/id316714929?see-all=audio-books';
-        button.target = '_blank';
-        button.rel = 'noopener noreferrer';
-        button.setAttribute('data-audiobook-allowed', 'true');
-        button.innerHTML = '🎧 Hörbuch bei Apple Books';
-        
-        const linksContainer = card.querySelector('.book-links');
-        if (linksContainer) {
-            linksContainer.appendChild(button);
-        } else {
-            card.appendChild(button);
+        try {
+            // Check if button is still in DOM
+            if (button.parentNode) {
+                button.remove();
+                this.safetyChecks.maxButtonRemovals++;
+                console.log('❌ [Utility] SAFELY REMOVED audiobook button for:', bookTitle);
+                return true;
+            } else {
+                console.warn('⚠️ [Utility] Button already removed for:', bookTitle);
+                return false;
+            }
+        } catch (error) {
+            console.error('❌ [Utility] Error removing button for:', bookTitle, error);
+            return false;
         }
     }
 
-    // Force audiobook buttons for specific books
-    forceAudiobookButtons() {
-        console.log('🛠️ [Utility] Forcing audiobook buttons...');
-        
-        document.querySelectorAll('.book-card').forEach(card => {
-            const bookTitle = this.getBookTitle(card);
+    // SAFE: Show button without affecting card structure
+    showButtonSafe(button, bookTitle) {
+        if (!button) {
+            console.warn('⚠️ [Utility] No button to show for:', bookTitle);
+            return false;
+        }
+
+        try {
+            button.style.display = 'inline-flex';
+            button.setAttribute('data-audiobook-allowed', 'true');
+            console.log('✅ [Utility] SAFELY SHOWED audiobook button for:', bookTitle);
+            return true;
+        } catch (error) {
+            console.error('❌ [Utility] Error showing button for:', bookTitle, error);
+            return false;
+        }
+    }
+
+    // SAFE: Create audiobook button without affecting card structure
+    createAudiobookButtonSafe(card, bookTitle) {
+        if (!card || !bookTitle) {
+            console.warn('⚠️ [Utility] Invalid parameters for button creation');
+            return false;
+        }
+
+        try {
+            const button = document.createElement('a');
+            button.className = 'book-link audiobook btn-audiobook-link';
+            button.href = 'https://books.apple.com/de/author/dirk-werner/id316714929?see-all=audio-books';
+            button.target = '_blank';
+            button.rel = 'noopener noreferrer';
+            button.setAttribute('data-audiobook-allowed', 'true');
+            button.innerHTML = '🎧 Hörbuch bei Apple Books';
             
-            if (!bookTitle) return;
-            
-            const audiobookButton = this.getAudiobookButton(card);
-            
-            if (!audiobookButton) {
-                this.createAudiobookButton(card, bookTitle);
-                console.log('🛠️ [Utility] Forced audiobook button for:', bookTitle);
+            // Find the best place to insert the button
+            const linksContainer = card.querySelector('.book-links');
+            if (linksContainer) {
+                linksContainer.appendChild(button);
+                console.log('🛠️ [Utility] SAFELY CREATED audiobook button in .book-links for:', bookTitle);
+            } else {
+                // Fallback: insert at the end of the card
+                card.appendChild(button);
+                console.log('🛠️ [Utility] SAFELY CREATED audiobook button at end of card for:', bookTitle);
             }
+            
+            return true;
+        } catch (error) {
+            console.error('❌ [Utility] Error creating button for:', bookTitle, error);
+            return false;
+        }
+    }
+
+    // SAFE: Process all audiobook buttons with comprehensive error protection
+    processAudiobookButtonsSafe() {
+        console.log('🔧 [Utility] SAFELY Processing audiobook buttons...');
+        
+        const cards = document.querySelectorAll('.book-card');
+        console.log('🔧 [Utility] Found', cards.length, 'book cards');
+        
+        let processedCards = 0;
+        let successfulOperations = 0;
+        
+        cards.forEach((card, index) => {
+            try {
+                // Safety check: ensure card is valid
+                if (!card || !card.querySelector) {
+                    console.warn('⚠️ [Utility] Invalid card at index:', index);
+                    return;
+                }
+
+                // Get book title safely
+                const bookTitle = this.getBookTitleSafe(card);
+                if (!bookTitle) {
+                    console.warn('⚠️ [Utility] No title found for card at index:', index);
+                    return;
+                }
+
+                // Check if book should have audiobook
+                const hasAudiobook = this.hasAudiobook(bookTitle);
+                
+                // Get audiobook button safely
+                const audiobookButton = this.getAudiobookButtonSafe(card);
+                
+                if (audiobookButton) {
+                    if (hasAudiobook) {
+                        // Keep and enable button
+                        if (this.showButtonSafe(audiobookButton, bookTitle)) {
+                            successfulOperations++;
+                        }
+                    } else {
+                        // Remove button safely
+                        if (this.removeButtonSafe(audiobookButton, bookTitle)) {
+                            successfulOperations++;
+                        }
+                    }
+                } else if (hasAudiobook) {
+                    // Create button if missing
+                    if (this.createAudiobookButtonSafe(card, bookTitle)) {
+                        successfulOperations++;
+                    }
+                }
+                
+                processedCards++;
+                
+            } catch (error) {
+                console.error('❌ [Utility] Error processing card at index:', index, error);
+            }
+        });
+        
+        console.log('🔧 [Utility] SAFE processing completed:', {
+            processedCards,
+            successfulOperations,
+            maxButtonRemovals: this.safetyChecks.maxButtonRemovals
         });
     }
 
-    // Debug information
+    // Force audiobook buttons for specific books (SAFE)
+    forceAudiobookButtonsSafe() {
+        console.log('🛠️ [Utility] SAFELY Forcing audiobook buttons...');
+        
+        const cards = document.querySelectorAll('.book-card');
+        let forcedButtons = 0;
+        
+        cards.forEach((card, index) => {
+            try {
+                const bookTitle = this.getBookTitleSafe(card);
+                if (!bookTitle) return;
+                
+                const audiobookButton = this.getAudiobookButtonSafe(card);
+                
+                if (!audiobookButton) {
+                    if (this.createAudiobookButtonSafe(card, bookTitle)) {
+                        forcedButtons++;
+                    }
+                }
+            } catch (error) {
+                console.error('❌ [Utility] Error forcing button for card at index:', index, error);
+            }
+        });
+        
+        console.log('🛠️ [Utility] SAFELY forced', forcedButtons, 'audiobook buttons');
+    }
+
+    // Debug information with safety checks
     debug() {
         console.log('🐞 [Utility] Debug Information:', {
             whitelistLoaded: this.whitelist.length > 0,
@@ -220,7 +343,8 @@ class AudiobookUtility {
             forceListCount: this.forceList.length,
             isInitialized: this.isInitialized,
             totalBooks: document.querySelectorAll('.book-card').length,
-            audiobookButtons: document.querySelectorAll('.book-link.audiobook, .audiobook-button, .btn-audiobook-link').length
+            audiobookButtons: document.querySelectorAll('.book-link.audiobook, .audiobook-button, .btn-audiobook-link').length,
+            safetyChecks: this.safetyChecks
         });
         
         // Test specific books
@@ -234,6 +358,15 @@ class AudiobookUtility {
         testBooks.forEach(book => {
             const hasAudiobook = this.hasAudiobook(book);
             console.log(`🐞 [Test] "${book}": ${hasAudiobook ? '✅ HAS audiobook' : '❌ NO audiobook'}`);
+        });
+
+        // Check for undefined titles
+        console.log('🐞 [Utility] Checking for undefined titles...');
+        document.querySelectorAll('.book-card').forEach((card, index) => {
+            const title = this.getBookTitleSafe(card);
+            if (!title || title === 'undefined') {
+                console.warn('🐞 [Utility] Card at index', index, 'has invalid title:', title);
+            }
         });
     }
 }
@@ -250,4 +383,4 @@ if (document.readyState === 'loading') {
     window.audiobookUtility.init();
 }
 
-console.log('🎧 [Utility] Audiobook Utility loaded'); 
+console.log('🎧 [Utility] Audiobook Utility loaded with safety protection'); 

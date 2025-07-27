@@ -957,16 +957,16 @@ function initResponsiveNav() {
                 btn.style.display = 'inline-flex';
             });
             
-                    // Use Audiobook Utility for button management
+                    // Use Audiobook Utility for button management (SAFE)
         if (window.audiobookUtility && window.audiobookUtility.isInitialized) {
-            console.log('🔧 [Main] Using Audiobook Utility for button management');
-            window.audiobookUtility.processAudiobookButtons();
+            console.log('🔧 [Main] Using Audiobook Utility for SAFE button management');
+            window.audiobookUtility.processAudiobookButtonsSafe();
         } else {
-            console.log('🔧 [Main] Audiobook Utility not ready, processing manually...');
-            // Fallback to manual processing
+            console.log('🔧 [Main] Audiobook Utility not ready, waiting...');
+            // Wait for utility to be ready
             setTimeout(() => {
                 if (window.audiobookUtility) {
-                    window.audiobookUtility.processAudiobookButtons();
+                    window.audiobookUtility.processAudiobookButtonsSafe();
                 }
             }, 2000);
         }

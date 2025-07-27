@@ -365,29 +365,64 @@ async function createBookCard(book) {
     const schema = generateBookSchema(book);
     const schemaScript = `<script type="application/ld+json">${JSON.stringify(schema)}</script>`;
     
-    // Generate slug for book detail page
+    // Generate slug for book detail page with robust detection
     let slug;
     let hasDetailPage = false;
     
-    if (book.title.includes("Umgang mit Eifersüchtigen")) {
+    // Robust title comparison for "Umgang mit Eifersüchtigen"
+    const normalizedTitle = book.title.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+    const eifersuchtKeywords = ['eifersüchtigen', 'eifersucht', 'umgang mit eifersüchtigen'];
+    
+    if (eifersuchtKeywords.some(keyword => normalizedTitle.includes(keyword))) {
         slug = "umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke";
         hasDetailPage = true;
+        console.log('🔗 [Link] Book has detail page:', book.title, '→', slug);
+        
+        // Log decision for debugging
+        if (window.linkDebugger) {
+            window.linkDebugger.logLinkDecision(
+                book.title, 
+                hasDetailPage, 
+                `/buecher/${slug}`, 
+                'Eifersucht book detected'
+            );
+        }
     } else {
-        // For now, only "Umgang mit Eifersüchtigen" has a detail page
-        // Other books will use Books2Read fallback
+        // All other books use Books2Read fallback
         slug = null;
+        hasDetailPage = false;
+        console.log('🔗 [Link] Book uses Books2Read fallback:', book.title);
+        
+        // Log decision for debugging
+        if (window.linkDebugger) {
+            window.linkDebugger.logLinkDecision(
+                book.title, 
+                hasDetailPage, 
+                'https://books2read.com/Dirk-Werner-Author', 
+                'No detail page available'
+            );
+        }
+    }
+    
+    // Ensure we have valid URLs
+    const detailPageUrl = hasDetailPage ? `/buecher/${slug}` : null;
+    const books2readUrl = 'https://books2read.com/Dirk-Werner-Author';
+    
+    // Validate URLs before creating HTML
+    if (hasDetailPage && (!slug || slug.length === 0)) {
+        console.warn('⚠️ [Link] Invalid slug detected, falling back to Books2Read:', book.title);
         hasDetailPage = false;
     }
     
     return `
-        <div class="book-card fade-in" data-genre="${genre}" data-title="${book.title.toLowerCase()}" data-asin="${book.asin || ''}" data-has-audiobook="${hasAudiobook}">
+        <div class="book-card fade-in" data-genre="${genre}" data-title="${book.title.toLowerCase()}" data-asin="${book.asin || ''}" data-has-audiobook="${hasAudiobook}" data-has-detail-page="${hasDetailPage}">
             ${schemaScript}
             <div class="book-image">
                 ${hasDetailPage ? 
-                    `<a href="/buecher/${slug}" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren">
+                    `<a href="${detailPageUrl}" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren">
                         <img src="${book.image.link}" alt="Buchcover: ${book.title}" loading="lazy">
                     </a>` :
-                    `<a href="https://books2read.com/Dirk-Werner-Author" target="_blank" rel="noopener noreferrer" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren" data-fallback="true">
+                    `<a href="${books2readUrl}" target="_blank" rel="noopener noreferrer" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren" data-fallback="true">
                         <img src="${book.image.link}" alt="Buchcover: ${book.title}" loading="lazy">
                     </a>`
                 }
@@ -395,18 +430,18 @@ async function createBookCard(book) {
             <div class="book-info">
                 <h3 class="book-title">
                     ${hasDetailPage ? 
-                        `<a href="/buecher/${slug}" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren">${book.title}</a>` :
-                        `<a href="https://books2read.com/Dirk-Werner-Author" target="_blank" rel="noopener noreferrer" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren" data-fallback="true">${book.title}</a>`
+                        `<a href="${detailPageUrl}" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren">${book.title}</a>` :
+                        `<a href="${books2readUrl}" target="_blank" rel="noopener noreferrer" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren" data-fallback="true">${book.title}</a>`
                     }
                 </h3>
                 <p class="book-author">${book.author}</p>
                 <p class="book-description">${book.description}</p>
                 <div class="book-links">
                     ${hasDetailPage ? 
-                        `<a href="/buecher/${slug}" class="book-link detail-link" aria-label="Mehr über ${book.title} erfahren">
+                        `<a href="${detailPageUrl}" class="book-link detail-link" aria-label="Mehr über ${book.title} erfahren">
                             📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
                         </a>` :
-                        `<a href="https://books2read.com/Dirk-Werner-Author" target="_blank" rel="noopener noreferrer" class="book-link detail-link" aria-label="Mehr über ${book.title} erfahren" data-fallback="true">
+                        `<a href="${books2readUrl}" target="_blank" rel="noopener noreferrer" class="book-link detail-link" aria-label="Mehr über ${book.title} erfahren" data-fallback="true">
                             📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
                         </a>`
                     }

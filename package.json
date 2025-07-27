@@ -5,6 +5,8 @@
   "main": "generate-sitemap.js",
   "scripts": {
     "generate-sitemap": "node generate-sitemap.js",
+    "generate-book-pages": "node generate-book-pages.js",
+    "generate-all": "npm run generate-sitemap && npm run generate-book-pages",
     "test": "node -e \"const { generateSlug } = require('./generate-sitemap.js'); console.log(generateSlug('Test: Äöüß & Special (Characters)'));\""
   },
   "keywords": [

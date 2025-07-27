@@ -641,6 +641,208 @@ body {
     color: #3498db;
 }
 
+/* Breadcrumb Styles */
+.breadcrumb {
+    background: #f8f9fa;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.breadcrumb-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-list li:not(:last-child)::after {
+    content: '›';
+    margin-left: 0.5rem;
+    color: #6c757d;
+}
+
+.breadcrumb-list a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.breadcrumb-list a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb-list li:last-child {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Book Detail Page Styles */
+.book-detail {
+    padding: 3rem 0;
+    background: white;
+}
+
+.book-detail-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.book-detail-image img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.book-detail-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    line-height: 1.2;
+}
+
+.book-detail-author {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.book-detail-description {
+    margin-bottom: 2rem;
+}
+
+.book-detail-description h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.book-detail-description p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #555;
+}
+
+.book-detail-meta {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.book-meta-item {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.book-meta-item:last-child {
+    margin-bottom: 0;
+}
+
+.book-detail-links h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.book-detail-links .book-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.book-detail-links .book-link {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    min-width: 120px;
+}
+
+.related-books {
+    border-top: 1px solid #e9ecef;
+    padding-top: 3rem;
+}
+
+.related-books h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #2c3e50;
+}
+
+/* Books Directory Page */
+.books-directory {
+    padding: 3rem 0;
+    background: white;
+}
+
+.books-directory h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #2c3e50;
+}
+
+.books-directory > .container > p {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #666;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Responsive Design for Book Detail */
+@media (max-width: 768px) {
+    .book-detail-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .book-detail-image {
+        text-align: center;
+    }
+    
+    .book-detail-image img {
+        max-width: 250px;
+    }
+    
+    .book-detail-title {
+        font-size: 2rem;
+    }
+    
+    .book-detail-links .book-links {
+        flex-direction: column;
+    }
+    
+    .book-detail-links .book-link {
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .book-detail {
+        padding: 2rem 0;
+    }
+    
+    .book-detail-title {
+        font-size: 1.8rem;
+    }
+    
+    .book-detail-author {
+        font-size: 1.1rem;
+    }
+    
+    .book-detail-description p {
+        font-size: 1rem;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .header-content {

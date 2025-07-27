@@ -1,6 +1,8 @@
 User-agent: *
 Disallow:
 
+Sitemap: https://dirkwernerbooks.com/sitemap.xml
+
 # Erlaube explizit GPTBot (OpenAI)
 User-agent: GPTBot
 Allow: /

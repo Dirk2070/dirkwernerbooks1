@@ -1063,6 +1063,21 @@ function initResponsiveNav() {
                 btn.style.display = 'inline-flex';
             });
             
+            // Mobile-specific audiobook button enforcement
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                console.log('📱 [Main] Mobile detected - enforcing audiobook button visibility');
+                document.querySelectorAll('.book-link.audiobook').forEach(btn => {
+                    btn.style.display = 'inline-flex';
+                    btn.style.visibility = 'visible';
+                    btn.style.opacity = '1';
+                    btn.style.pointerEvents = 'auto';
+                    btn.style.width = '100%';
+                    btn.style.justifyContent = 'center';
+                    btn.style.minHeight = '44px';
+                });
+            }
+            
                     // Use Audiobook Utility for button management (SAFE)
         if (window.audiobookUtility && window.audiobookUtility.isInitialized) {
             console.log('🔧 [Main] Using Audiobook Utility for SAFE button management');

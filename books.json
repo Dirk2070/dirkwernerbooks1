@@ -51,9 +51,15 @@
   },
   {
     "asin": "B0DY7K1148",
-    "title": "Psychotainment: Wie du auf jeder Party glänzt: 101 psychologische Fakten, die Gespräche unvergesslich machen (German Edition)",
+    "title": {
+      "de": "Psychotainment: Wie du auf jeder Party glänzt: 101 psychologische Fakten, die Gespräche unvergesslich machen (German Edition)",
+      "en": "Psychotainment: How to Shine at Every Party: 101 Psychological Facts That Make Conversations Unforgettable (German Edition)"
+    },
     "author": "Dirk Werner",
-    "description": "Der erste Psychologie-Ratgeber, der wissenschaftliche Erkenntnisse in party-taugliche Highlights verwandelt. 101 psychologische Fakten für unvergessliche Gespräche.",
+    "description": {
+      "de": "Der erste Psychologie-Ratgeber, der wissenschaftliche Erkenntnisse in party-taugliche Highlights verwandelt. 101 psychologische Fakten für unvergessliche Gespräche.",
+      "en": "The first psychology guide that transforms scientific insights into party-ready highlights. 101 psychological facts for unforgettable conversations."
+    },
     "image": {
       "link": "https://m.media-amazon.com/images/I/81JdaN0VGXL.jpg"
     },
@@ -70,9 +76,15 @@
   },
   {
     "asin": "B0DV56DC5P",
-    "title": "The Key of the Enlightened (English Edition)",
+    "title": {
+      "de": "Der Schlüssel der Erleuchteten (English Edition)",
+      "en": "The Key of the Enlightened (English Edition)"
+    },
     "author": "Dirk Werner",
-    "description": "Ein spiritueller Roman über Erleuchtung und Selbstfindung. Eine Reise zu innerem Frieden und Weisheit.",
+    "description": {
+      "de": "Ein spiritueller Roman über Erleuchtung und Selbstfindung. Eine Reise zu innerem Frieden und Weisheit.",
+      "en": "A spiritual novel about enlightenment and self-discovery. A journey to inner peace and wisdom."
+    },
     "image": {
       "link": "https://m.media-amazon.com/images/I/81jq2h0h4mL.jpg"
     },
@@ -89,9 +101,15 @@
   },
   {
     "asin": "B0DT7F2VVS",
-    "title": "Instructions for Staying in the Matrix Forever (English Edition)",
+    "title": {
+      "de": "Anweisungen zum ewigen Verbleib in der Matrix (English Edition)",
+      "en": "Instructions for Staying in the Matrix Forever (English Edition)"
+    },
     "author": "Dirk Werner",
-    "description": "Ein philosophischer Thriller über die Natur der Realität und die Entscheidung, in der Matrix zu bleiben.",
+    "description": {
+      "de": "Ein philosophischer Thriller über die Natur der Realität und die Entscheidung, in der Matrix zu bleiben.",
+      "en": "A philosophical thriller about the nature of reality and the decision to stay in the Matrix."
+    },
     "image": {
       "link": "https://m.media-amazon.com/images/I/714ARxqExxL.jpg"
     },

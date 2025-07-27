@@ -1306,6 +1306,17 @@ a[href*="books2read"] img:not([src*="arrow"]):not([src*="check"]):not([src*="fal
     .book-link.audiobook[style*="opacity: 0"] {
         opacity: 1 !important;
     }
+    
+    /* Force all audiobook buttons to be visible on mobile */
+    .book-link.audiobook {
+        display: inline-flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 100% !important;
+        justify-content: center !important;
+        min-height: 44px !important;
+    }
     .book-detail-content {
         flex-direction: column;
         gap: 2rem;

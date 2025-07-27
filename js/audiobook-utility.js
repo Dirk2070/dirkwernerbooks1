@@ -298,6 +298,15 @@ class AudiobookUtility {
         const isMobile = window.innerWidth <= 768;
         if (isMobile) {
             console.log('📱 [Utility] Mobile device detected, applying mobile-specific logic');
+            // Force mobile audiobook button visibility
+            setTimeout(() => {
+                document.querySelectorAll('.book-link.audiobook').forEach(btn => {
+                    btn.style.display = 'inline-flex';
+                    btn.style.visibility = 'visible';
+                    btn.style.opacity = '1';
+                    btn.style.pointerEvents = 'auto';
+                });
+            }, 100);
         }
         
         let processedCards = 0;

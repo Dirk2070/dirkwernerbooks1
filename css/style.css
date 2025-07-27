@@ -572,19 +572,29 @@ body {
     font-weight: bold;
 } */
 
-/* Clean design: Remove all green arrow elements */
+/* Clean design: Remove ONLY green arrow elements, preserve book covers */
 .book-detail-link[data-fallback="true"]::after,
 a[href*="books2read"]::after,
-a[href*="books2read"] > img,
 .fallback-icon,
 .green-arrow,
 svg[data-fallback="true"],
 span.icon-green,
-img[src*="arrow"] {
+img[src*="arrow"],
+img[src*="check"],
+img[src*="fallback"] {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
     pointer-events: none !important;
+}
+
+/* PRESERVE book cover images - only target arrow/icon images */
+.book-cover img,
+.book-card img:not([src*="arrow"]):not([src*="check"]):not([src*="fallback"]),
+a[href*="books2read"] img:not([src*="arrow"]):not([src*="check"]):not([src*="fallback"]) {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 /* Minimalistisches Design: Entferne redundante visuelle Elemente */
@@ -602,11 +612,23 @@ img[src*="arrow"] {
     transition: all 0.3s ease;
 }
 
-/* Remove any remaining arrow icons from buttons */
-.book-link svg,
-.book-detail-link svg,
-.detail-link svg {
+/* Remove ONLY arrow icons from buttons, preserve other SVGs */
+.book-link svg[data-fallback="true"],
+.book-detail-link svg[data-fallback="true"],
+.detail-link svg[data-fallback="true"],
+.book-link svg.fallback-icon,
+.book-detail-link svg.fallback-icon,
+.detail-link svg.fallback-icon {
     display: none !important;
+}
+
+/* PRESERVE other SVG icons (like book icons, etc.) */
+.book-link svg:not([data-fallback="true"]):not(.fallback-icon),
+.book-detail-link svg:not([data-fallback="true"]):not(.fallback-icon),
+.detail-link svg:not([data-fallback="true"]):not(.fallback-icon) {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 /* Make book titles clickable */

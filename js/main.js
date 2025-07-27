@@ -20,6 +20,7 @@ if (typeof window.translations === 'undefined') {
             'Bei Books2Read': 'Bei Books2Read',
             'Hörbuch': 'Hörbuch',
             'Hörbuch bei Apple Books': 'Hörbuch bei Apple Books',
+            'Mehr erfahren': 'Mehr erfahren',
             
             // Placeholders
             'Suche nach Titel...': 'Suche nach Titel...',
@@ -61,6 +62,7 @@ if (typeof window.translations === 'undefined') {
             'Bei Books2Read': 'On Books2Read',
             'Hörbuch': 'Audiobook',
             'Hörbuch bei Apple Books': 'Experience the Audiobook on Apple',
+            'Mehr erfahren': 'Learn More',
             
             // Placeholders
             'Suche nach Titel...': 'Search by title...',
@@ -384,13 +386,20 @@ async function createBookCard(book) {
         <div class="book-card fade-in" data-genre="${genre}" data-title="${book.title.toLowerCase()}" data-asin="${book.asin || ''}" data-has-audiobook="${hasAudiobook}">
             ${schemaScript}
             <div class="book-image">
-                <img src="${book.image.link}" alt="Buchcover: ${book.title}" loading="lazy">
+                <a href="/buecher/${slug}" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren">
+                    <img src="${book.image.link}" alt="Buchcover: ${book.title}" loading="lazy">
+                </a>
             </div>
             <div class="book-info">
-                <h3 class="book-title">${book.title}</h3>
+                <h3 class="book-title">
+                    <a href="/buecher/${slug}" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren">${book.title}</a>
+                </h3>
                 <p class="book-author">${book.author}</p>
                 <p class="book-description">${book.description}</p>
                 <div class="book-links">
+                    <a href="/buecher/${slug}" class="book-link detail-link" aria-label="Mehr über ${book.title} erfahren">
+                        📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
+                    </a>
                     ${shopLinksHTML}
                     ${audiobookHTML}
                 </div>

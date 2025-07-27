@@ -41,7 +41,19 @@ window.appleAudiobookList = {
       "format": "Audiobook"
     },
     {
+      "title": "Wie man Sekten erkennt: Ein Leitfaden zum Schutz vor Manipulation und Kontrolle",
+      "appleId": "1810717772",
+      "year": "2025",
+      "format": "Audiobook"
+    },
+    {
       "title": "How to Recognize Cults: A Guide to Protecting Yourself from Manipulation and Control",
+      "appleId": "1811457128",
+      "year": "2025",
+      "format": "Audiobook"
+    },
+    {
+      "title": "Wie man Sekten erkennt: Ein Leitfaden zum Schutz vor Manipulation und Kontrolle",
       "appleId": "1811457128",
       "year": "2025",
       "format": "Audiobook"

@@ -96,8 +96,10 @@ class AudiobookUtility {
     normalizeTitle(title) {
         if (!title) return '';
         return title.toLowerCase()
-            .replace(/[^\w\s]/g, '')
-            .replace(/\s+/g, ' ')
+            .replace(/\(english edition\)/gi, '')  // Remove "(English Edition)"
+            .replace(/\(german edition\)/gi, '')   // Remove "(German Edition)"
+            .replace(/[^\w\s]/g, '')               // Remove special characters
+            .replace(/\s+/g, ' ')                  // Normalize whitespace
             .trim();
     }
 

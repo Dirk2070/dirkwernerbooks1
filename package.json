@@ -1,23 +1,27 @@
 {
-  "name": "dirk-werner-books-website",
+  "name": "dirk-werner-books-scraper",
   "version": "1.0.0",
-  "description": "Official website for Dirk Werner - Psychologist & Author",
-  "main": "generate-sitemap.js",
+  "description": "Apple Books Audiobook Scraper für Dirk Werner's Website",
+  "main": "appleBooksScraper.js",
   "scripts": {
-    "generate-sitemap": "node generate-sitemap.js",
-    "generate-book-pages": "node generate-book-pages.js",
-    "generate-all": "npm run generate-sitemap && npm run generate-book-pages",
-    "test": "node -e \"const { generateSlug } = require('./generate-sitemap.js'); console.log(generateSlug('Test: Äöüß & Special (Characters)'));\""
+    "scrape": "node appleBooksScraper.js",
+    "scrape:watch": "node appleBooksScraper.js --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "author",
-    "books",
-    "psychology",
-    "website",
-    "sitemap"
+    "scraper",
+    "apple-books",
+    "audiobooks",
+    "dirk-werner"
   ],
   "author": "Dirk Werner",
   "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {},
   "engines": {
     "node": ">=14.0.0"
   }

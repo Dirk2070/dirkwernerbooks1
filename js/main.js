@@ -229,9 +229,9 @@ async function setAudiobookLinksByCountry() {
       window.open(link, '_blank', 'noopener,noreferrer');
     };
     heroBtn.addEventListener('click', heroBtn._audiobookClickHandler);
-    console.log('Hero button updated with link:', link);
+    console.log('🎧 [Hero] Hero button updated with link:', link);
   } else {
-    console.warn('Hero button not found in DOM');
+    console.log('🎧 [Hero] Hero button not found in DOM - likely on book detail page');
   }
   
   return link;
@@ -339,36 +339,53 @@ async function loadBooks() {
         await displayAllBooks();
         
     } catch (error) {
-        console.error('Error loading books:', error);
-        document.getElementById('featuredBooks').innerHTML = '<p>Fehler beim Laden der Bücher.</p>';
-        document.getElementById('allBooks').innerHTML = '<p>Fehler beim Laden der Bücher.</p>';
+        console.error('📚 [Books] Error loading books:', error);
+        
+        // Only show error messages if containers exist
+        const featuredContainer = document.getElementById('featuredBooks');
+        const allBooksContainer = document.getElementById('allBooks');
+        
+        if (featuredContainer) {
+            featuredContainer.innerHTML = '<p>Fehler beim Laden der Bücher.</p>';
+        }
+        if (allBooksContainer) {
+            allBooksContainer.innerHTML = '<p>Fehler beim Laden der Bücher.</p>';
+        }
+        
+        // If we're on a book detail page, this is expected
+        if (!featuredContainer && !allBooksContainer) {
+            console.log('📚 [Books] Book containers not found - likely on book detail page');
+        }
     }
 }
 
 // Display featured books (first 6)
 async function displayFeaturedBooks() {
     const featuredContainer = document.getElementById('featuredBooks');
-    const featuredBooks = allBooks.slice(0, 6);
-    
-    const bookCards = await Promise.all(featuredBooks.map(book => createBookCard(book)));
-    featuredContainer.innerHTML = bookCards.join('');
+    if (featuredContainer && allBooks) {
+        const featuredBooks = allBooks.slice(0, 6);
+        const bookCards = await Promise.all(featuredBooks.map(book => createBookCard(book)));
+        featuredContainer.innerHTML = bookCards.join('');
+    }
 }
 
 // Display all books
 async function displayAllBooks() {
     const allBooksContainer = document.getElementById('allBooks');
-    const bookCards = await Promise.all(filteredBooks.map(book => createBookCard(book)));
-    allBooksContainer.innerHTML = bookCards.join('');
-    
-    // Add fade-in animation
-    setTimeout(() => {
-        document.querySelectorAll('.book-card').forEach((card, index) => {
-            setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, index * 100);
-        });
-    }, 100);
+    if (allBooksContainer && filteredBooks) {
+        const bookCards = await Promise.all(filteredBooks.map(book => createBookCard(book)));
+        allBooksContainer.innerHTML = bookCards.join('');
+        
+        // Add fade-in animation
+        setTimeout(() => {
+            document.querySelectorAll('.book-card').forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        }, 100);
+    }
 }
 
 // Filter books by genre
@@ -469,23 +486,30 @@ function initSmoothScrolling() {
 // Initialize search functionality
 function initSearch() {
     const searchInput = document.getElementById('searchInput');
-    let searchTimeout;
-    
-    searchInput.addEventListener('input', function() {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            searchBooks(this.value);
-        }, 300);
-    });
+    if (searchInput) {
+        let searchTimeout;
+        
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                searchBooks(this.value);
+            }, 300);
+        });
+    } else {
+        console.log('🔍 [Search] Search input not found - likely on book detail page');
+    }
 }
 
 // Initialize genre filter
 function initGenreFilter() {
     const genreFilter = document.getElementById('genreFilter');
-    
-    genreFilter.addEventListener('change', function() {
-        filterByGenre(this.value);
-    });
+    if (genreFilter) {
+        genreFilter.addEventListener('change', function() {
+            filterByGenre(this.value);
+        });
+    } else {
+        console.log('🎭 [Filter] Genre filter not found - likely on book detail page');
+    }
 }
 
 // Initialize language switching
@@ -527,16 +551,20 @@ function initAnimations() {
 function initResponsiveNav() {
     // Add mobile menu functionality if needed
     const nav = document.querySelector('.nav');
-    let lastScrollY = window.scrollY;
-    
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > lastScrollY && window.scrollY > 100) {
-            nav.style.transform = 'translateY(-100%)';
-        } else {
-            nav.style.transform = 'translateY(0)';
-        }
-        lastScrollY = window.scrollY;
-    });
+    if (nav) {
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > lastScrollY && window.scrollY > 100) {
+                nav.style.transform = 'translateY(-100%)';
+            } else {
+                nav.style.transform = 'translateY(0)';
+            }
+            lastScrollY = window.scrollY;
+        });
+    } else {
+        console.log('📱 [Nav] Navigation not found - likely on book detail page');
+    }
 }
 
 // Initialize everything when DOM is loaded

@@ -554,7 +554,8 @@ body {
     position: relative;
 }
 
-.book-detail-link[data-fallback="true"]::after {
+/* REMOVED: Green arrow pseudo-elements for cleaner design */
+/* .book-detail-link[data-fallback="true"]::after {
     content: "↗";
     position: absolute;
     top: 5px;
@@ -569,6 +570,43 @@ body {
     justify-content: center;
     font-size: 12px;
     font-weight: bold;
+} */
+
+/* Clean design: Remove all green arrow elements */
+.book-detail-link[data-fallback="true"]::after,
+a[href*="books2read"]::after,
+a[href*="books2read"] > img,
+.fallback-icon,
+.green-arrow,
+svg[data-fallback="true"],
+span.icon-green,
+img[src*="arrow"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Minimalistisches Design: Entferne redundante visuelle Elemente */
+.book-link::after,
+.book-detail-link::after,
+.detail-link::after {
+    display: none !important;
+}
+
+/* Clean button design: Focus on content, not decoration */
+.book-link,
+.book-detail-link,
+.detail-link {
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+/* Remove any remaining arrow icons from buttons */
+.book-link svg,
+.book-detail-link svg,
+.detail-link svg {
+    display: none !important;
 }
 
 /* Make book titles clickable */

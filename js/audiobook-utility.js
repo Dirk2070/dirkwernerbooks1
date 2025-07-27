@@ -269,6 +269,13 @@ class AudiobookUtility {
     processAudiobookButtonsSafe() {
         console.log('🔧 [Utility] SAFELY Processing audiobook buttons...');
         
+        // Wait for whitelist to be loaded before processing
+        if (!this.whitelist || this.whitelist.length === 0) {
+            console.log('⏳ [Utility] Whitelist not ready, delaying processing...');
+            setTimeout(() => this.processAudiobookButtonsSafe(), 1000);
+            return;
+        }
+        
         const cards = document.querySelectorAll('.book-card');
         console.log('🔧 [Utility] Found', cards.length, 'book cards');
         

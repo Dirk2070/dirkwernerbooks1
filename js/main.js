@@ -768,7 +768,7 @@ function translatePage(lang) {
                 'Auf Amazon DE ansehen': 'View on Amazon DE',
                 'Bei Apple Books': 'On Apple Books',
                 'Bei Books2Read': 'On Books2Read',
-                'Hörbuch bei Apple Books': '🎧 Listen to Audiobook on Apple Books'
+                'Hörbuch bei Apple Books': '🎧 Listen to Audiobook on Apple Books Now'
             }
         };
     }
@@ -1070,13 +1070,23 @@ function initResponsiveNav() {
             window.audiobookUtility.processDetailPageAudiobookButtons();
         } else {
             console.log('🔧 [Main] Audiobook Utility not ready, waiting...');
-            // Wait for utility to be ready
+            // Wait for utility to be ready with longer delay
             setTimeout(() => {
                 if (window.audiobookUtility) {
+                    console.log('🔧 [Main] Audiobook Utility ready, processing buttons...');
                     window.audiobookUtility.processAudiobookButtonsSafe();
                     window.audiobookUtility.processDetailPageAudiobookButtons();
+                } else {
+                    console.log('🔧 [Main] Audiobook Utility still not ready, retrying...');
+                    // Retry after another 3 seconds
+                    setTimeout(() => {
+                        if (window.audiobookUtility) {
+                            window.audiobookUtility.processAudiobookButtonsSafe();
+                            window.audiobookUtility.processDetailPageAudiobookButtons();
+                        }
+                    }, 3000);
                 }
-            }, 2000);
+            }, 3000);
         }
         }, 1000);
     } else {

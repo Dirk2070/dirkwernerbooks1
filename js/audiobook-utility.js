@@ -224,7 +224,20 @@ class AudiobookUtility {
 
         try {
             button.style.display = 'inline-flex';
+            button.style.visibility = 'visible';
+            button.style.opacity = '1';
+            button.style.pointerEvents = 'auto';
             button.setAttribute('data-audiobook-allowed', 'true');
+            
+            // Mobile-specific enhancements
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                button.style.width = '100%';
+                button.style.justifyContent = 'center';
+                button.style.minHeight = '44px';
+                console.log('📱 [Utility] Applied mobile-specific styling for:', bookTitle);
+            }
+            
             console.log('✅ [Utility] SAFELY SHOWED audiobook button for:', bookTitle);
             return true;
         } catch (error) {
@@ -280,6 +293,12 @@ class AudiobookUtility {
         
         const cards = document.querySelectorAll('.book-card');
         console.log('🔧 [Utility] Found', cards.length, 'book cards');
+        
+        // Mobile-specific processing
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+            console.log('📱 [Utility] Mobile device detected, applying mobile-specific logic');
+        }
         
         let processedCards = 0;
         let successfulOperations = 0;

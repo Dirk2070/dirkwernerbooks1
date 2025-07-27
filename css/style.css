@@ -1286,6 +1286,26 @@ a[href*="books2read"] img:not([src*="arrow"]):not([src*="check"]):not([src*="fal
 
 /* Responsive Design for Book Detail */
 @media (max-width: 768px) {
+    /* Global mobile audiobook button visibility */
+    .book-link.audiobook {
+        display: inline-flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+    
+    /* Override any hiding rules for mobile */
+    .book-link.audiobook[style*="display: none"] {
+        display: inline-flex !important;
+    }
+    
+    .book-link.audiobook[style*="visibility: hidden"] {
+        visibility: visible !important;
+    }
+    
+    .book-link.audiobook[style*="opacity: 0"] {
+        opacity: 1 !important;
+    }
     .book-detail-content {
         flex-direction: column;
         gap: 2rem;
@@ -1459,9 +1479,13 @@ a[href*="books2read"] img:not([src*="arrow"]):not([src*="check"]):not([src*="fal
     }
     
     /* Ensure audiobook buttons are visible on mobile */
-    .book-card[data-has-audiobook="true"] .book-link.audiobook {
+    .book-card[data-has-audiobook="true"] .book-link.audiobook,
+    .book-card[data-audiobook-allowed="true"] .book-link.audiobook,
+    .book-link.audiobook[data-audiobook-allowed="true"] {
         display: inline-flex !important;
         width: 100%;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
 }
 
@@ -1506,9 +1530,13 @@ a[href*="books2read"] img:not([src*="arrow"]):not([src*="check"]):not([src*="fal
     }
     
     /* Ensure audiobook buttons are visible on small screens */
-    .book-card[data-has-audiobook="true"] .book-link.audiobook {
+    .book-card[data-has-audiobook="true"] .book-link.audiobook,
+    .book-card[data-audiobook-allowed="true"] .book-link.audiobook,
+    .book-link.audiobook[data-audiobook-allowed="true"] {
         display: inline-flex !important;
         width: 100%;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
 }
 

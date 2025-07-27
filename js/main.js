@@ -218,6 +218,17 @@ function generatePurchaseLinks(book) {
     return links;
 }
 
+// Helper function to get localized text from multilingual objects
+function getLocalizedText(textObj, lang) {
+    if (typeof textObj === 'string') {
+        return textObj; // Fallback for old format
+    }
+    if (textObj && typeof textObj === 'object') {
+        return textObj[lang] || textObj['de'] || textObj['en'] || 'No description available';
+    }
+    return 'No description available';
+}
+
 // Funktion für IP-basierte geolokationsbasierte Apple Books-Links
 async function setAudiobookLinksByCountry() {
   const fallback = "https://books.apple.com/de/author/dirk-werner/id316714929?see-all=audio-books";
@@ -467,12 +478,12 @@ async function createBookCard(book) {
             <div class="book-info">
                 <h3 class="book-title">
                     ${hasDetailPage ? 
-                        `<a href="${detailPageUrl}" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren">${book.title}</a>` :
-                        `<a href="${books2readUrl}" target="_blank" rel="noopener noreferrer" class="book-detail-link" aria-label="Mehr über ${book.title} erfahren" data-fallback="true">${book.title}</a>`
+                        `<a href="${detailPageUrl}" class="book-detail-link" aria-label="Mehr über ${getLocalizedText(book.title, currentLang)} erfahren">${getLocalizedText(book.title, currentLang)}</a>` :
+                        `<a href="${books2readUrl}" target="_blank" rel="noopener noreferrer" class="book-detail-link" aria-label="Mehr über ${getLocalizedText(book.title, currentLang)} erfahren" data-fallback="true">${getLocalizedText(book.title, currentLang)}</a>`
                     }
                 </h3>
                 <p class="book-author">${book.author}</p>
-                <p class="book-description">${book.description}</p>
+                <p class="book-description">${getLocalizedText(book.description, currentLang)}</p>
                 <div class="book-links">
                     ${hasDetailPage ? 
                         `<a href="${detailPageUrl}" class="book-link detail-link" aria-label="Mehr über ${book.title} erfahren">

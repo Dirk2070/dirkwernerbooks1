@@ -1,9 +1,15 @@
 [
   {
     "asin": "B0CW1G3XR6",
-    "title": "Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)",
+    "title": {
+      "de": "Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)",
+      "en": "Dealing with Jealous People: How to Stay Strong (German Edition)"
+    },
     "author": "Dirk Werner",
-    "description": "Ein praktischer Ratgeber für den Umgang mit Eifersucht in Beziehungen. Hilft dabei, innere Stärke zu bewahren und gesunde Grenzen zu setzen.",
+    "description": {
+      "de": "Ein praktischer Ratgeber für den Umgang mit Eifersucht in Beziehungen. Hilft dabei, innere Stärke zu bewahren und gesunde Grenzen zu setzen.",
+      "en": "A practical guide for dealing with jealousy in relationships. Helps maintain inner strength and set healthy boundaries."
+    },
     "image": {
       "link": "https://m.media-amazon.com/images/I/7120r0YodfL.jpg"
     },
@@ -20,9 +26,15 @@
   },
   {
     "asin": "B0DNBSQXXL",
-    "title": "How to Recognize Cults: A Guide to Protecting Yourself from Manipulation and Control (English Edition)",
+    "title": {
+      "de": "Wie man Sekten erkennt: Ein Leitfaden zum Schutz vor Manipulation und Kontrolle (English Edition)",
+      "en": "How to Recognize Cults: A Guide to Protecting Yourself from Manipulation and Control (English Edition)"
+    },
     "author": "Dirk Werner",
-    "description": "Ein umfassender Leitfaden zur Erkennung von Sekten und manipulativen Gruppen. Bietet praktische Strategien zum Selbstschutz.",
+    "description": {
+      "de": "Ein umfassender Leitfaden zur Erkennung von Sekten und manipulativen Gruppen. Bietet praktische Strategien zum Selbstschutz.",
+      "en": "A comprehensive guide to recognizing cults and manipulative groups. Offers practical strategies for self-protection."
+    },
     "image": {
       "link": "https://m.media-amazon.com/images/I/81U7rDDkknL.jpg"
     },

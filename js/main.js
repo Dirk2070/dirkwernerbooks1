@@ -447,6 +447,10 @@ async function createBookCard(book) {
         console.log('🔧 [Link] FORCING detail page for Eifersucht book:', book.title);
     }
     
+    // CRITICAL FIX: Only set data-fallback="true" for books WITHOUT detail pages
+    const shouldUseFallback = !hasDetailPage;
+    console.log('🔧 [Link] Book:', book.title, 'hasDetailPage:', hasDetailPage, 'shouldUseFallback:', shouldUseFallback);
+    
     return `
         <div class="book-card fade-in" data-genre="${genre}" data-title="${book.title.toLowerCase()}" data-asin="${book.asin || ''}" data-has-audiobook="${hasAudiobook}" data-has-detail-page="${hasDetailPage}">
             ${schemaScript}
@@ -1307,43 +1311,45 @@ window.addEventListener('resize', function() {
 function validateAndFixLinks() {
     console.log('🔧 [LinkFix] Starting link validation...');
     
-    const eifersuchtBook = document.querySelector('.book-card[data-title*="eifersüchtigen"]');
-    
-    if (eifersuchtBook) {
-        console.log('🔧 [LinkFix] Found Eifersucht book, validating links...');
+    // Fix ALL books that have detail pages but wrong data-fallback attributes
+    document.querySelectorAll('.book-card').forEach(card => {
+        const hasDetailPage = card.getAttribute('data-has-detail-page') === 'true';
+        const bookTitle = card.querySelector('.book-title')?.textContent?.trim();
         
-        // Check title link
-        const titleLink = eifersuchtBook.querySelector('.book-title a');
-        if (titleLink && !titleLink.href.includes('/buecher/')) {
-            console.log('🔧 [LinkFix] Fixing title link for Eifersucht book');
-            titleLink.href = '/buecher/umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke';
-            titleLink.removeAttribute('target');
-            titleLink.removeAttribute('rel');
-            titleLink.removeAttribute('data-fallback');
+        console.log('🔧 [LinkFix] Checking book:', bookTitle, 'hasDetailPage:', hasDetailPage);
+        
+        if (hasDetailPage) {
+            // This book SHOULD have detail page links (no green arrow)
+            const titleLink = card.querySelector('.book-title a');
+            const mehrErfahrenBtn = card.querySelector('.detail-link');
+            const coverLink = card.querySelector('.book-image a');
+            
+            // Remove data-fallback from all links
+            [titleLink, mehrErfahrenBtn, coverLink].forEach(link => {
+                if (link && link.hasAttribute('data-fallback')) {
+                    console.log('🔧 [LinkFix] Removing data-fallback from link for:', bookTitle);
+                    link.removeAttribute('data-fallback');
+                }
+            });
+            
+            // Ensure links point to detail page (for Eifersucht book)
+            if (bookTitle && bookTitle.toLowerCase().includes('eifersüchtigen')) {
+                const detailUrl = '/buecher/umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke';
+                
+                [titleLink, mehrErfahrenBtn, coverLink].forEach(link => {
+                    if (link && !link.href.includes('/buecher/')) {
+                        console.log('🔧 [LinkFix] Fixing link to detail page for:', bookTitle);
+                        link.href = detailUrl;
+                        link.removeAttribute('target');
+                        link.removeAttribute('rel');
+                    }
+                });
+            }
+        } else {
+            // This book should use Books2Read fallback (with green arrow)
+            console.log('🔧 [LinkFix] Book should use Books2Read fallback:', bookTitle);
         }
-        
-        // Check "Mehr erfahren" button
-        const mehrErfahrenBtn = eifersuchtBook.querySelector('.detail-link');
-        if (mehrErfahrenBtn && !mehrErfahrenBtn.href.includes('/buecher/')) {
-            console.log('🔧 [LinkFix] Fixing "Mehr erfahren" button for Eifersucht book');
-            mehrErfahrenBtn.href = '/buecher/umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke';
-            mehrErfahrenBtn.removeAttribute('target');
-            mehrErfahrenBtn.removeAttribute('rel');
-            mehrErfahrenBtn.removeAttribute('data-fallback');
-        }
-        
-        // Check cover image link
-        const coverLink = eifersuchtBook.querySelector('.book-image a');
-        if (coverLink && !coverLink.href.includes('/buecher/')) {
-            console.log('🔧 [LinkFix] Fixing cover link for Eifersucht book');
-            coverLink.href = '/buecher/umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke';
-            coverLink.removeAttribute('target');
-            coverLink.removeAttribute('rel');
-            coverLink.removeAttribute('data-fallback');
-        }
-        
-        console.log('🔧 [LinkFix] Eifersucht book links validated and fixed');
-    }
+    });
     
     console.log('🔧 [LinkFix] Link validation completed');
 }

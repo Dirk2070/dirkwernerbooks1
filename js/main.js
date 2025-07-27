@@ -1385,6 +1385,42 @@ window.fixGreenArrows = function() {
     return `Fixed ${elementsWithFallback.length} green arrows!`;
 };
 
+// Iron Man's solution for saving Green Arrow
+window.ironManFix = function() {
+    console.log('🦸‍♂️ [Iron Man] Suiting up...');
+    console.log('🦸‍♂️ [Iron Man] JARVIS, locate all green arrows on the website...');
+    
+    const greenArrows = document.querySelectorAll('[data-fallback="true"]');
+    console.log('🦸‍♂️ [Iron Man] Found', greenArrows.length, 'green arrows to rescue!');
+    
+    if (greenArrows.length === 0) {
+        console.log('🦸‍♂️ [Iron Man] No green arrows found! Green Arrow must already be safe.');
+        return 'Green Arrow is already on the island!';
+    }
+    
+    console.log('🦸‍♂️ [Iron Man] Activating repulsors...');
+    
+    greenArrows.forEach((arrow, index) => {
+        console.log(`🦸‍♂️ [Iron Man] Rescuing green arrow ${index + 1}/${greenArrows.length}...`);
+        arrow.removeAttribute('data-fallback');
+        console.log('🦸‍♂️ [Iron Man] Green arrow removed from:', arrow.textContent?.substring(0, 50) + '...');
+    });
+    
+    console.log('🦸‍♂️ [Iron Man] Mission accomplished! Green Arrow is back on the island!');
+    console.log('🦸‍♂️ [Iron Man] JARVIS, confirm all green arrows have been removed...');
+    
+    const remainingArrows = document.querySelectorAll('[data-fallback="true"]');
+    console.log('🦸‍♂️ [Iron Man] Remaining green arrows:', remainingArrows.length);
+    
+    if (remainingArrows.length === 0) {
+        console.log('🦸‍♂️ [Iron Man] Perfect! All green arrows have been successfully removed!');
+        return '🎯 Mission Accomplished! Green Arrow is safe on the island!';
+    } else {
+        console.log('🦸‍♂️ [Iron Man] Some green arrows still remain. Need to call the Avengers...');
+        return '⚠️ Some green arrows still need rescue!';
+    }
+};
+
 // Export functions for potential external use
 window.DirkWernerSite = {
     translatePage,
@@ -1392,6 +1428,7 @@ window.DirkWernerSite = {
     searchBooks,
     validateAndFixLinks,
     fixGreenArrows,
+    ironManFix,
     // loadBooks removed to prevent external calls on detail pages
 };
 

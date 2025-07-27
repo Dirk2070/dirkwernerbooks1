@@ -1525,6 +1525,86 @@ window.quickCssFix = function() {
     return '🧼 Quick CSS Fix applied!';
 };
 
+// Anti-Pfeil-Code - Direct Zombie Icon Removal
+window.antiPfeilCode = function() {
+    console.log('🎯 [Anti-Pfeil] Hunting down zombie icons...');
+    
+    // Find all potential green arrow elements
+    const rogueArrows = [...document.querySelectorAll('svg, span, i, img')]
+        .filter(el => 
+            el.outerHTML.includes('check') || 
+            el.outerHTML.includes('arrow') || 
+            el.className.includes('fallback') || 
+            el.className.includes('green') || 
+            el.dataset.fallback === "true"
+        );
+    
+    console.log('🎯 [Anti-Pfeil] Found', rogueArrows.length, 'rogue green icons');
+    
+    if (rogueArrows.length === 0) {
+        console.log('🎯 [Anti-Pfeil] No zombie icons found!');
+        return '✨ No zombie icons detected!';
+    }
+    
+    // Remove each zombie icon
+    rogueArrows.forEach((el, index) => {
+        console.log(`🧹 [Anti-Pfeil] Removing zombie icon ${index + 1}/${rogueArrows.length}:`, el);
+        el.remove();
+    });
+    
+    console.log('🎯 [Anti-Pfeil] All zombie icons eliminated!');
+    return `🧹 Eliminated ${rogueArrows.length} zombie icons!`;
+};
+
+// CSS Anti-Pfeil Overlay (permanent visual fix)
+window.cssAntiPfeil = function() {
+    console.log('🧼 [CSS Anti-Pfeil] Applying permanent CSS overlay...');
+    
+    const style = document.createElement('style');
+    style.id = 'css-anti-pfeil';
+    style.innerHTML = `
+        .green-arrow, 
+        .fallback-icon, 
+        svg[data-fallback="true"], 
+        span.icon-green, 
+        img[src*="arrow"],
+        [data-fallback="true"]::after,
+        .book-detail-link[data-fallback="true"]::after {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+    `;
+    
+    document.head.appendChild(style);
+    console.log('🧼 [CSS Anti-Pfeil] Permanent CSS overlay applied!');
+    return '🧼 CSS Anti-Pfeil overlay applied!';
+};
+
+// Ultimate Iron Man Fix (JS + CSS combination)
+window.ultimateIronManFix = function() {
+    console.log('🦸‍♂️ [Ultimate Iron Man] Deploying full arsenal...');
+    
+    // Step 1: Remove zombie icons from DOM
+    const jsResult = window.antiPfeilCode();
+    console.log('🦸‍♂️ [Ultimate Iron Man] JS removal result:', jsResult);
+    
+    // Step 2: Apply CSS overlay for permanent hiding
+    const cssResult = window.cssAntiPfeil();
+    console.log('🦸‍♂️ [Ultimate Iron Man] CSS overlay result:', cssResult);
+    
+    // Step 3: Remove data-fallback attributes
+    const dataFallbacks = document.querySelectorAll('[data-fallback="true"]');
+    dataFallbacks.forEach(el => {
+        el.removeAttribute('data-fallback');
+        console.log('🦸‍♂️ [Ultimate Iron Man] Removed data-fallback from:', el);
+    });
+    
+    console.log('🦸‍♂️ [Ultimate Iron Man] Ultimate mission accomplished!');
+    return `🦸‍♂️ Ultimate Iron Man Fix completed! Removed ${dataFallbacks.length} data-fallback attributes!`;
+};
+
 // Export functions for potential external use
 window.DirkWernerSite = {
     translatePage,
@@ -1535,6 +1615,9 @@ window.DirkWernerSite = {
     ironManFix,
     cssWitchcraft,
     quickCssFix,
+    antiPfeilCode,
+    cssAntiPfeil,
+    ultimateIronManFix,
     // loadBooks removed to prevent external calls on detail pages
 };
 

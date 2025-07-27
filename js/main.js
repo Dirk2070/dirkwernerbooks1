@@ -95,7 +95,9 @@ if (typeof window.translations === 'undefined') {
 
 // Genre classification based on title keywords
 function classifyGenre(title) {
-    const titleLower = title.toLowerCase();
+    // Handle multilingual title objects
+    const titleString = typeof title === 'string' ? title : getLocalizedText(title, window.currentLanguage || 'de');
+    const titleLower = titleString.toLowerCase();
     
     if (titleLower.includes('seelmann') || titleLower.includes('trance') || titleLower.includes('echo') || 
         titleLower.includes('legacy') || titleLower.includes('vermächtnis') || titleLower.includes('tödlich')) {
@@ -131,14 +133,14 @@ function generateBookSchema(book) {
     const schema = {
         "@context": "https://schema.org",
         "@type": "Book",
-        "name": book.title,
+        "name": getLocalizedText(book.title, window.currentLanguage || 'de'),
         "author": {
             "@type": "Person",
             "name": book.author || "Dirk Werner"
         },
         "bookFormat": book.bookFormat || "EBook",
         "inLanguage": book.language || "de",
-        "description": book.description || "",
+        "description": getLocalizedText(book.description, window.currentLanguage || 'de') || "",
         "offers": {
             "@type": "Offer",
             "url": book.links?.amazon_de || book.link,
@@ -636,7 +638,7 @@ function removeDuplicateBooks(books) {
     
     books.forEach(book => {
         // Extract base title by removing format suffixes
-        let baseTitle = book.title;
+        let baseTitle = getLocalizedText(book.title, window.currentLanguage || 'de');
         
         // Remove common format suffixes
         const formatSuffixes = [
@@ -740,9 +742,10 @@ function searchBooks(query) {
     if (searchTerm === '') {
         filteredBooks = [...allBooks];
     } else {
-        filteredBooks = allBooks.filter(book => 
-            book.title.toLowerCase().includes(searchTerm)
-        );
+        filteredBooks = allBooks.filter(book => {
+            const titleString = getLocalizedText(book.title, window.currentLanguage || 'de');
+            return titleString.toLowerCase().includes(searchTerm);
+        });
     }
     
     displayAllBooks();

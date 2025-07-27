@@ -1363,15 +1363,26 @@ function validateAndFixLinks() {
 // Manual trigger for link validation (for debugging)
 window.fixGreenArrows = function() {
     console.log('🔧 [Manual] Manually fixing green arrows...');
-    validateAndFixLinks();
     
-    // Force remove all data-fallback attributes
-    document.querySelectorAll('[data-fallback="true"]').forEach(element => {
-        console.log('🔧 [Manual] Removing data-fallback from:', element);
+    // Force remove all data-fallback attributes (IMMEDIATE FIX)
+    const elementsWithFallback = document.querySelectorAll('[data-fallback="true"]');
+    console.log('🔧 [Manual] Found', elementsWithFallback.length, 'elements with data-fallback="true"');
+    
+    elementsWithFallback.forEach((element, index) => {
+        console.log('🔧 [Manual] Removing data-fallback from element', index + 1, ':', element);
         element.removeAttribute('data-fallback');
     });
     
-    console.log('🔧 [Manual] Green arrows should be fixed now!');
+    // Also run the full validation
+    validateAndFixLinks();
+    
+    console.log('🔧 [Manual] Green arrows should be fixed now! Check the page...');
+    
+    // Verify the fix
+    const remainingFallbacks = document.querySelectorAll('[data-fallback="true"]');
+    console.log('🔧 [Manual] Remaining elements with data-fallback:', remainingFallbacks.length);
+    
+    return `Fixed ${elementsWithFallback.length} green arrows!`;
 };
 
 // Export functions for potential external use

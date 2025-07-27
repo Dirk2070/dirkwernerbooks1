@@ -32,8 +32,11 @@ class AudiobookUtility {
             // Wait for whitelist to load
             await this.waitForWhitelist();
             
-            // Process buttons with safety wrapper
+            // Process buttons with safety wrapper (for overview pages)
             this.processAudiobookButtonsSafe();
+            
+            // Process detail page buttons (for individual book pages)
+            this.processDetailPageAudiobookButtons();
             
             this.isInitialized = true;
             console.log('🎧 [Utility] Audiobook Utility initialized successfully');
@@ -306,6 +309,173 @@ class AudiobookUtility {
             successfulOperations,
             maxButtonRemovals: this.safetyChecks.maxButtonRemovals
         });
+    }
+
+    // SPECIALIZED: Process audiobook buttons on detail pages
+    processDetailPageAudiobookButtons() {
+        console.log('🔧 [Utility] Processing audiobook buttons on DETAIL PAGE...');
+        
+        // Check if we're on a detail page
+        const currentPath = window.location.pathname;
+        const isDetailPage = currentPath.includes('/buecher/') && currentPath !== '/buecher/';
+        
+        if (!isDetailPage) {
+            console.log('🔧 [Utility] Not on detail page, skipping detail processing');
+            return;
+        }
+        
+        console.log('🔧 [Utility] Detail page detected:', currentPath);
+        
+        // Get the main book title from the detail page
+        const titleSelectors = [
+            'h1.book-title',
+            'h1',
+            '.book-title',
+            '.title',
+            '[data-title]',
+            'h2.book-title',
+            'h2'
+        ];
+        
+        let bookTitle = null;
+        for (const selector of titleSelectors) {
+            const element = document.querySelector(selector);
+            if (element) {
+                bookTitle = element.textContent?.trim() || element.getAttribute('data-title')?.trim();
+                if (bookTitle && bookTitle !== 'undefined' && bookTitle.length > 0) {
+                    console.log('🔧 [Utility] Found book title on detail page:', bookTitle);
+                    break;
+                }
+            }
+        }
+        
+        if (!bookTitle) {
+            console.warn('⚠️ [Utility] No book title found on detail page');
+            return;
+        }
+        
+        // Check if this book should have an audiobook
+        const hasAudiobook = this.hasAudiobook(bookTitle);
+        console.log('🔧 [Utility] Book should have audiobook:', hasAudiobook);
+        
+        // Special case: "Umgang mit Eifersüchtigen" definitely has NO audiobook
+        if (bookTitle.toLowerCase().includes('eifersüchtigen') || bookTitle.toLowerCase().includes('eifersucht')) {
+            console.log('🔧 [Utility] Special case: Eifersucht book - NO audiobook available');
+            this.removeDetailPageAudiobookButtons();
+            return;
+        }
+        
+        if (!hasAudiobook) {
+            console.log('🔧 [Utility] Book does not have audiobook, removing any existing buttons');
+            this.removeDetailPageAudiobookButtons();
+            return;
+        }
+        
+        // Find or create audiobook button on detail page
+        this.ensureDetailPageAudiobookButton(bookTitle);
+    }
+
+    // Remove audiobook buttons from detail page
+    removeDetailPageAudiobookButtons() {
+        const buttonSelectors = [
+            '.book-link.audiobook',
+            '.audiobook-button',
+            '.btn-audiobook-link',
+            '.book-action.audiobook-button'
+        ];
+        
+        let removedCount = 0;
+        buttonSelectors.forEach(selector => {
+            const buttons = document.querySelectorAll(selector);
+            buttons.forEach(button => {
+                try {
+                    button.remove();
+                    removedCount++;
+                    console.log('❌ [Utility] Removed audiobook button from detail page');
+                } catch (error) {
+                    console.warn('⚠️ [Utility] Error removing button:', error);
+                }
+            });
+        });
+        
+        if (removedCount > 0) {
+            console.log('🔧 [Utility] Removed', removedCount, 'audiobook buttons from detail page');
+        }
+    }
+
+    // Ensure audiobook button exists on detail page
+    ensureDetailPageAudiobookButton(bookTitle) {
+        console.log('🔧 [Utility] Ensuring audiobook button on detail page for:', bookTitle);
+        
+        // Check if button already exists
+        const existingButton = document.querySelector('.book-link.audiobook, .audiobook-button, .btn-audiobook-link, .book-action.audiobook-button');
+        
+        if (existingButton) {
+            console.log('🔧 [Utility] Audiobook button already exists on detail page');
+            // Make sure it's visible
+            existingButton.style.display = 'inline-flex';
+            existingButton.setAttribute('data-audiobook-allowed', 'true');
+            return;
+        }
+        
+        // Create new button
+        console.log('🔧 [Utility] Creating new audiobook button on detail page');
+        this.createDetailPageAudiobookButton(bookTitle);
+    }
+
+    // Create audiobook button on detail page
+    createDetailPageAudiobookButton(bookTitle) {
+        try {
+            const button = document.createElement('a');
+            button.className = 'book-link audiobook btn-audiobook-link';
+            button.href = 'https://books.apple.com/de/author/dirk-werner/id316714929?see-all=audio-books';
+            button.target = '_blank';
+            button.rel = 'noopener noreferrer';
+            button.setAttribute('data-audiobook-allowed', 'true');
+            button.innerHTML = '🎧 Hörbuch bei Apple Books';
+            
+            // Find the best place to insert the button on detail page
+            const insertionSelectors = [
+                '.book-links',
+                '.book-actions',
+                '.book-meta',
+                '.book-description',
+                '.book-info',
+                '.book-details',
+                '.purchase-links',
+                '.buy-links'
+            ];
+            
+            let inserted = false;
+            for (const selector of insertionSelectors) {
+                const container = document.querySelector(selector);
+                if (container) {
+                    container.appendChild(button);
+                    console.log('🛠️ [Utility] Created audiobook button in', selector, 'for:', bookTitle);
+                    inserted = true;
+                    break;
+                }
+            }
+            
+            // Fallback: insert after the title
+            if (!inserted) {
+                const titleElement = document.querySelector('h1, h2, .book-title, .title');
+                if (titleElement && titleElement.parentNode) {
+                    titleElement.parentNode.insertBefore(button, titleElement.nextSibling);
+                    console.log('🛠️ [Utility] Created audiobook button after title for:', bookTitle);
+                    inserted = true;
+                }
+            }
+            
+            // Last resort: insert at the end of the body
+            if (!inserted) {
+                document.body.appendChild(button);
+                console.log('🛠️ [Utility] Created audiobook button at end of body for:', bookTitle);
+            }
+            
+        } catch (error) {
+            console.error('❌ [Utility] Error creating detail page audiobook button:', error);
+        }
     }
 
     // Force audiobook buttons for specific books (SAFE)

@@ -961,12 +961,14 @@ function initResponsiveNav() {
         if (window.audiobookUtility && window.audiobookUtility.isInitialized) {
             console.log('🔧 [Main] Using Audiobook Utility for SAFE button management');
             window.audiobookUtility.processAudiobookButtonsSafe();
+            window.audiobookUtility.processDetailPageAudiobookButtons();
         } else {
             console.log('🔧 [Main] Audiobook Utility not ready, waiting...');
             // Wait for utility to be ready
             setTimeout(() => {
                 if (window.audiobookUtility) {
                     window.audiobookUtility.processAudiobookButtonsSafe();
+                    window.audiobookUtility.processDetailPageAudiobookButtons();
                 }
             }, 2000);
         }

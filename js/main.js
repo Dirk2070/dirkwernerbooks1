@@ -1421,6 +1421,110 @@ window.ironManFix = function() {
     }
 };
 
+// CSS Witchcraft - Advanced Green Arrow Detection and Removal
+window.cssWitchcraft = function() {
+    console.log('🧙‍♂️ [CSS Witchcraft] Casting detection spells...');
+    
+    // Test 1: Find all SVG and IMG elements with arrow/fallback references
+    const svgImgArrows = [...document.querySelectorAll('svg, img')].filter(el => 
+        el.outerHTML.includes('arrow') || 
+        el.outerHTML.includes('fallback') || 
+        el.outerHTML.includes('check')
+    );
+    console.log('🧙‍♂️ [CSS Witchcraft] Found', svgImgArrows.length, 'SVG/IMG elements with arrow references');
+    
+    // Test 2: Direct selector for fallback icons
+    const fallbackIcons = document.querySelectorAll('.fallback-icon, .green-arrow');
+    console.log('🧙‍♂️ [CSS Witchcraft] Found', fallbackIcons.length, 'fallback icons');
+    
+    // Test 3: Background image arrows
+    const backgroundArrows = [...document.querySelectorAll('*')].filter(el => {
+        const style = getComputedStyle(el);
+        return style.backgroundImage && style.backgroundImage.includes('arrow');
+    });
+    console.log('🧙‍♂️ [CSS Witchcraft] Found', backgroundArrows.length, 'elements with arrow background images');
+    
+    // Test 4: CSS pseudo-elements (::after content)
+    const pseudoArrows = [...document.querySelectorAll('*')].filter(el => {
+        const style = getComputedStyle(el, '::after');
+        return style.content && (style.content.includes('↗') || style.content.includes('arrow'));
+    });
+    console.log('🧙‍♂️ [CSS Witchcraft] Found', pseudoArrows.length, 'elements with arrow pseudo-elements');
+    
+    // Test 5: Data-fallback attributes
+    const dataFallbacks = document.querySelectorAll('[data-fallback="true"]');
+    console.log('🧙‍♂️ [CSS Witchcraft] Found', dataFallbacks.length, 'elements with data-fallback="true"');
+    
+    // Comprehensive removal
+    const totalArrows = svgImgArrows.length + fallbackIcons.length + backgroundArrows.length + pseudoArrows.length + dataFallbacks.length;
+    console.log('🧙‍♂️ [CSS Witchcraft] Total arrow-related elements found:', totalArrows);
+    
+    if (totalArrows === 0) {
+        console.log('🧙‍♂️ [CSS Witchcraft] No arrows found! The spell worked!');
+        return '✨ No green arrows detected!';
+    }
+    
+    // Apply CSS Witchcraft
+    console.log('🧙‍♂️ [CSS Witchcraft] Applying removal spells...');
+    
+    // Remove SVG/IMG arrows
+    svgImgArrows.forEach(el => {
+        console.log('🧙‍♂️ [CSS Witchcraft] Removing SVG/IMG arrow:', el);
+        el.remove();
+    });
+    
+    // Remove fallback icons
+    fallbackIcons.forEach(el => {
+        console.log('🧙‍♂️ [CSS Witchcraft] Removing fallback icon:', el);
+        el.remove();
+    });
+    
+    // Remove data-fallback attributes
+    dataFallbacks.forEach(el => {
+        console.log('🧙‍♂️ [CSS Witchcraft] Removing data-fallback from:', el);
+        el.removeAttribute('data-fallback');
+    });
+    
+    // Apply CSS override for background arrows
+    if (backgroundArrows.length > 0) {
+        const css = document.createElement('style');
+        css.id = 'css-witchcraft-override';
+        css.textContent = `
+            *[style*="arrow"] {
+                background-image: none !important;
+            }
+        `;
+        document.head.appendChild(css);
+        console.log('🧙‍♂️ [CSS Witchcraft] Applied CSS override for background arrows');
+    }
+    
+    console.log('🧙‍♂️ [CSS Witchcraft] All spells cast! Green arrows should be gone!');
+    return `✨ Removed ${totalArrows} green arrow elements!`;
+};
+
+// Quick CSS Fix (permanent, fast, effective)
+window.quickCssFix = function() {
+    console.log('🧼 [Quick CSS Fix] Applying instant CSS override...');
+    
+    const css = document.createElement('style');
+    css.id = 'quick-css-fix';
+    css.textContent = `
+        .fallback-icon, 
+        .green-arrow, 
+        svg[data-fallback="true"],
+        [data-fallback="true"]::after,
+        .book-detail-link[data-fallback="true"]::after {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+    `;
+    
+    document.head.appendChild(css);
+    console.log('🧼 [Quick CSS Fix] CSS override applied! Green arrows should disappear immediately!');
+    return '🧼 Quick CSS Fix applied!';
+};
+
 // Export functions for potential external use
 window.DirkWernerSite = {
     translatePage,
@@ -1429,6 +1533,8 @@ window.DirkWernerSite = {
     validateAndFixLinks,
     fixGreenArrows,
     ironManFix,
+    cssWitchcraft,
+    quickCssFix,
     // loadBooks removed to prevent external calls on detail pages
 };
 

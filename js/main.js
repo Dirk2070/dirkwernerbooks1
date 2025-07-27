@@ -363,8 +363,7 @@ async function loadBooks() {
 
 // Remove duplicate books based on base title (without format suffix)
 function removeDuplicateBooks(books) {
-    const uniqueBooks = [];
-    const seenTitles = new Set();
+    const bookMap = new Map(); // Map to store the best version of each book
     
     books.forEach(book => {
         // Extract base title by removing format suffixes
@@ -387,15 +386,24 @@ function removeDuplicateBooks(books) {
         });
         
         // If we haven't seen this base title before, add the book
-        if (!seenTitles.has(baseTitle)) {
-            uniqueBooks.push(book);
-            seenTitles.add(baseTitle);
+        if (!bookMap.has(baseTitle)) {
+            bookMap.set(baseTitle, book);
         } else {
-            console.log(`📚 [Duplicate] Skipping duplicate: "${book.title}" (base: "${baseTitle}")`);
+            // If we already have a book with this base title, keep the one with more links
+            const existingBook = bookMap.get(baseTitle);
+            const existingLinksCount = existingBook.links ? Object.keys(existingBook.links).length : 0;
+            const newLinksCount = book.links ? Object.keys(book.links).length : 0;
+            
+            if (newLinksCount > existingLinksCount) {
+                console.log(`📚 [Duplicate] Replacing "${existingBook.title}" with "${book.title}" (more links: ${newLinksCount} vs ${existingLinksCount})`);
+                bookMap.set(baseTitle, book);
+            } else {
+                console.log(`📚 [Duplicate] Skipping "${book.title}" (fewer links: ${newLinksCount} vs ${existingLinksCount})`);
+            }
         }
     });
     
-    return uniqueBooks;
+    return Array.from(bookMap.values());
 }
 
 // Display featured books (first 6)

@@ -547,6 +547,19 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
+.book-link.paperback {
+    background: #8B4513;
+    color: white;
+    border: 2px solid #8B4513;
+}
+
+.book-link.paperback:hover {
+    background: #A0522D;
+    border-color: #A0522D;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+}
+
 .book-link.amazon-com {
     background: #374151;
     color: white;

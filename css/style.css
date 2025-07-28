@@ -2476,6 +2476,80 @@ html {
     pointer-events: none !important;
 }
 
+/* 🚨 AMAZON-SPEZIFISCHE OVERRIDES: Amazon-Widget Overlays entfernen */
+/* Amazon Product Block Text Overlays komplett ausblenden */
+.amzn-product-block-text,
+#amzn-assoc-carousel-1 .amzn-product-block-text,
+#amzn-assoc-carousel-2 .amzn-product-block-text,
+.amazon-product-block-text,
+.amazon-widget-text,
+.amazon-overlay-text {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0, 0, 0, 0) !important;
+}
+
+/* Amazon Product Blocks ohne Text-Overlays */
+.amzn-product-block,
+.amazon-product-block,
+.amazon-widget {
+    position: relative !important;
+}
+
+.amzn-product-block-text,
+.amazon-product-block-text,
+.amazon-widget-text {
+    position: static !important;
+    background: transparent !important;
+    margin-top: 0.5em !important;
+    padding: 0 !important;
+    width: auto !important;
+    display: none !important; /* Zusätzliche Sicherheit */
+}
+
+/* Alle möglichen Amazon-Overlay-Klassen */
+[class*="amzn"],
+[class*="amazon"],
+[class*="product-block"],
+[class*="widget-text"],
+[class*="overlay-text"] {
+    position: relative !important;
+}
+
+[class*="amzn"]::before,
+[class*="amzn"]::after,
+[class*="amazon"]::before,
+[class*="amazon"]::after,
+[class*="product-block"]::before,
+[class*="product-block"]::after,
+[class*="widget-text"]::before,
+[class*="widget-text"]::after,
+[class*="overlay-text"]::before,
+[class*="overlay-text"]::after {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
 /* 🎯 ENDGÜLTIGE LÖSUNG: Alle möglichen Titel-Overlays über Buchcovern entfernen */
 /* H3-Titel und andere Überschriften über Buchcovern */
 .book-card h3.overlay-title,

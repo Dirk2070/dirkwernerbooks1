@@ -1107,6 +1107,59 @@ function cleanupDataTitleAttributes() {
     return cleanedCount;
 }
 
+// 🚨 AMAZON-WIDGET CLEANUP: Amazon-spezifische Overlays entfernen
+function cleanupAmazonWidgets() {
+    console.log('🧹 [Amazon Cleanup] Entfernung von Amazon-Widget Overlays...');
+    
+    let removedCount = 0;
+    
+    // Amazon-spezifische Overlay-Klassen entfernen
+    const amazonOverlays = document.querySelectorAll(`
+        .amzn-product-block-text,
+        .amazon-product-block-text,
+        .amazon-widget-text,
+        .amazon-overlay-text,
+        [class*="amzn-product-block-text"],
+        [class*="amazon-product-block-text"],
+        [class*="amazon-widget-text"],
+        [class*="amazon-overlay-text"]
+    `);
+    
+    amazonOverlays.forEach((overlay, index) => {
+        overlay.remove();
+        removedCount++;
+        console.log(`🧹 [Amazon Cleanup] Overlay ${index + 1} entfernt: ${overlay.className}`);
+    });
+    
+    // Amazon Carousel IDs bereinigen
+    const amazonCarousels = document.querySelectorAll('[id*="amzn-assoc-carousel"]');
+    amazonCarousels.forEach((carousel, index) => {
+        const textElements = carousel.querySelectorAll('.amzn-product-block-text');
+        textElements.forEach((text, textIndex) => {
+            text.remove();
+            removedCount++;
+            console.log(`🧹 [Amazon Cleanup] Carousel ${index + 1}, Text ${textIndex + 1} entfernt`);
+        });
+    });
+    
+    // Alle möglichen Amazon-Overlays mit Wildcard-Selektoren
+    const allAmazonElements = document.querySelectorAll('[class*="amzn"], [class*="amazon"]');
+    allAmazonElements.forEach((element, index) => {
+        if (element.className.includes('text') || element.className.includes('overlay')) {
+            element.style.display = 'none';
+            element.style.visibility = 'hidden';
+            element.style.opacity = '0';
+            element.style.position = 'absolute';
+            element.style.zIndex = '-1';
+            removedCount++;
+            console.log(`🧹 [Amazon Cleanup] Amazon-Element ${index + 1} ausgeblendet: ${element.className}`);
+        }
+    });
+    
+    console.log(`🧹 [Amazon Cleanup] ${removedCount} Amazon-Overlays entfernt/ausgeblendet`);
+    return removedCount;
+}
+
     // Initialize everything when DOM is loaded
     document.addEventListener('DOMContentLoaded', async function() {
         console.log('🚀 [Init] DOMContentLoaded event fired');
@@ -1188,16 +1241,38 @@ function cleanupDataTitleAttributes() {
             cleanupDataTitleAttributes();
         }, 1000); // 1 Sekunde nach dem Laden
         
+        // 🚨 AMAZON-WIDGET CLEANUP: Amazon-Overlays entfernen
+        setTimeout(() => {
+            cleanupAmazonWidgets();
+        }, 1500); // 1.5 Sekunden nach dem Laden
+        
+        // 🚨 WIEDERHOLTE AMAZON-CLEANUP: Für dynamisch geladene Widgets
+        setInterval(() => {
+            cleanupAmazonWidgets();
+        }, 5000); // Alle 5 Sekunden prüfen
+        
         // 🚨 SOFORTIGE BEREINIGUNG: Bei DOM-Änderungen
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.type === 'childList') {
                     mutation.addedNodes.forEach((node) => {
-                        if (node.nodeType === 1 && node.classList && node.classList.contains('book-card')) {
+                        if (node.nodeType === 1) {
                             // Neue Buchkarte hinzugefügt - sofort bereinigen
-                            setTimeout(() => {
-                                cleanupDataTitleAttributes();
-                            }, 100);
+                            if (node.classList && node.classList.contains('book-card')) {
+                                setTimeout(() => {
+                                    cleanupDataTitleAttributes();
+                                }, 100);
+                            }
+                            
+                            // Amazon-Widget hinzugefügt - sofort bereinigen
+                            if (node.classList && (node.classList.contains('amzn-product-block') || 
+                                                  node.classList.contains('amazon-product-block') ||
+                                                  node.className.includes('amzn') ||
+                                                  node.className.includes('amazon'))) {
+                                setTimeout(() => {
+                                    cleanupAmazonWidgets();
+                                }, 100);
+                            }
                         }
                     });
                 }

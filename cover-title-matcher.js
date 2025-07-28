@@ -6,10 +6,28 @@ const BOOKS_PATH = path.join(__dirname, 'books.json');
 
 // Cover-Titel-Mapping (basierend auf visueller Analyse)
 const COVER_TITLE_MAPPING = {
-  // 101 goldene Regeln - Paar im Blumenfeld mit Schmetterlingen
-  'https://m.media-amazon.com/images/I/81LKWtbbD0L.jpg': {
+  // 101 goldene Regeln - Paar im Blumenfeld mit Schmetterlingen (korrigiert)
+  'https://m.media-amazon.com/images/I/71ta7WfuuoL.jpg': {
     title: '101 goldene Regeln für eine harmonische Paar-Beziehung',
     keywords: ['101 goldene', 'Paar-Beziehung', 'harmonische', 'Blumenfeld', 'Schmetterlinge']
+  },
+  
+  // Nanogenesis - Science Fiction Cover
+  'https://m.media-amazon.com/images/I/81k1jQeXgbL.jpg': {
+    title: 'Nanogenesis: The Rise of Superhumans',
+    keywords: ['Nanogenesis', 'Superhumans', 'Science Fiction', 'Nanotechnologie']
+  },
+  
+  // Self-Love Over Perfection - Rosa/Pink Cover
+  'https://m.media-amazon.com/images/I/71D0-qTLOuL.jpg': {
+    title: 'Self-Love Over Perfection: A Guide to Overcoming Female Narcissism',
+    keywords: ['Self-Love', 'Perfection', 'Female Narcissism', 'rosa', 'pink']
+  },
+  
+  // Selbstsabotage - Dunkles Cover mit Gehirn/Neuronen
+  'https://m.media-amazon.com/images/I/81cZff5qtCL.jpg': {
+    title: 'Selbstsabotage überwinden: Entfessle dein wahres Potenzial',
+    keywords: ['Selbstsabotage', 'Potenzial', 'Gehirn', 'Neuronen', 'dunkel']
   },
   
   // Umgang mit Eifersüchtigen
@@ -138,7 +156,7 @@ const COVER_TITLE_MAPPING = {
     keywords: ['Battle Within', 'Felsgipfel', 'Person', 'Arme ausgebreitet']
   },
   
-  // American Shadows - Dunkles Cover
+  // American Shadows - Dunkles Cover (korrigiert)
   'https://m.media-amazon.com/images/I/81LKWtbbD0L.jpg': {
     title: 'American Shadows: Hecates Intervention',
     keywords: ['American Shadows', 'Hecate', 'dunkel', 'Schatten']
@@ -290,14 +308,80 @@ function updateBooksWithCoverTitles() {
 function autoCorrectCoverAssignments() {
   console.log('🤖 Starte automatische Cover-Zuordnung...\n');
   
-  const result = updateBooksWithCoverTitles();
-  if (!result) return;
+  try {
+    const books = JSON.parse(fs.readFileSync(BOOKS_PATH, 'utf-8'));
+    let correctionsMade = 0;
+    
+    books.forEach((book, index) => {
+      const currentTitle = book.title?.de || book.title || 'Unbekannt';
+      const currentCover = book.image?.link || '';
+      const recognition = recognizeTitleFromCover(currentCover);
+      
+      if (recognition.confidence === 'high') {
+        // Prüfe, ob Titel übereinstimmt
+        const titleMatches = recognition.keywords.some(keyword => 
+          currentTitle.toLowerCase().includes(keyword.toLowerCase())
+        );
+        
+        if (!titleMatches) {
+          console.log(`⚠️  Cover-Zuordnungsfehler gefunden:`);
+          console.log(`   Buch: "${currentTitle.substring(0, 50)}..."`);
+          console.log(`   Aktuelles Cover: ${currentCover}`);
+          console.log(`   Cover gehört zu: "${recognition.title}"`);
+          
+          // Finde das korrekte Cover für dieses Buch
+          const correctCover = findCorrectCoverForTitle(currentTitle);
+          if (correctCover && correctCover !== currentCover) {
+            console.log(`   ✅ Korrekte Cover gefunden: ${correctCover}`);
+            book.image.link = correctCover;
+            correctionsMade++;
+          } else {
+            console.log(`   ❌ Kein korrektes Cover gefunden`);
+          }
+          console.log('---');
+        }
+      }
+    });
+    
+    if (correctionsMade > 0) {
+      // Speichere korrigierte books.json
+      const backupPath = path.join(__dirname, `books_backup_${Date.now()}.json`);
+      fs.writeFileSync(backupPath, JSON.stringify(books, null, 2), 'utf-8');
+      console.log(`💾 Backup erstellt: ${backupPath}`);
+      
+      fs.writeFileSync(BOOKS_PATH, JSON.stringify(books, null, 2), 'utf-8');
+      console.log(`✅ ${correctionsMade} Cover-Korrekturen gespeichert!`);
+    } else {
+      console.log('✅ Keine Cover-Korrekturen nötig!');
+    }
+    
+  } catch (error) {
+    console.error('❌ Fehler bei automatischer Korrektur:', error.message);
+  }
+}
+
+// Hilfsfunktion: Finde korrektes Cover für Titel
+function findCorrectCoverForTitle(title) {
+  const normalizedTitle = normalizeTitle(title);
   
-  // Hier könnte die automatische Korrektur implementiert werden
-  console.log('\n💡 Für automatische Korrekturen:');
-  console.log('1. Erweitere COVER_TITLE_MAPPING mit den nicht erkannten Covers');
-  console.log('2. Implementiere Logik für automatische Titel-Korrektur');
-  console.log('3. Speichere korrigierte books.json');
+  // Suche in COVER_TITLE_MAPPING nach passendem Titel
+  for (const [coverUrl, mapping] of Object.entries(COVER_TITLE_MAPPING)) {
+    const mappingTitle = normalizeTitle(mapping.title);
+    if (normalizedTitle.includes(mappingTitle) || mappingTitle.includes(normalizedTitle)) {
+      return coverUrl;
+    }
+  }
+  
+  return null;
+}
+
+// Hilfsfunktion: Titel normalisieren
+function normalizeTitle(title) {
+  return title
+    .toLowerCase()
+    .replace(/[^\w\s]/gi, '')   // Entfernt Sonderzeichen
+    .replace(/\s+/g, ' ')       // Mehrfaches Leerzeichen vereinfachen
+    .trim();
 }
 
 // CLI-Befehle

@@ -2780,6 +2780,76 @@ function diagnoseVisibilityIssues() {
         
         console.log('🔍 [Diagnose] Book loading diagnosis completed');
     }
+
+    // 🚨 NOTFALL-REPARATUR: Automatische Buchladung falls fehlgeschlagen
+    function emergencyBookLoading() {
+        console.log('🚨 [Emergency] Starting emergency book loading...');
+        
+        // 1. Prüfe ob Bücher bereits geladen sind
+        if (allBooks && allBooks.length > 0) {
+            console.log('🚨 [Emergency] Books already loaded:', allBooks.length);
+            return;
+        }
+        
+        // 2. Prüfe Container
+        const allBooksContainer = document.getElementById('allBooks');
+        if (!allBooksContainer) {
+            console.error('🚨 [Emergency] No allBooks container found!');
+            return;
+        }
+        
+        // 3. Versuche books.json zu laden
+        fetch('books.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('🚨 [Emergency] Books loaded successfully:', data.length);
+                allBooks = data;
+                filteredBooks = [...data];
+                
+                // 4. Sofort anzeigen
+                displayAllBooks();
+            })
+            .catch(error => {
+                console.error('🚨 [Emergency] Failed to load books:', error);
+                
+                // 5. Fallback: Dummy-Buch anzeigen
+                const dummyBook = {
+                    asin: "DUMMY-001",
+                    title: { de: "Testbuch - Bücher werden geladen...", en: "Test Book - Loading..." },
+                    author: "Dirk Werner",
+                    description: { de: "Bücher werden geladen. Bitte warten...", en: "Books are loading. Please wait..." },
+                    image: { link: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkxvYWRpbmcuLi48L3RleHQ+PC9zdmc+" },
+                    link: "#",
+                    links: { amazon_de: "#", amazon_us: "#", apple_books: "#", books2read: "#" },
+                    language: "de",
+                    bookFormat: { de: "EBook", en: "EBook" },
+                    hasAudiobook: false
+                };
+                
+                allBooks = [dummyBook];
+                filteredBooks = [dummyBook];
+                displayAllBooks();
+                
+                // 6. Erneut versuchen nach 5 Sekunden
+                setTimeout(() => {
+                    console.log('🚨 [Emergency] Retrying book loading...');
+                    emergencyBookLoading();
+                }, 5000);
+            });
+    }
+
+    // 🔄 AUTOMATISCHE REPARATUR: Nach 5 Sekunden ausführen falls keine Bücher
+    setTimeout(() => {
+        if (!allBooks || allBooks.length === 0) {
+            console.log('🚨 [Auto-Repair] No books detected, starting emergency loading...');
+            emergencyBookLoading();
+        }
+    }, 5000);
 });
 
 // 🐛 DUMMY-FUNKTION: validateAndFixLinks für Kompatibilität

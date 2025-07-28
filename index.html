@@ -111,7 +111,14 @@
                     </div>
                 </div>
                 <div class="header-right">
-                    <div class="language-switch">
+                    <!-- 📱 MOBILE: Dropdown-Sprachumschalter für mobile Geräte -->
+                    <select id="language-switcher" class="language-dropdown">
+                        <option value="de">🇩🇪 Deutsch</option>
+                        <option value="en">🇺🇸 English</option>
+                    </select>
+                    
+                    <!-- 🖥️ DESKTOP: Button-Sprachumschalter für Desktop -->
+                    <div class="language-switch desktop-only">
                         <button class="lang-btn active" data-lang="de">DE</button>
                         <button class="lang-btn" data-lang="en">EN</button>
                     </div>

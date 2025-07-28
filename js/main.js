@@ -939,10 +939,11 @@ function initGenreFilter() {
 
 // Initialize language switching
 function initLanguageSwitching() {
-    // 📱 MOBILE vs DESKTOP: Temporäre Sprachverwaltung pro Gerät
+    // 📱 MOBILE vs DESKTOP: Geräteabhängige Sprachverwaltung
     const urlParams = new URLSearchParams(window.location.search);
     const urlLang = urlParams.get('lang');
     const sessionLang = sessionStorage.getItem('currentLang');
+    const isMobile = window.innerWidth < 768;
     
     let preferredLang = 'de'; // default
     
@@ -962,61 +963,96 @@ function initLanguageSwitching() {
     window.currentLanguage = preferredLang;
     
     // Set initial active state
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        if (btn.dataset.lang === preferredLang) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
+    // Set active language button/select based on device
+    if (isMobile) {
+        // Mobile: Dropdown-Sprachumschalter
+        const languageSwitcher = document.getElementById('language-switcher');
+        if (languageSwitcher) {
+            languageSwitcher.value = preferredLang;
+            languageSwitcher.style.fontSize = '14px';
+            languageSwitcher.style.width = '100%';
+            console.log('📱 [Mobile] Language dropdown initialized:', preferredLang);
         }
-    });
+    } else {
+        // Desktop: Button-Sprachumschalter
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            if (btn.dataset.lang === preferredLang) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        console.log('🖥️ [Desktop] Language buttons initialized:', preferredLang);
+    }
     
-    // Add click event listeners
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        // 🚨 SPRACHUMSCHALTUNG FIX: Temporäre Sprachverwaltung ohne persistente Änderungen
-        const handleLanguageSwitch = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const lang = this.dataset.lang;
-            
-            console.log(`🌐 [Language] Switching to: ${lang}`);
-            
-            // Update active state
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Update session storage and URL parameter (temporär)
-            sessionStorage.setItem('currentLang', lang);
-            window.currentLanguage = lang;
-            updateURLParameter('lang', lang);
-            
-            // Apply translation without persistent DOM changes
-            translatePage(lang);
-            
-            // Temporäre DOM-Updates (werden beim Reload zurückgesetzt)
-            setTimeout(() => {
-                document.querySelectorAll('[data-de], [data-en]').forEach(element => {
-                    if (element.dataset[lang]) {
-                        element.textContent = element.dataset[lang];
-                    }
-                });
+    // Add event listeners for language switching
+    if (isMobile) {
+        // Mobile: Dropdown-Sprachumschalter
+        const languageSwitcher = document.getElementById('language-switcher');
+        if (languageSwitcher) {
+            languageSwitcher.addEventListener('change', function() {
+                const lang = this.value;
+                console.log(`🌐 [Mobile] Language switching to: ${lang}`);
                 
-                // Re-render book cards
-                if (typeof displayFeaturedBooks === 'function') {
-                    displayFeaturedBooks();
-                }
-                if (typeof displayAllBooks === 'function') {
-                    displayAllBooks();
-                }
-            }, 100);
+                // Update session storage and URL parameter
+                sessionStorage.setItem('currentLang', lang);
+                window.currentLanguage = lang;
+                updateURLParameter('lang', lang);
+                
+                // Apply translation
+                translatePage(lang);
+                
+                // Force page reload for mobile (more reliable)
+                location.reload();
+            });
+        }
+    } else {
+        // Desktop: Button-Sprachumschalter
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            const handleLanguageSwitch = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const lang = this.dataset.lang;
+                
+                console.log(`🌐 [Desktop] Switching to: ${lang}`);
+                
+                // Update active state
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update session storage and URL parameter (temporär)
+                sessionStorage.setItem('currentLang', lang);
+                window.currentLanguage = lang;
+                updateURLParameter('lang', lang);
+                
+                // Apply translation without persistent DOM changes
+                translatePage(lang);
+                
+                // Temporäre DOM-Updates (werden beim Reload zurückgesetzt)
+                setTimeout(() => {
+                    document.querySelectorAll('[data-de], [data-en]').forEach(element => {
+                        if (element.dataset[lang]) {
+                            element.textContent = element.dataset[lang];
+                        }
+                    });
+                    
+                    // Re-render book cards
+                    if (typeof displayFeaturedBooks === 'function') {
+                        displayFeaturedBooks();
+                    }
+                    if (typeof displayAllBooks === 'function') {
+                        displayAllBooks();
+                    }
+                }, 100);
+                
+                console.log(`🌐 [Language] Successfully switched to: ${lang} (temporary)`);
+            };
             
-            console.log(`🌐 [Language] Successfully switched to: ${lang} (temporary)`);
-        };
-        
-        // Add event listeners for both click and touch
-        btn.addEventListener('click', handleLanguageSwitch);
-        btn.addEventListener('touchend', handleLanguageSwitch);
-    });
+            btn.addEventListener('click', handleLanguageSwitch);
+            btn.addEventListener('touchend', handleLanguageSwitch);
+        });
+    }
     
     // Apply initial translation
     translatePage(preferredLang);

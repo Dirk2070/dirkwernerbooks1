@@ -938,6 +938,40 @@ function initAnimations() {
 
 // Handle responsive navigation
 function initResponsiveNav() {
+    // Mobile navigation toggle
+    const mobileToggle = document.querySelector('.mobile-nav-toggle');
+    const navList = document.querySelector('.nav-list');
+    
+    if (mobileToggle && navList) {
+        mobileToggle.addEventListener('click', function() {
+            navList.classList.toggle('active');
+            
+            // Update aria-label for accessibility
+            const isOpen = navList.classList.contains('active');
+            mobileToggle.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
+            mobileToggle.textContent = isOpen ? '✕' : '☰';
+        });
+        
+        // Close mobile menu when clicking on a link
+        const navLinks = navList.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                navList.classList.remove('active');
+                mobileToggle.setAttribute('aria-label', 'Menü öffnen');
+                mobileToggle.textContent = '☰';
+            });
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!navList.contains(event.target) && !mobileToggle.contains(event.target)) {
+                navList.classList.remove('active');
+                mobileToggle.setAttribute('aria-label', 'Menü öffnen');
+                mobileToggle.textContent = '☰';
+            }
+        });
+    }
+    
     // Add mobile menu functionality if needed
     const nav = document.querySelector('.nav');
     if (nav) {

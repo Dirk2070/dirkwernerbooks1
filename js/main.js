@@ -333,6 +333,10 @@ async function createBookCard(book) {
     const links = generatePurchaseLinks(book);
     const currentLang = window.currentLanguage || 'de';
     
+    // Cache-Busting für Cover-Bilder
+    const coverUrl = book.image?.link || '';
+    const cacheBustedCover = coverUrl ? `${coverUrl}${coverUrl.includes('?') ? '&' : '?'}nocache=${Date.now()}` : '';
+    
     // Wait for whitelist to be loaded
     if (!window.appleAudiobookList && typeof window.waitForAudiobookList === 'function') {
         await window.waitForAudiobookList();
@@ -471,10 +475,10 @@ async function createBookCard(book) {
             <div class="book-image">
                 ${hasDetailPage ? 
                     `<a href="${detailPageUrl}" class="book-detail-link" aria-label="Mehr über ${titleString} erfahren">
-                        <img src="${book.image.link}" alt="Buchcover: ${titleString}" loading="lazy">
+                        <img src="${cacheBustedCover}" alt="Buchcover: ${titleString}" loading="lazy">
                     </a>` :
                     `<a href="${books2readUrl}" target="_blank" rel="noopener noreferrer" class="book-detail-link" aria-label="Mehr über ${titleString} erfahren" data-fallback="true">
-                        <img src="${book.image.link}" alt="Buchcover: ${titleString}" loading="lazy">
+                        <img src="${cacheBustedCover}" alt="Buchcover: ${titleString}" loading="lazy">
                     </a>`
                 }
             </div>

@@ -31,13 +31,13 @@
             "@type": "Person",
             "name": "Dirk Werner"
         },
-        "bookFormat": "Paperback",
+        "bookFormat": "EBook",
         "inLanguage": "de",
-        "description": "Ein Ausmalbuch mit über 70 inspirierenden Motiven heiliger Geometrie für Entspannung und Kreativität.",
+        "description": "[object Object]",
         "image": "https://m.media-amazon.com/images/I/81SB6qaE+uL.jpg",
         "offers": {
             "@type": "Offer",
-            "url": "https://www.amazon.de/Kosmische-Matrix-Geometrie-Ausmalen-inspirierende/dp/B0D7Z9D9KG",
+            "url": "https://www.amazon.de/dp/B0D7Z9D9KG",
             "priceCurrency": "EUR"
         },
         "isbn": "B0D7Z9D9KG"
@@ -151,7 +151,7 @@
                             <strong>Sprache:</strong> Deutsch
                         </div>
                         <div class="book-meta-item">
-                            <strong>Format:</strong> Taschenbuch
+                            <strong>Format:</strong> E-Book
                         </div>
                         <div class="book-meta-item">
                             <strong>ASIN:</strong> B0D7Z9D9KG
@@ -161,15 +161,17 @@
                     <div class="book-detail-links">
                         <h3>Jetzt kaufen</h3>
                         <div class="book-links">
-                            <a href="https://www.amazon.de/Kosmische-Matrix-Geometrie-Ausmalen-inspirierende/dp/B0D7Z9D9KG" class="book-link amazon-de" target="_blank" rel="noopener noreferrer" aria-label="Buch 'Kosmische Matrix: Heilige Geometrie zum Ausmalen: 70+ inspirierende Motive' bei Amazon Deutschland kaufen">
+                            <a href="https://www.amazon.de/dp/B0D7Z9D9KG" class="book-link amazon-de" target="_blank" rel="noopener noreferrer" aria-label="Buch 'Kosmische Matrix: Heilige Geometrie zum Ausmalen: 70+ inspirierende Motive' bei Amazon Deutschland kaufen">
                                 📚 Bei Amazon DE kaufen
                             </a>
                             
-                            <a href="https://www.amazon.com/Kosmische-Matrix-Geometrie-Ausmalen-inspirierende/dp/B0D7Z9D9KG" class="book-link amazon-com" target="_blank" rel="noopener noreferrer" aria-label="Buch 'Kosmische Matrix: Heilige Geometrie zum Ausmalen: 70+ inspirierende Motive' bei Amazon USA kaufen">
+                            <a href="https://www.amazon.com/dp/B0D7Z9D9KG" class="book-link amazon-com" target="_blank" rel="noopener noreferrer" aria-label="Buch 'Kosmische Matrix: Heilige Geometrie zum Ausmalen: 70+ inspirierende Motive' bei Amazon USA kaufen">
                                 🛒 Bei Amazon US kaufen
                             </a>
                             
-                            
+                            <a href="https://books.apple.com/de/author/dirk-werner/id316714929" class="book-link apple-books" target="_blank" rel="noopener noreferrer" aria-label="Buch 'Kosmische Matrix: Heilige Geometrie zum Ausmalen: 70+ inspirierende Motive' bei Apple Books kaufen">
+                                📱 Bei Apple Books kaufen
+                            </a>
                             
                             <a href="https://books2read.com/Dirk-Werner-Author" class="book-link books2read" target="_blank" rel="noopener noreferrer" aria-label="Buch 'Kosmische Matrix: Heilige Geometrie zum Ausmalen: 70+ inspirierende Motive' bei Books2Read ansehen">
                                 🌍 Bei Books2Read ansehen
@@ -224,7 +226,10 @@
                 const allBooks = await response.json();
                 
                 // Filter out current book and get 6 random books
-                const otherBooks = allBooks.filter(b => b.title !== 'Kosmische Matrix: Heilige Geometrie zum Ausmalen: 70+ inspirierende Motive');
+                const otherBooks = allBooks.filter(b => {
+                    const bookTitle = b.title?.de || b.title?.en || b.title;
+                    return bookTitle !== 'Kosmische Matrix: Heilige Geometrie zum Ausmalen: 70+ inspirierende Motive';
+                });
                 const relatedBooks = otherBooks.sort(() => 0.5 - Math.random()).slice(0, 6);
                 
                 const relatedContainer = document.getElementById('relatedBooks');

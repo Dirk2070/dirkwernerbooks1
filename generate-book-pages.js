@@ -22,7 +22,10 @@ function generateSlug(title) {
 
 // Function to generate HTML for individual book page
 function generateBookPageHTML(book) {
-    const slug = generateSlug(book.title);
+    // Handle multilingual title structure
+    const title = book.title?.de || book.title?.en || book.title;
+    const description = book.description?.de || book.description?.en || book.description;
+    const slug = generateSlug(title);
     
     return `<!DOCTYPE html>
 <html lang="${book.language || 'de'}">
@@ -31,20 +34,20 @@ function generateBookPageHTML(book) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- SEO Meta Tags -->
-    <title>${book.title} von Dirk Werner - ${book.description ? book.description.substring(0, 60) + '...' : 'Buchdetails'}</title>
-    <meta name="description" content="${book.description || 'Entdecken Sie ' + book.title + ' von Dirk Werner - Psychologe und Autor.'}">
+    <title>${title} von Dirk Werner - ${description ? description.substring(0, 60) + '...' : 'Buchdetails'}</title>
+    <meta name="description" content="${description || 'Entdecken Sie ' + title + ' von Dirk Werner - Psychologe und Autor.'}">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="${book.title} von Dirk Werner">
-    <meta property="og:description" content="${book.description || 'Entdecken Sie dieses Buch von Dirk Werner'}">
+    <meta property="og:title" content="${title} von Dirk Werner">
+    <meta property="og:description" content="${description || 'Entdecken Sie dieses Buch von Dirk Werner'}">
     <meta property="og:image" content="${book.image.link}">
     <meta property="og:url" content="https://dirkwernerbooks.com/buecher/${slug}">
     <meta property="og:type" content="book">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="${book.title} von Dirk Werner">
-    <meta name="twitter:description" content="${book.description || 'Entdecken Sie dieses Buch von Dirk Werner'}">
+    <meta name="twitter:title" content="${title} von Dirk Werner">
+    <meta name="twitter:description" content="${description || 'Entdecken Sie dieses Buch von Dirk Werner'}">
     <meta name="twitter:image" content="${book.image.link}">
     
     <!-- Schema.org Book Markup -->
@@ -52,7 +55,7 @@ function generateBookPageHTML(book) {
     {
         "@context": "https://schema.org",
         "@type": "Book",
-        "name": "${book.title}",
+        "name": "${title}",
         "author": {
             "@type": "Person",
             "name": "Dirk Werner"
@@ -97,7 +100,7 @@ function generateBookPageHTML(book) {
             {
                 "@type": "ListItem",
                 "position": 3,
-                "name": "${book.title}",
+                "name": "${title}",
                 "item": "https://dirkwernerbooks.com/buecher/${slug}"
             }
         ]
@@ -149,7 +152,7 @@ function generateBookPageHTML(book) {
                 <ol class="breadcrumb-list">
                     <li><a href="/">Startseite</a></li>
                     <li><a href="/#books">Bücher</a></li>
-                    <li aria-current="page">${book.title}</li>
+                    <li aria-current="page">${title}</li>
                 </ol>
             </nav>
         </div>
@@ -160,16 +163,16 @@ function generateBookPageHTML(book) {
         <div class="container">
             <div class="book-detail-content">
                 <div class="book-detail-image">
-                    <img src="${book.image.link}" alt="Buchcover: ${book.title} von Dirk Werner" loading="lazy">
+                    <img src="${book.image.link}" alt="Buchcover: ${title} von Dirk Werner" loading="lazy">
                 </div>
                 
                 <div class="book-detail-info">
-                    <h1 class="book-detail-title">${book.title}</h1>
+                    <h1 class="book-detail-title">${title}</h1>
                     <p class="book-detail-author">von Dirk Werner</p>
                     
-                    ${book.description ? `<div class="book-detail-description">
+                    ${description ? `<div class="book-detail-description">
                         <h2>Über dieses Buch</h2>
-                        <p>${book.description}</p>
+                        <p>${description}</p>
                     </div>` : ''}
                     
                     <div class="book-detail-meta">
@@ -187,26 +190,26 @@ function generateBookPageHTML(book) {
                     <div class="book-detail-links">
                         <h3>Jetzt kaufen</h3>
                         <div class="book-links">
-                            ${book.links?.amazon_de ? `<a href="${book.links.amazon_de}" class="book-link amazon-de" target="_blank" rel="noopener noreferrer" aria-label="Buch '${book.title}' bei Amazon Deutschland kaufen">
+                            ${book.links?.amazon_de ? `<a href="${book.links.amazon_de}" class="book-link amazon-de" target="_blank" rel="noopener noreferrer" aria-label="Buch '${title}' bei Amazon Deutschland kaufen">
                                 📚 Bei Amazon DE kaufen
                             </a>` : ''}
                             
-                            ${book.links?.amazon_us ? `<a href="${book.links.amazon_us}" class="book-link amazon-com" target="_blank" rel="noopener noreferrer" aria-label="Buch '${book.title}' bei Amazon USA kaufen">
+                            ${book.links?.amazon_us ? `<a href="${book.links.amazon_us}" class="book-link amazon-com" target="_blank" rel="noopener noreferrer" aria-label="Buch '${title}' bei Amazon USA kaufen">
                                 🛒 Bei Amazon US kaufen
                             </a>` : ''}
                             
-                            ${book.links?.apple_books ? `<a href="${book.links.apple_books}" class="book-link apple-books" target="_blank" rel="noopener noreferrer" aria-label="Buch '${book.title}' bei Apple Books kaufen">
+                            ${book.links?.apple_books ? `<a href="${book.links.apple_books}" class="book-link apple-books" target="_blank" rel="noopener noreferrer" aria-label="Buch '${title}' bei Apple Books kaufen">
                                 📱 Bei Apple Books kaufen
                             </a>` : ''}
                             
-                            ${book.links?.books2read ? `<a href="${book.links.books2read}" class="book-link books2read" target="_blank" rel="noopener noreferrer" aria-label="Buch '${book.title}' bei Books2Read ansehen">
+                            ${book.links?.books2read ? `<a href="${book.links.books2read}" class="book-link books2read" target="_blank" rel="noopener noreferrer" aria-label="Buch '${title}' bei Books2Read ansehen">
                                 🌍 Bei Books2Read ansehen
                             </a>` : ''}
                         </div>
                         
                         ${book.hasAudiobook ? `<div class="audiobook-links">
                             <h4>Hörbuch verfügbar</h4>
-                            <a href="#" class="book-link audiobook btn-audiobook-link" target="_blank" rel="noopener noreferrer" aria-label="Hörbuch '${book.title}' bei Apple Books anhören">
+                            <a href="#" class="book-link audiobook btn-audiobook-link" target="_blank" rel="noopener noreferrer" aria-label="Hörbuch '${title}' bei Apple Books anhören">
                                 🎧 Hörbuch bei Apple Books
                             </a>
                         </div>` : ''}
@@ -257,7 +260,10 @@ function generateBookPageHTML(book) {
                 const allBooks = await response.json();
                 
                 // Filter out current book and get 6 random books
-                const otherBooks = allBooks.filter(b => b.title !== '${book.title}');
+                const otherBooks = allBooks.filter(b => {
+                    const bookTitle = b.title?.de || b.title?.en || b.title;
+                    return bookTitle !== '${title}';
+                });
                 const relatedBooks = otherBooks.sort(() => 0.5 - Math.random()).slice(0, 6);
                 
                 const relatedContainer = document.getElementById('relatedBooks');
@@ -281,8 +287,8 @@ function generateBookPageHTML(book) {
 // Function to generate all book pages
 function generateBookPages() {
     try {
-        // Read the books-extended.json file
-        const booksData = JSON.parse(fs.readFileSync('books-extended.json', 'utf8'));
+        // Read the books.json file (main source of truth)
+        const booksData = JSON.parse(fs.readFileSync('books.json', 'utf8'));
         
         // Create buecher directory if it doesn't exist
         const buecherDir = 'buecher';
@@ -294,7 +300,8 @@ function generateBookPages() {
         
         // Generate individual pages for each book
         booksData.forEach(book => {
-            const slug = generateSlug(book.title);
+            const title = book.title?.de || book.title?.en || book.title;
+            const slug = generateSlug(title);
             const html = generateBookPageHTML(book);
             
             // Write the HTML file
@@ -306,7 +313,8 @@ function generateBookPages() {
         
         console.log(`\n🎉 Successfully generated ${generatedCount} book pages!`);
         console.log(`📁 Location: ${buecherDir}/`);
-        console.log(`🌐 Example URL: https://dirkwernerbooks.com/buecher/${generateSlug(booksData[0].title)}`);
+        const firstBookTitle = booksData[0].title?.de || booksData[0].title?.en || booksData[0].title;
+        console.log(`🌐 Example URL: https://dirkwernerbooks.com/buecher/${generateSlug(firstBookTitle)}`);
         
         // Generate index file for the buecher directory
         generateBuecherIndex(booksData);
@@ -355,19 +363,21 @@ function generateBuecherIndex(booksData) {
             
             <div class="books-grid">
                 ${booksData.map(book => {
-                    const slug = generateSlug(book.title);
+                    const title = book.title?.de || book.title?.en || book.title;
+                    const description = book.description?.de || book.description?.en || book.description;
+                    const slug = generateSlug(title);
                     return `<div class="book-card">
                         <div class="book-image">
                             <a href="/buecher/${slug}.html">
-                                <img src="${book.image.link}" alt="Buchcover: ${book.title} von Dirk Werner" loading="lazy">
+                                <img src="${book.image.link}" alt="Buchcover: ${title} von Dirk Werner" loading="lazy">
                             </a>
                         </div>
                         <div class="book-content">
                             <h3 class="book-title">
-                                <a href="/buecher/${slug}.html">${book.title}</a>
+                                <a href="/buecher/${slug}.html">${title}</a>
                             </h3>
                             <p class="book-author">von Dirk Werner</p>
-                            ${book.description ? `<p class="book-description">${book.description.substring(0, 100)}...</p>` : ''}
+                            ${description ? `<p class="book-description">${description.substring(0, 100)}...</p>` : ''}
                             <a href="/buecher/${slug}.html" class="book-link books2read">Mehr erfahren</a>
                         </div>
                     </div>`;

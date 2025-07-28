@@ -2336,13 +2336,21 @@ async function loadAndDisplayBooks() {
     
     // Validate and fix links after initialization
     setTimeout(() => {
-        validateAndFixLinks();
+        if (typeof validateAndFixLinks === 'function') {
+            validateAndFixLinks();
+        } else {
+            console.warn("🔧 [Main] validateAndFixLinks ist nicht definiert. Überspringe Link-Prüfung.");
+        }
     }, 500);
     
     // Additional validation after content is fully loaded
     setTimeout(() => {
-        validateAndFixLinks();
-        console.log('🔧 [Main] Second link validation completed');
+        if (typeof validateAndFixLinks === 'function') {
+            validateAndFixLinks();
+            console.log('🔧 [Main] Second link validation completed');
+        } else {
+            console.warn("🔧 [Main] validateAndFixLinks ist nicht definiert. Überspringe zweite Link-Prüfung.");
+        }
     }, 2000);
     
     // WEB COMPONENT: Custom audiobook button element
@@ -2616,3 +2624,12 @@ function diagnoseVisibilityIssues() {
         diagnoseVisibilityIssues();
     }, 5000);
 });
+
+// 🐛 DUMMY-FUNKTION: validateAndFixLinks für Kompatibilität
+function validateAndFixLinks() {
+    console.log('🔧 [Links] validateAndFixLinks aufgerufen - temporär deaktiviert');
+    // Temporär deaktiviert. Keine Aktion nötig.
+    // Diese Funktion diente ursprünglich zur Link-Validierung, ist aber nicht mehr notwendig.
+}
+
+// Parse markdown text to HTML

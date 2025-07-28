@@ -440,8 +440,18 @@ async function createBookCard(book) {
     const shouldUseFallback = !hasDetailPage;
     console.log('🔧 [Link] Book:', titleString, 'hasDetailPage:', hasDetailPage, 'shouldUseFallback:', shouldUseFallback);
     
-    // 🎯 SAUBERES DATA-TITLE: Nur reiner Text, kein HTML
-    const cleanTitleString = titleString.replace(/<[^>]*>/g, '').replace(/"/g, '&quot;').trim();
+    // 🎯 SAUBERES DATA-TITLE: Umfassende Bereinigung von HTML und Sonderzeichen
+    const cleanTitleString = titleString
+        .replace(/<[^>]*>/g, '') // HTML-Tags entfernen
+        .replace(/&[a-zA-Z0-9#]+;/g, '') // HTML-Entities entfernen
+        .replace(/"/g, '') // Anführungszeichen entfernen
+        .replace(/'/g, '') // Einfache Anführungszeichen entfernen
+        .replace(/style="[^"]*"/g, '') // Style-Attribute entfernen
+        .replace(/class="[^"]*"/g, '') // Class-Attribute entfernen
+        .replace(/href="[^"]*"/g, '') // Href-Attribute entfernen
+        .replace(/data-[^=]*="[^"]*"/g, '') // Data-Attribute entfernen
+        .replace(/\s+/g, ' ') // Mehrfache Leerzeichen vereinfachen
+        .trim();
     
     return `
         <div class="book-card fade-in" data-genre="${genre}" data-title="${cleanTitleString.toLowerCase()}" data-asin="${book.asin || ''}" data-has-audiobook="${hasAudiobook}" data-has-detail-page="${hasDetailPage}">
@@ -1061,28 +1071,35 @@ function testMobileTitleOverlays() {
 
 // 🚨 NOTFALL-FUNKTION: data-title Attribute bereinigen
 function cleanupDataTitleAttributes() {
-    console.log('🧹 [Cleanup] Bereinigung der data-title Attribute...');
+    console.log('🧹 [Cleanup] Umfassende Bereinigung der data-title Attribute...');
     
     const bookCards = document.querySelectorAll('.book-card[data-title]');
     let cleanedCount = 0;
     
     bookCards.forEach((card, index) => {
         const dataTitle = card.getAttribute('data-title');
-        if (dataTitle && (dataTitle.includes('<') || dataTitle.includes('>') || dataTitle.includes('"') || dataTitle.includes("'"))) {
-            // HTML-Tags und Anführungszeichen entfernen
+        if (dataTitle) {
+            // Umfassende Bereinigung von HTML und Sonderzeichen
             const cleanTitle = dataTitle
                 .replace(/<[^>]*>/g, '') // HTML-Tags entfernen
+                .replace(/&[a-zA-Z0-9#]+;/g, '') // HTML-Entities entfernen
                 .replace(/"/g, '') // Anführungszeichen entfernen
                 .replace(/'/g, '') // Einfache Anführungszeichen entfernen
-                .replace(/&quot;/g, '') // HTML-Entities entfernen
-                .replace(/&amp;/g, '&') // HTML-Entities konvertieren
-                .replace(/&lt;/g, '<') // HTML-Entities konvertieren
-                .replace(/&gt;/g, '>') // HTML-Entities konvertieren
+                .replace(/style="[^"]*"/g, '') // Style-Attribute entfernen
+                .replace(/class="[^"]*"/g, '') // Class-Attribute entfernen
+                .replace(/href="[^"]*"/g, '') // Href-Attribute entfernen
+                .replace(/data-[^=]*="[^"]*"/g, '') // Data-Attribute entfernen
+                .replace(/\s+/g, ' ') // Mehrfache Leerzeichen vereinfachen
                 .trim();
             
-            card.setAttribute('data-title', cleanTitle);
-            cleanedCount++;
-            console.log(`🧹 [Cleanup] Buchkarte ${index + 1}: data-title bereinigt`);
+            // Nur setzen wenn sich etwas geändert hat
+            if (cleanTitle !== dataTitle) {
+                card.setAttribute('data-title', cleanTitle);
+                cleanedCount++;
+                console.log(`🧹 [Cleanup] Buchkarte ${index + 1}: data-title bereinigt`);
+                console.log(`   Vorher: "${dataTitle}"`);
+                console.log(`   Nachher: "${cleanTitle}"`);
+            }
         }
     });
     
@@ -1170,6 +1187,28 @@ function cleanupDataTitleAttributes() {
         setTimeout(() => {
             cleanupDataTitleAttributes();
         }, 1000); // 1 Sekunde nach dem Laden
+        
+        // 🚨 SOFORTIGE BEREINIGUNG: Bei DOM-Änderungen
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === 1 && node.classList && node.classList.contains('book-card')) {
+                            // Neue Buchkarte hinzugefügt - sofort bereinigen
+                            setTimeout(() => {
+                                cleanupDataTitleAttributes();
+                            }, 100);
+                        }
+                    });
+                }
+            });
+        });
+        
+        // Beobachte Änderungen im DOM
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
         
         // Set initial language
         translatePage('de');

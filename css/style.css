@@ -2438,6 +2438,44 @@ html {
     pointer-events: none !important;
 }
 
+/* 🚨 ULTIMATIVE SICHERHEIT: Alle möglichen Text-Inhalte über Buchcovern entfernen */
+.book-card {
+    position: relative !important;
+}
+
+.book-card::before,
+.book-card::after {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0, 0, 0, 0) !important;
+}
+
+/* Sicherstellen, dass nur die gewünschten Elemente sichtbar sind */
+.book-card > *:not(.book-image):not(.book-info) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
 /* 🎯 ENDGÜLTIGE LÖSUNG: Alle möglichen Titel-Overlays über Buchcovern entfernen */
 /* H3-Titel und andere Überschriften über Buchcovern */
 .book-card h3.overlay-title,

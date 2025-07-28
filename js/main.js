@@ -1092,6 +1092,21 @@ function handleLanguageSwitch(e) {
             if (typeof displayAllBooks === 'function') { 
                 displayAllBooks(); 
             }
+            
+            // 🚨 AUTOMATISCHE BEREINIGUNG NACH SPRACHUMSCHALTUNG
+            console.log('🚨 [Language] Running cleanup after language switch...');
+            ultimateTextOverlayCleanup();
+            blockExternalContent();
+            
+            // Zusätzliche Bereinigung nach 1 Sekunde
+            setTimeout(() => {
+                ultimateTextOverlayCleanup();
+            }, 1000);
+            
+            // Zusätzliche Bereinigung nach 3 Sekunden
+            setTimeout(() => {
+                ultimateTextOverlayCleanup();
+            }, 3000);
         }, 100);
     }
     
@@ -1315,7 +1330,260 @@ function ultimateTextOverlayCleanup() {
         }
     });
     
+    // 6. EXTERNE INHALTE VON AMAZON/APPLE ENTFERNEN
+    // Amazon Widgets und Overlays
+    document.querySelectorAll('.amzn-product-block, .amazon-product-block, [class*="amzn"], [class*="amazon"], [id*="amzn"], [id*="amazon"]').forEach(element => {
+        if (element.textContent && (element.textContent.includes('data-') || element.textContent.includes('ASIN') || element.textContent.includes('amazon'))) {
+            element.style.display = 'none';
+            element.style.visibility = 'hidden';
+            element.style.opacity = '0';
+            element.style.position = 'absolute';
+            element.style.zIndex = '-1';
+            element.style.width = '0';
+            element.style.height = '0';
+            element.style.overflow = 'hidden';
+            element.style.pointerEvents = 'none';
+            element.style.fontSize = '0';
+            element.style.lineHeight = '0';
+            element.style.margin = '0';
+            element.style.padding = '0';
+            element.style.border = '0';
+            element.style.clip = 'rect(0,0,0,0)';
+        }
+    });
+    
+    // Apple Books Widgets und Overlays
+    document.querySelectorAll('.apple-books-widget, [class*="apple"], [id*="apple"], [class*="books"], [id*="books"]').forEach(element => {
+        if (element.textContent && (element.textContent.includes('data-') || element.textContent.includes('apple') || element.textContent.includes('books'))) {
+            element.style.display = 'none';
+            element.style.visibility = 'hidden';
+            element.style.opacity = '0';
+            element.style.position = 'absolute';
+            element.style.zIndex = '-1';
+            element.style.width = '0';
+            element.style.height = '0';
+            element.style.overflow = 'hidden';
+            element.style.pointerEvents = 'none';
+            element.style.fontSize = '0';
+            element.style.lineHeight = '0';
+            element.style.margin = '0';
+            element.style.padding = '0';
+            element.style.border = '0';
+            element.style.clip = 'rect(0,0,0,0)';
+        }
+    });
+    
+    // 7. ALLE MÖGLICHEN EXTERNE WIDGETS UND OVERLAYS
+    const externalSelectors = [
+        '[class*="widget"]', '[id*="widget"]',
+        '[class*="overlay"]', '[id*="overlay"]',
+        '[class*="embed"]', '[id*="embed"]',
+        '[class*="iframe"]', '[id*="iframe"]',
+        '[class*="script"]', '[id*="script"]',
+        '[class*="external"]', '[id*="external"]',
+        '[class*="third-party"]', '[id*="third-party"]',
+        '[class*="api"]', '[id*="api"]',
+        '[class*="sdk"]', '[id*="sdk"]',
+        '[class*="plugin"]', '[id*="plugin"]',
+        '[class*="addon"]', '[id*="addon"]'
+    ];
+    
+    externalSelectors.forEach(selector => {
+        document.querySelectorAll(selector).forEach(element => {
+            if (element.textContent && (
+                element.textContent.includes('data-') || 
+                element.textContent.includes('ASIN') || 
+                element.textContent.includes('amazon') ||
+                element.textContent.includes('apple') ||
+                element.textContent.includes('books') ||
+                element.textContent.includes('widget') ||
+                element.textContent.includes('overlay')
+            )) {
+                element.style.display = 'none';
+                element.style.visibility = 'hidden';
+                element.style.opacity = '0';
+                element.style.position = 'absolute';
+                element.style.zIndex = '-1';
+                element.style.width = '0';
+                element.style.height = '0';
+                element.style.overflow = 'hidden';
+                element.style.pointerEvents = 'none';
+                element.style.fontSize = '0';
+                element.style.lineHeight = '0';
+                element.style.margin = '0';
+                element.style.padding = '0';
+                element.style.border = '0';
+                element.style.clip = 'rect(0,0,0,0)';
+            }
+        });
+    });
+    
+    // 8. DYNAMISCH NACHGELADENE ELEMENTE ENTFERNEN
+    document.querySelectorAll('*').forEach(element => {
+        const text = element.textContent || '';
+        if (text && (
+            text.includes('data-asin=') ||
+            text.includes('data-has-audiobook=') ||
+            text.includes('data-has-detail-page=') ||
+            text.includes('data-title=') ||
+            text.includes('erfahren">') ||
+            text.includes('ASIN') ||
+            text.includes('amazon') ||
+            text.includes('apple') ||
+            text.includes('books') ||
+            text.includes('widget') ||
+            text.includes('overlay')
+        )) {
+            // Nur entfernen, wenn es nicht ein erlaubtes Element ist
+            const isAllowed = element.closest('.book-title') || 
+                             element.closest('.book-author') || 
+                             element.closest('.book-description') ||
+                             element.closest('.book-links') ||
+                             element.closest('.book-content');
+            
+            if (!isAllowed) {
+                element.style.display = 'none';
+                element.style.visibility = 'hidden';
+                element.style.opacity = '0';
+                element.style.position = 'absolute';
+                element.style.zIndex = '-1';
+                element.style.width = '0';
+                element.style.height = '0';
+                element.style.overflow = 'hidden';
+                element.style.pointerEvents = 'none';
+                element.style.fontSize = '0';
+                element.style.lineHeight = '0';
+                element.style.margin = '0';
+                element.style.padding = '0';
+                element.style.border = '0';
+                element.style.clip = 'rect(0,0,0,0)';
+            }
+        }
+    });
+    
     console.log('🚨 [Cleanup] Ultimate text overlay cleanup completed');
+}
+
+// 🔄 DAUERHAFTE ÜBERWACHUNG: Kontinuierliche Bereinigung externer Inhalte
+function startContinuousCleanup() {
+    console.log('🔄 [Continuous Cleanup] Starting continuous monitoring...');
+    
+    // MutationObserver für neue DOM-Elemente
+    const observer = new MutationObserver((mutations) => {
+        let cleanupNeeded = false;
+        
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'childList') {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === 1) { // Element node
+                        // Prüfen auf externe Inhalte
+                        if (node.textContent && (
+                            node.textContent.includes('data-asin=') ||
+                            node.textContent.includes('data-has-audiobook=') ||
+                            node.textContent.includes('data-has-detail-page=') ||
+                            node.textContent.includes('data-title=') ||
+                            node.textContent.includes('erfahren">') ||
+                            node.textContent.includes('ASIN') ||
+                            node.textContent.includes('amazon') ||
+                            node.textContent.includes('apple') ||
+                            node.textContent.includes('books') ||
+                            node.textContent.includes('widget') ||
+                            node.textContent.includes('overlay')
+                        )) {
+                            cleanupNeeded = true;
+                        }
+                        
+                        // Prüfen auf externe Klassen/IDs
+                        if (node.className && (
+                            node.className.includes('amzn') ||
+                            node.className.includes('amazon') ||
+                            node.className.includes('apple') ||
+                            node.className.includes('books') ||
+                            node.className.includes('widget') ||
+                            node.className.includes('overlay') ||
+                            node.className.includes('embed') ||
+                            node.className.includes('external') ||
+                            node.className.includes('third-party')
+                        )) {
+                            cleanupNeeded = true;
+                        }
+                        
+                        if (node.id && (
+                            node.id.includes('amzn') ||
+                            node.id.includes('amazon') ||
+                            node.id.includes('apple') ||
+                            node.id.includes('books') ||
+                            node.id.includes('widget') ||
+                            node.id.includes('overlay') ||
+                            node.id.includes('embed') ||
+                            node.id.includes('external') ||
+                            node.id.includes('third-party')
+                        )) {
+                            cleanupNeeded = true;
+                        }
+                    }
+                });
+            }
+        });
+        
+        if (cleanupNeeded) {
+            console.log('🔄 [Continuous Cleanup] External content detected, running cleanup...');
+            setTimeout(() => {
+                ultimateTextOverlayCleanup();
+            }, 100);
+        }
+    });
+    
+    // Beobachte das gesamte Dokument
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['class', 'id', 'style']
+    });
+    
+    // Zusätzliche regelmäßige Bereinigung
+    setInterval(() => {
+        ultimateTextOverlayCleanup();
+    }, 5000); // Alle 5 Sekunden
+    
+    console.log('🔄 [Continuous Cleanup] Continuous monitoring started');
+    return observer;
+}
+
+// 🚫 EXTERNE INHALTE BLOCKIEREN: Verhindert das Laden externer Widgets
+function blockExternalContent() {
+    console.log('🚫 [Block External] Blocking external content loading...');
+    
+    // Amazon Widgets blockieren
+    const amazonScripts = document.querySelectorAll('script[src*="amazon"], script[src*="amzn"]');
+    amazonScripts.forEach(script => {
+        script.remove();
+        console.log('🚫 [Block External] Removed Amazon script:', script.src);
+    });
+    
+    // Apple Widgets blockieren
+    const appleScripts = document.querySelectorAll('script[src*="apple"], script[src*="books"]');
+    appleScripts.forEach(script => {
+        script.remove();
+        console.log('🚫 [Block External] Removed Apple script:', script.src);
+    });
+    
+    // Externe iframes blockieren
+    const externalIframes = document.querySelectorAll('iframe[src*="amazon"], iframe[src*="apple"], iframe[src*="books"]');
+    externalIframes.forEach(iframe => {
+        iframe.remove();
+        console.log('🚫 [Block External] Removed external iframe:', iframe.src);
+    });
+    
+    // Externe Styles blockieren
+    const externalStyles = document.querySelectorAll('link[href*="amazon"], link[href*="apple"], link[href*="books"]');
+    externalStyles.forEach(style => {
+        style.remove();
+        console.log('🚫 [Block External] Removed external style:', style.href);
+    });
+    
+    console.log('🚫 [Block External] External content blocking completed');
 }
 
 // 🧹 MOBILE CLEANUP: Umfassende Bereinigung für mobile Geräte
@@ -1765,6 +2033,12 @@ function cleanupAmazonWidgets() {
         setInterval(() => {
             ultimateTextOverlayCleanup();
         }, 10000);
+        
+        // 🔄 DAUERHAFTE ÜBERWACHUNG: Kontinuierliche Bereinigung externer Inhalte
+        startContinuousCleanup();
+        
+        // 🚫 EXTERNE INHALTE BLOCKIEREN: Verhindert das Laden externer Widgets
+        blockExternalContent();
         
         // 🔧 SPRACHUMSCHALTUNG-REPAIR: Nach dem Laden reparieren
         setTimeout(() => {

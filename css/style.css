@@ -1190,3 +1190,139 @@ body {
     }
 }
 
+/* 🚫 EXTERNE INHALTE BLOCKIEREN: Amazon, Apple und andere Widgets dauerhaft verstecken */
+/* Amazon Widgets und Overlays */
+.amzn-product-block, .amazon-product-block, 
+[class*="amzn"], [class*="amazon"], 
+[id*="amzn"], [id*="amazon"],
+[data-amzn], [data-amazon] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0,0,0,0) !important;
+}
+
+/* Apple Books Widgets und Overlays */
+.apple-books-widget, 
+[class*="apple"], [id*="apple"], 
+[class*="books"], [id*="books"],
+[data-apple], [data-books] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0,0,0,0) !important;
+}
+
+/* Alle möglichen externen Widgets und Overlays */
+[class*="widget"], [id*="widget"],
+[class*="overlay"], [id*="overlay"],
+[class*="embed"], [id*="embed"],
+[class*="iframe"], [id*="iframe"],
+[class*="script"], [id*="script"],
+[class*="external"], [id*="external"],
+[class*="third-party"], [id*="third-party"],
+[class*="api"], [id*="api"],
+[class*="sdk"], [id*="sdk"],
+[class*="plugin"], [id*="plugin"],
+[class*="addon"], [id*="addon"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0,0,0,0) !important;
+}
+
+/* Externe iframes blockieren */
+iframe[src*="amazon"], iframe[src*="amzn"],
+iframe[src*="apple"], iframe[src*="books"],
+iframe[src*="widget"], iframe[src*="overlay"],
+iframe[src*="embed"], iframe[src*="external"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    border: 0 !important;
+    clip: rect(0,0,0,0) !important;
+}
+
+/* Externe Scripts blockieren */
+script[src*="amazon"], script[src*="amzn"],
+script[src*="apple"], script[src*="books"],
+script[src*="widget"], script[src*="overlay"],
+script[src*="embed"], script[src*="external"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0,0,0,0) !important;
+}
+
+/* Externe Styles blockieren */
+link[href*="amazon"], link[href*="amzn"],
+link[href*="apple"], link[href*="books"],
+link[href*="widget"], link[href*="overlay"],
+link[href*="embed"], link[href*="external"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0,0,0,0) !important;
+}
+

@@ -655,12 +655,12 @@ body {
     font-size: 0.85em;
     line-height: 1.4;
     margin-bottom: 1rem;
-    max-height: 60px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+    max-height: none;
+    overflow: visible;
+    text-overflow: unset;
+    display: block;
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: unset;
 }
 
 /* Book Detail Link Button */

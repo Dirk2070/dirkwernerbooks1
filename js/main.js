@@ -465,7 +465,7 @@ async function createBookCard(book) {
             <!-- 📚 BUCH-INFO: Titel und Beschreibung NUR unterhalb des Covers -->
             <div class="book-info">
                 <h3 class="book-title">
-                    <a href="${detailPageUrl}" class="book-title-link" aria-label="Mehr über ${getLocalizedText(book.title, currentLang)} erfahren">${getLocalizedText(book.title, currentLang)}</a>
+                    <a href="${detailPageUrl}" class="book-title-link" aria-label="Mehr über ${titleString} erfahren">${getLocalizedText(book.title, currentLang)}</a>
                 </h3>
                 <p class="book-author">${book.author}</p>
                 <p class="book-description">${getLocalizedText(book.description, currentLang)}</p>

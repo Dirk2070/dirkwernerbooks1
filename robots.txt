@@ -1,8 +1,6 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://dirkwernerbooks.com/sitemap.xml
-
 # Erlaube explizit GPTBot (OpenAI)
 User-agent: GPTBot
 Allow: /
@@ -14,11 +12,4 @@ Allow: /
 # Alle Bots erlaubt
 
 # Sitemap-Hinweis für alle Bots
-Sitemap: https://dirkwernerbooks.com/sitemap.xml
-
-# Allow Google access to sitemap
-Sitemap: https://dirkwernerbooks.com/sitemap.xml
-
-Sitemap: https://dirkwernerbooks.com/sitemap.xml
-
 Sitemap: https://dirkwernerbooks.com/sitemap.xml 

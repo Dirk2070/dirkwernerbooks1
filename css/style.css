@@ -666,6 +666,64 @@ body {
     -webkit-box-orient: unset;
 }
 
+/* 📱 MOBILE: Markdown-Styling für mobile Geräte */
+.book-description {
+    line-height: 1.6;
+    color: #374151;
+}
+
+.book-description h1,
+.book-description h2,
+.book-description h3,
+.book-description h4,
+.book-description h5,
+.book-description h6 {
+    margin: 1rem 0 0.5rem 0;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.book-description p {
+    margin: 0.5rem 0;
+}
+
+.book-description ul,
+.book-description ol {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.book-description li {
+    margin: 0.25rem 0;
+}
+
+.book-description strong,
+.book-description b {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.book-description em,
+.book-description i {
+    font-style: italic;
+}
+
+.book-description code {
+    background: #f3f4f6;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-family: monospace;
+    font-size: 0.875em;
+}
+
+.book-description blockquote {
+    border-left: 4px solid #6b7280;
+    padding-left: 1rem;
+    margin: 1rem 0;
+    font-style: italic;
+    color: #6b7280;
+}
+
 /* Book Detail Link Button */
 .book-detail-link {
     margin-top: 1rem;
@@ -2728,6 +2786,28 @@ html {
 .book-card .book-image h4,
 .book-card .book-image h5,
 .book-card .book-image h6 {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    clip: rect(0, 0, 0, 0) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+}
+
+/* 🚨 DATA-ATTRIBUTE OVERLAY ENTFERNUNG: Alle data-* Attribute sichtbar machen */
+.book-card .book-image [data-asin],
+.book-card .book-image [data-has-audiobook],
+.book-card .book-image [data-title],
+.book-card .book-image [data-*] {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;

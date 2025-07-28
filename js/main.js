@@ -3,6 +3,19 @@ let allBooks = [];
 window.currentLanguage = 'de';
 let filteredBooks = [];
 
+// Markdown Parser für mobile Formatierung
+function parseMarkdown(text) {
+    if (typeof marked !== 'undefined') {
+        try {
+            return marked.parse(text);
+        } catch (error) {
+            console.warn('⚠️ [Markdown] Parsing failed, returning original text:', error);
+            return text;
+        }
+    }
+    return text;
+}
+
 // Ensure translations are available globally
 if (typeof window.translations === 'undefined') {
     window.translations = {
@@ -468,7 +481,7 @@ async function createBookCard(book) {
                     <a href="${detailPageUrl}" class="book-title-link" aria-label="Mehr über ${titleString} erfahren">${getLocalizedText(book.title, currentLang)}</a>
                 </h3>
                 <p class="book-author">${book.author}</p>
-                <p class="book-description">${getLocalizedText(book.description, currentLang)}</p>
+                <p class="book-description">${parseMarkdown(getLocalizedText(book.description, currentLang))}</p>
                 <div class="book-links">
                     <a href="${detailPageUrl}" class="book-link detail-link mehr-button" aria-label="Mehr über ${titleString} erfahren">
                         📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
@@ -914,72 +927,48 @@ function initLanguageSwitching() {
     
     // Add click event listeners
     document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const selectedLang = this.dataset.lang;
-            
-            // Update active state
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            
-            localStorage.setItem('preferredLang', selectedLang);
-            window.currentLanguage = selectedLang;
-            translatePage(selectedLang);
-            
-            console.log('🌐 [Language] Switched to:', selectedLang);
-        });
-        
-        // 📱 MOBILE: Touch-Event-Handler für bessere mobile Unterstützung
-        btn.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            const lang = this.dataset.lang;
-            console.log('📱 [Mobile] Touch language switch to:', lang);
-        });
-        
-        btn.addEventListener('touchend', function(e) {
-            e.preventDefault();
-            const lang = this.dataset.lang;
-            
-            // Update active state
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            
-            localStorage.setItem('preferredLang', lang);
-            window.currentLanguage = lang;
-            translatePage(lang);
-            
-            console.log('📱 [Mobile] Touch language switch completed:', lang);
-        });
-        
-        // 📱 MOBILE: Zusätzliche Sicherheit für mobile Sprachumschaltung
-        btn.addEventListener('click', function(e) {
-            // Verhindere doppelte Ausführung
+        // 🚨 SPRACHUMSCHALTUNG FIX: Einheitlicher Event-Handler für alle Geräte
+        const handleLanguageSwitch = function(e) {
             e.preventDefault();
             e.stopPropagation();
             
             const lang = this.dataset.lang;
+            console.log('🌐 [Language] Switching to:', lang);
             
             // Update active state
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
+            // Update localStorage and global state
             localStorage.setItem('preferredLang', lang);
             window.currentLanguage = lang;
+            
+            // Apply translation
             translatePage(lang);
             
-            // 📱 MOBILE: Force DOM update für mobile Geräte
+            // Force DOM update für mobile Geräte
             setTimeout(() => {
                 document.querySelectorAll('[data-de], [data-en]').forEach(element => {
                     if (element.dataset[lang]) {
                         element.textContent = element.dataset[lang];
                     }
                 });
+                
+                // Force re-render of book cards
+                if (typeof displayFeaturedBooks === 'function') {
+                    displayFeaturedBooks();
+                }
+                if (typeof displayAllBooks === 'function') {
+                    displayAllBooks();
+                }
             }, 100);
             
-            console.log('📱 [Mobile] Click language switch completed:', lang);
-        });
+            console.log('🌐 [Language] Successfully switched to:', lang);
+        };
+        
+        // Add event listeners for both click and touch
+        btn.addEventListener('click', handleLanguageSwitch);
+        btn.addEventListener('touchend', handleLanguageSwitch);
     });
     
     // Apply initial translation

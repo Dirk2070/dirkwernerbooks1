@@ -1,4 +1,4 @@
-/* 🎨 MODERNES LAYOUT: Zeitgemäßes Design mit verbesserter Typografie und Effekten */
+/* 🎨 GEWÜNSCHTES LAYOUT: Basierend auf den Bildern implementiert */
 
 /* Reset and Base Styles */
 * {
@@ -21,17 +21,15 @@ body {
     padding: 0 24px;
 }
 
-/* 🎨 MODERNER HEADER: Kompakter und eleganter */
+/* 🎨 HEADER: Dunkelgrauer Hintergrund wie in den Bildern */
 .header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #2c3e50; /* Dunkelgrau wie in den Bildern */
     color: white;
     padding: 1rem 0;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
     z-index: 1000;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
 }
 
 .header-content {
@@ -68,7 +66,7 @@ body {
 }
 
 .header-logo:hover {
-    transform: scale(1.05) rotate(2deg);
+    transform: scale(1.05);
     filter: brightness(1.2) contrast(1.2);
 }
 
@@ -98,13 +96,12 @@ body {
     align-items: center;
 }
 
-/* 🎨 MODERNE SPRACHUMSCHALTUNG: Funktional und elegant */
+/* 🎨 SPRACHUMSCHALTUNG: Einfach und funktional */
 .language-switch {
     display: flex;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    padding: 4px;
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 2px;
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -113,117 +110,75 @@ body {
     border: none;
     color: rgba(255, 255, 255, 0.8);
     padding: 8px 16px;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
     font-size: 0.9rem;
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.lang-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
-
-.lang-btn:hover::before {
-    left: 100%;
 }
 
 .lang-btn.active {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.2);
     color: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    transform: translateY(-1px);
 }
 
 .lang-btn:hover {
     color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.15);
 }
 
-/* 🎨 MODERNE NAVIGATION: Clean und funktional */
+/* 🎨 NAVIGATION: Hellgrauer Hintergrund wie in den Bildern */
 .nav {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: #ecf0f1; /* Hellgrau wie in den Bildern */
+    border-bottom: 1px solid #bdc3c7;
     padding: 0.75rem 0;
 }
 
 .desktop-nav {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     list-style: none;
-    gap: 2rem;
     margin: 0;
     padding: 0;
 }
 
 .desktop-nav a {
-    color: #374151;
+    color: #2c3e50;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.95rem;
     padding: 0.5rem 1rem;
-    border-radius: 8px;
+    border-radius: 6px;
     transition: all 0.3s ease;
-    position: relative;
-}
-
-.desktop-nav a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-}
-
-.desktop-nav a:hover::after {
-    width: 80%;
 }
 
 .desktop-nav a:hover {
-    color: #667eea;
-    background: rgba(102, 126, 234, 0.1);
-    transform: translateY(-1px);
+    color: #3498db;
+    background: rgba(52, 152, 219, 0.1);
 }
 
 .nav-logo-item {
-    margin-left: 2rem;
+    margin-left: auto;
 }
 
 .nav-logo-link {
-    display: block;
-    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
 }
 
 .nav-logo {
     height: 2rem;
     width: auto;
     opacity: 0.8;
-    transition: all 0.3s ease;
-    border-radius: 6px;
+    transition: opacity 0.3s ease;
 }
 
 .nav-logo-link:hover .nav-logo {
     opacity: 1;
-    transform: scale(1.1) rotate(2deg);
 }
 
-/* 🎨 MODERNE MOBILE NAVIGATION: Touch-optimiert */
+/* 🎨 MOBILE NAVIGATION: Vereinfacht wie gewünscht */
 .mobile-nav {
     display: none;
     justify-content: space-between;
@@ -231,8 +186,7 @@ body {
     gap: 1rem;
     overflow-x: auto;
     padding: 0.5rem 0;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
 }
 
 .mobile-nav::-webkit-scrollbar {
@@ -240,91 +194,64 @@ body {
 }
 
 .mobile-nav-link {
-    color: #374151;
+    color: #2c3e50;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.9rem;
     padding: 0.5rem 0.75rem;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    border-radius: 6px;
     white-space: nowrap;
-    background: rgba(102, 126, 234, 0.1);
-    border: 1px solid rgba(102, 126, 234, 0.2);
+    transition: all 0.3s ease;
 }
 
 .mobile-nav-link:hover {
-    background: rgba(102, 126, 234, 0.2);
-    color: #667eea;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    color: #3498db;
+    background: rgba(52, 152, 219, 0.1);
 }
 
 .mobile-language-toggle {
     display: flex;
     align-items: center;
-    background: rgba(102, 126, 234, 0.1);
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 6px;
     padding: 2px;
-    border: 1px solid rgba(102, 126, 234, 0.2);
+    border: 1px solid #bdc3c7;
 }
 
 .mobile-lang-btn {
     background: transparent;
     border: none;
-    color: #374151;
+    color: #2c3e50;
     padding: 6px 12px;
-    border-radius: 8px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 600;
     font-size: 0.85rem;
     transition: all 0.3s ease;
-    min-width: 40px;
-    min-height: 36px;
 }
 
 .mobile-lang-btn.active {
-    background: #667eea;
+    background: #3498db;
     color: white;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
 }
 
 .mobile-lang-btn:hover {
-    background: rgba(102, 126, 234, 0.2);
-    color: #667eea;
-    transform: translateY(-1px);
+    background: rgba(52, 152, 219, 0.1);
 }
 
 .mobile-lang-separator {
-    color: #9ca3af;
-    font-weight: 300;
+    color: #bdc3c7;
+    font-weight: 400;
     margin: 0 2px;
 }
 
-/* 🎨 MODERNE HERO SECTION: Dynamisch und ansprechend */
+/* 🎨 HERO SECTION: Blaue Banner wie in den Bildern */
 .hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #3498db; /* Blau wie in den Bildern */
     color: white;
     padding: 4rem 0;
     text-align: center;
     position: relative;
-    overflow: hidden;
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-    opacity: 0.3;
-    animation: float 20s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(1deg); }
 }
 
 .hero-content {
@@ -335,13 +262,11 @@ body {
 }
 
 .hero-title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 900;
     margin-bottom: 1.5rem;
     line-height: 1.2;
     letter-spacing: -0.025em;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    animation: fadeInUp 1s ease-out;
 }
 
 .hero-subtitle {
@@ -349,14 +274,12 @@ body {
     font-weight: 600;
     margin-bottom: 1rem;
     opacity: 0.95;
-    animation: fadeInUp 1s ease-out 0.2s both;
 }
 
 .hero-tagline {
     font-size: 1.1rem;
     margin-bottom: 2.5rem;
     opacity: 0.9;
-    animation: fadeInUp 1s ease-out 0.4s both;
 }
 
 .hero-buttons {
@@ -364,76 +287,488 @@ body {
     justify-content: center;
     gap: 1.5rem;
     flex-wrap: wrap;
-    animation: fadeInUp 1s ease-out 0.6s both;
 }
 
-/* 🎨 MODERNE CTA BUTTONS: Attraktiv und interaktiv */
+/* 🎨 CTA BUTTONS: Rot und Orange wie in den Bildern */
 .cta-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 1rem 2rem;
-    border-radius: 12px;
+    border-radius: 8px;
     text-decoration: none;
     font-weight: 700;
     font-size: 1.1rem;
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
     min-width: 200px;
     min-height: 56px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.cta-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
-
-.cta-button:hover::before {
-    left: 100%;
-}
-
 .cta-button.primary {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    background: #e74c3c; /* Rot wie in den Bildern */
     color: white;
     border: none;
 }
 
 .cta-button.primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
-    background: linear-gradient(135deg, #ff5252, #d63031);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+    background: #c0392b;
 }
 
 .cta-button.secondary {
-    background: linear-gradient(135deg, #ffa726, #ff9800);
+    background: #f39c12; /* Orange wie in den Bildern */
     color: white;
     border: none;
 }
 
 .cta-button.secondary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(255, 167, 38, 0.4);
-    background: linear-gradient(135deg, #ff9800, #f57c00);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+    background: #e67e22;
 }
 
-/* 🎨 ANIMATIONEN: Smooth und modern */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* 🎨 SECTIONS: Allgemeine Styling für alle Sektionen */
+.featured-books, .author-section, .genres-section, .books-section {
+    padding: 4rem 0;
+    background: white;
+}
+
+.featured-books h2, .author-section h2, .genres-section h2, .books-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #2c3e50;
+    margin-bottom: 3rem;
+}
+
+/* 🎨 BUCHKARTEN: Saubere weiße Karten ohne Text-Overlays */
+.books-grid, .book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+.book-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid #ecf0f1;
+}
+
+.book-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.book-image {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+}
+
+.book-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.book-card:hover .book-image img {
+    transform: scale(1.05);
+}
+
+/* 🚨 TEXT-OVERLAY ENTFERNUNG: Keine Titel über den Covern */
+.book-card .book-image *:not(.book-cover-link):not(.book-cover-image):not(img) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0,0,0,0) !important;
+}
+
+.book-content {
+    padding: 1.5rem;
+}
+
+.book-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.book-author {
+    font-size: 0.95rem;
+    color: #7f8c8d;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.book-description {
+    font-size: 0.9rem;
+    color: #34495e;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+/* 🎨 BUTTONS: Vertikal gestapelt mit verschiedenen Farben */
+.book-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.book-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-height: 44px;
+}
+
+.book-link:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.book-link.learn-more {
+    background: #9b59b6; /* Lila */
+    color: white;
+}
+
+.book-link.learn-more:hover {
+    background: #8e44ad;
+}
+
+.book-link.amazon-de {
+    background: #e67e22; /* Orange */
+    color: white;
+}
+
+.book-link.amazon-de:hover {
+    background: #d35400;
+}
+
+.book-link.amazon-us {
+    background: #34495e; /* Dunkelgrau */
+    color: white;
+}
+
+.book-link.amazon-us:hover {
+    background: #2c3e50;
+}
+
+.book-link.apple-books {
+    background: #3498db; /* Blau */
+    color: white;
+}
+
+.book-link.apple-books:hover {
+    background: #2980b9;
+}
+
+.book-link.books2read {
+    background: #27ae60; /* Grün */
+    color: white;
+}
+
+.book-link.books2read:hover {
+    background: #229954;
+}
+
+.book-link.audiobook {
+    background: #9b59b6; /* Lila */
+    color: white;
+}
+
+.book-link.audiobook:hover {
+    background: #8e44ad;
+}
+
+/* 🎨 MEHR ERFAHREN BUTTON: Als echter Button */
+.mehr-button, .learn-more-button {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    background: #9b59b6;
+    color: white;
+    margin-top: 0.75rem;
+    min-height: 44px;
+}
+
+.mehr-button:hover, .learn-more-button:hover {
+    background: #8e44ad;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(155, 89, 182, 0.3);
+}
+
+/* 🎨 AUTHOR SECTION: Styling für die Autor-Sektion */
+.author-section {
+    background: #f8f9fa;
+}
+
+.author-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.author-image img {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.author-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.section-logo {
+    height: 2rem;
+    width: auto;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.section-logo-link:hover .section-logo {
+    opacity: 1;
+}
+
+.author-text h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.author-text p {
+    font-size: 1rem;
+    color: #34495e;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.author-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.author-links a {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.author-links a:hover {
+    background: #2980b9;
+    transform: translateY(-1px);
+}
+
+/* 🎨 GENRES SECTION: Styling für die Genres-Sektion */
+.genres-section {
+    background: white;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.genres-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.genre-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid #ecf0f1;
+}
+
+.genre-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.genre-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.genre-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.genre-card p {
+    font-size: 0.9rem;
+    color: #34495e;
+    line-height: 1.6;
+}
+
+/* 🎨 BOOKS SECTION: Styling für die Bücher-Sektion */
+.books-section {
+    background: #f8f9fa;
+}
+
+.books-header {
+    margin-bottom: 3rem;
+}
+
+.books-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.search-box input {
+    padding: 0.75rem 1rem;
+    border: 1px solid #bdc3c7;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    min-width: 250px;
+}
+
+.filter-dropdown select {
+    padding: 0.75rem 1rem;
+    border: 1px solid #bdc3c7;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: white;
+    cursor: pointer;
+}
+
+/* 🎨 FOOTER: Styling für den Footer */
+.footer {
+    background: #2c3e50;
+    color: white;
+    padding: 3rem 0 1rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.footer-section p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.5rem;
+}
+
+.footer-links, .social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.footer-links a, .social-links a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover, .social-links a:hover {
+    color: white;
+}
+
+.footer-logo {
+    height: 3rem;
+    width: auto;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.footer-logo-link:hover .footer-logo {
+    opacity: 1;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-bottom p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-legal {
+    display: flex;
+    gap: 1rem;
+}
+
+.footer-legal a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-legal a:hover {
+    color: white;
 }
 
 /* 🎨 RESPONSIVE DESIGN: Mobile-first Ansatz */
@@ -470,6 +805,77 @@ body {
         width: 100%;
         max-width: 300px;
     }
+    
+    .books-grid, .book-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1rem 0;
+    }
+    
+    .book-card {
+        margin: 0 1rem;
+    }
+    
+    .book-image {
+        height: 250px;
+    }
+    
+    .book-content {
+        padding: 1rem;
+    }
+    
+    .book-title {
+        font-size: 1.1rem;
+    }
+    
+    .book-description {
+        font-size: 0.85rem;
+    }
+    
+    .book-links {
+        gap: 0.5rem;
+    }
+    
+    .book-link {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.85rem;
+        min-height: 40px;
+    }
+    
+    .author-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .author-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .genres-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .books-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .search-box input {
+        min-width: 200px;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -491,6 +897,167 @@ body {
     
     .hero-title {
         font-size: 1.75rem;
+    }
+    
+    .book-card {
+        margin: 0 0.5rem;
+    }
+    
+    .book-image {
+        height: 200px;
+    }
+}
+
+/* 🚨 MOBILE-LAYOUT-FIXES: Umfassende Behebung aller mobilen Probleme */
+@media screen and (max-width: 768px) {
+    /* 🚨 ULTIMATIVE TEXT-OVERLAY-ENTFERNUNG: Alle möglichen Text-Elemente */
+    .book-card .book-image *:not(.book-cover-link):not(.book-cover-image):not(img) {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        z-index: -1 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        clip: rect(0,0,0,0) !important;
+    }
+    
+    /* 🚨 TAB-BUTTONS KOMPLETT AUSBLENDEN: "Beschreibung", "Metadaten", "Weitere Ausgaben" */
+    .tab-buttons, .book-info-tabs, .book-info-tab, .book-info-tab-button, .book-tab-button, [class*="tab-button"], [class*="info-tab"] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        z-index: -1 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        clip: rect(0,0,0,0) !important;
+    }
+    
+    /* 🚨 ZWISCHENTEXTE ENTFERNEN: Alle unerwünschten Text-Fragmente zwischen Buttons */
+    .book-card .book-content *:not(.book-title):not(.book-author):not(.book-description):not(.book-links):not(.mehr-button):not(.learn-more-button) {
+        font-size: 0 !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        z-index: -1 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        line-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        clip: rect(0,0,0,0) !important;
+    }
+    
+    /* 📱 MOBILE: Sprachumschaltung reparieren - Touch-Events und Sichtbarkeit */
+    .mobile-lang-btn {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 12px !important;
+        border-radius: 6px !important;
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
+        min-height: 36px !important;
+        min-width: 44px !important;
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: transparent !important;
+    }
+    
+    /* 📱 MOBILE: Hörbuch-Buttons korrekt anzeigen - für alle Bücher mit hasAudiobook=true */
+    .book-card[data-has-audiobook="true"] .book-link.audiobook {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1rem !important;
+        border-radius: 8px !important;
+        background: #9b59b6 !important;
+        color: white !important;
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
+        text-decoration: none !important;
+        transition: all 0.3s ease !important;
+        min-height: 44px !important;
+    }
+    
+    /* 📱 MOBILE: Hörbuch-Buttons für Bücher ohne Audiobook ausblenden */
+    .book-card[data-has-audiobook="false"] .book-link.audiobook, .book-card:not([data-has-audiobook]) .book-link.audiobook {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        z-index: -1 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        clip: rect(0,0,0,0) !important;
+    }
+    
+    /* 📱 MOBILE: Button-Layout optimieren - Linear und responsiv */
+    .book-links {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+    
+    /* 📱 MOBILE: Mehr erfahren Button optimieren */
+    .mehr-button, .learn-more-button {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1rem !important;
+        border-radius: 8px !important;
+        background: #9b59b6 !important;
+        color: white !important;
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
+        text-decoration: none !important;
+        transition: all 0.3s ease !important;
+        margin-top: 0.75rem !important;
+        min-height: 44px !important;
+        width: 100% !important;
+    }
+    
+    /* 📱 MOBILE: Buchcover optimieren */
+    .book-card .book-image img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        border-radius: 8px 8px 0 0 !important;
+    }
+    
+    /* 📱 MOBILE: Buchbeschreibung linear anzeigen */
+    .book-description {
+        display: block !important;
+        max-height: none !important;
+        overflow: visible !important;
+        text-overflow: unset !important;
+        -webkit-line-clamp: unset !important;
+        -webkit-box-orient: unset !important;
     }
 }
 

@@ -420,7 +420,7 @@
     "hasAudiobook": false
   },
   {
-    "asin": "B0DCTZF166",
+    "asin": "B0CD9D3XRT",
     "title": {
       "de": "Amerikanische Schatten: Hekates Intervention - Der inoffizielle Sequel zu American Gods (English Edition)",
       "en": "American Shadows: Hecate's Intervention - The Unofficial Sequel to American Gods (English Edition)"
@@ -433,18 +433,15 @@
     "image": {
       "link": "https://m.media-amazon.com/images/I/81LKWtbbD0L.jpg"
     },
-    "link": "https://www.amazon.de/dp/B0DCTZF166",
+    "link": "https://www.amazon.de/dp/B0CD9D3XRT",
     "links": {
-      "amazon_de": "https://www.amazon.de/dp/B0DCTZF166",
-      "amazon_us": "https://www.amazon.com/dp/B0DCTZF166",
+      "amazon_de": "https://www.amazon.de/dp/B0CD9D3XRT",
+      "amazon_us": "https://www.amazon.com/dp/B0CD9D3XRT",
       "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929",
       "books2read": "https://books2read.com/Dirk-Werner-Author"
     },
     "language": "en",
-    "bookFormat": {
-      "en": "EBook",
-      "de": "EBook"
-    },
+    "bookFormat": "EBook",
     "hasAudiobook": true
   },
   {
@@ -532,7 +529,7 @@
     "hasAudiobook": true
   },
   {
-    "asin": "B0D9762V4T",
+    "asin": "B0D429HGV1",
     "title": {
       "de": "Selbstsabotage überwinden: Entfessle dein wahres Potenzial (German Edition)",
       "en": "Overcoming Self-Sabotage: Unleash Your True Potential (German Edition)"
@@ -545,22 +542,19 @@
     "image": {
       "link": "https://m.media-amazon.com/images/I/81cZff5qtCL.jpg"
     },
-    "link": "https://www.amazon.de/dp/B0D9762V4T",
+    "link": "https://www.amazon.de/dp/B0D429HGV1",
     "links": {
-      "amazon_de": "https://www.amazon.de/dp/B0D9762V4T",
-      "amazon_us": "https://www.amazon.com/dp/B0D9762V4T",
+      "amazon_de": "https://www.amazon.de/dp/B0D429HGV1",
+      "amazon_us": "https://www.amazon.com/dp/B0D429HGV1",
       "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929",
       "books2read": "https://books2read.com/Dirk-Werner-Author"
     },
     "language": "de",
-    "bookFormat": {
-      "de": "EBook",
-      "en": "EBook"
-    },
+    "bookFormat": "EBook",
     "hasAudiobook": false
   },
   {
-    "asin": "B0D429HGV1",
+    "asin": "B0D9762V4T",
     "title": {
       "de": "Emotionale Intelligenz und Leadership: Wie Sie Ihre Stärken optimal nutzen (Thought Leader) (German Edition)",
       "en": "Emotional Intelligence and Leadership: How to Optimally Use Your Strengths (Thought Leader) (German Edition)"
@@ -573,18 +567,15 @@
     "image": {
       "link": "https://m.media-amazon.com/images/I/61Y+6IwoGDL.jpg"
     },
-    "link": "https://www.amazon.de/dp/B0D429HGV1",
+    "link": "https://www.amazon.de/dp/B0D9762V4T",
     "links": {
-      "amazon_de": "https://www.amazon.de/dp/B0D429HGV1",
-      "amazon_us": "https://www.amazon.com/dp/B0D429HGV1",
+      "amazon_de": "https://www.amazon.de/dp/B0D9762V4T",
+      "amazon_us": "https://www.amazon.com/dp/B0D9762V4T",
       "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929",
       "books2read": "https://books2read.com/Dirk-Werner-Author"
     },
     "language": "de",
-    "bookFormat": {
-      "de": "EBook",
-      "en": "EBook"
-    },
+    "bookFormat": "EBook",
     "hasAudiobook": false
   },
   {

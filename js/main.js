@@ -593,7 +593,8 @@ async function loadBooks() {
             
             console.log('📚 [Books] Books loaded successfully:', {
                 allBooksCount: allBooks.length,
-                filteredBooksCount: filteredBooks.length
+                filteredBooksCount: filteredBooks.length,
+                firstBook: allBooks[0]?.title?.de || 'No title'
             });
             
             // Display books
@@ -719,16 +720,26 @@ async function displayAllBooks() {
     const allBooksContainer = document.getElementById('allBooks');
     if (allBooksContainer && filteredBooks) {
         console.log('📚 [AllBooks] Displaying all books...');
+        console.log('📚 [AllBooks] Container found:', !!allBooksContainer);
+        console.log('📚 [AllBooks] Filtered books count:', filteredBooks.length);
+        
         // Remove duplicates before displaying
         const uniqueBooks = removeDuplicateBooks(filteredBooks);
+        console.log('📚 [AllBooks] Unique books count:', uniqueBooks.length);
+        
         const bookCards = await Promise.all(uniqueBooks.map(book => createBookCard(book)));
+        console.log('📚 [AllBooks] Book cards created:', bookCards.length);
+        
         allBooksContainer.innerHTML = bookCards.join('');
+        console.log('📚 [AllBooks] HTML inserted into container');
         
         console.log('📚 [AllBooks] All books displayed:', uniqueBooks.length);
         
         // Add fade-in animation
         setTimeout(() => {
-            document.querySelectorAll('.book-card').forEach((card, index) => {
+            const cards = document.querySelectorAll('.book-card');
+            console.log('📚 [AllBooks] Found book cards in DOM:', cards.length);
+            cards.forEach((card, index) => {
                 setTimeout(() => {
                     card.style.opacity = '1';
                     card.style.transform = 'translateY(0)';
@@ -738,7 +749,8 @@ async function displayAllBooks() {
     } else {
         console.log('📚 [AllBooks] Skipping all books display:', {
             hasContainer: !!allBooksContainer,
-            hasFilteredBooks: !!filteredBooks
+            hasFilteredBooks: !!filteredBooks,
+            containerId: allBooksContainer?.id || 'not found'
         });
     }
 }
@@ -2703,6 +2715,71 @@ function diagnoseVisibilityIssues() {
 
     // Aktivieren des Watchdogs
     visibilityWatchdog();
+    
+    // 🔍 BUCHLADUNG-DIAGNOSE: Nach 3 Sekunden ausführen
+    setTimeout(() => {
+        diagnoseBookLoading();
+    }, 3000);
+
+    // 🔍 BUCHLADUNG-DIAGNOSE: Prüft, ob Bücher korrekt geladen werden
+    function diagnoseBookLoading() {
+        console.log('🔍 [Diagnose] Starting book loading diagnosis...');
+        
+        // 1. Prüfe books.json
+        fetch('books.json')
+            .then(response => {
+                console.log('🔍 [Diagnose] books.json response:', {
+                    ok: response.ok,
+                    status: response.status,
+                    contentType: response.headers.get('content-type')
+                });
+                return response.text();
+            })
+            .then(text => {
+                console.log('🔍 [Diagnose] books.json content length:', text.length);
+                try {
+                    const data = JSON.parse(text);
+                    console.log('🔍 [Diagnose] books.json parsed successfully, books:', data.length);
+                } catch (e) {
+                    console.error('🔍 [Diagnose] books.json parse error:', e);
+                }
+            })
+            .catch(error => {
+                console.error('🔍 [Diagnose] books.json fetch error:', error);
+            });
+        
+        // 2. Prüfe Container
+        const allBooksContainer = document.getElementById('allBooks');
+        console.log('🔍 [Diagnose] allBooks container:', {
+            exists: !!allBooksContainer,
+            id: allBooksContainer?.id,
+            innerHTML: allBooksContainer?.innerHTML?.length || 0
+        });
+        
+        // 3. Prüfe Variablen
+        console.log('🔍 [Diagnose] Book variables:', {
+            allBooks: allBooks?.length || 0,
+            filteredBooks: filteredBooks?.length || 0
+        });
+        
+        // 4. Prüfe DOM
+        const bookCards = document.querySelectorAll('.book-card');
+        console.log('🔍 [Diagnose] Book cards in DOM:', bookCards.length);
+        
+        // 5. Prüfe CSS-Sichtbarkeit
+        if (allBooksContainer) {
+            const styles = window.getComputedStyle(allBooksContainer);
+            console.log('🔍 [Diagnose] allBooks container styles:', {
+                display: styles.display,
+                visibility: styles.visibility,
+                opacity: styles.opacity,
+                height: styles.height,
+                overflow: styles.overflow
+            });
+        }
+        
+        console.log('🔍 [Diagnose] Book loading diagnosis completed');
+    }
 });
 
 // 🐛 DUMMY-FUNKTION: validateAndFixLinks für Kompatibilität

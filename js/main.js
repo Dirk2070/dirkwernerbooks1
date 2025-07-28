@@ -501,34 +501,38 @@ async function createBookCard(book) {
 
 // Load and display books
 async function loadBooks() {
+    console.log('📚 [Books] Starting loadBooks() function...');
+    
     // STRICT URL-based book detail page detection
     const currentPath = window.location.pathname;
     const isBookDetailPage = currentPath.startsWith('/buecher/') && currentPath !== '/buecher/';
     const isOverviewPage = currentPath === '/' || currentPath === '/index.html';
     
-    // ONLY load books on overview page
-    if (!isOverviewPage || isBookDetailPage) {
-        console.log('📚 [Books] Not on overview page - SKIPPING loadBooks()', {
-            currentPath,
-            isOverviewPage,
-            isBookDetailPage
-        });
-        return;
-    }
+    console.log('📚 [Books] Page detection:', {
+        currentPath,
+        isBookDetailPage,
+        isOverviewPage
+    });
     
-    // Additional safety check: if we're on a detail page, don't load books
-    if (document.querySelector('.book-detail')) {
-        console.log('📚 [Books] Book detail container found - SKIPPING loadBooks()');
-        return;
-    }
-    
+    // Check for page elements
     const featuredContainer = document.getElementById('featuredBooks');
     const allBooksContainer = document.getElementById('allBooks');
+    const bookDetailContainer = document.querySelector('.book-detail');
     
-    // Only proceed if we have book containers (main page)
-    if (featuredContainer || allBooksContainer) {
+    console.log('📚 [Books] Container detection:', {
+        featuredContainer: !!featuredContainer,
+        allBooksContainer: !!allBooksContainer,
+        bookDetailContainer: !!bookDetailContainer
+    });
+    
+    // Load books if we have containers and we're not on a detail page
+    if ((featuredContainer || allBooksContainer) && !bookDetailContainer) {
+        console.log('📚 [Books] Proceeding with book loading...');
+        
         try {
+            console.log('📚 [Books] Fetching books.json...');
             const response = await fetch('books.json');
+            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -540,6 +544,7 @@ async function loadBooks() {
             }
             
             const text = await response.text();
+            console.log('📚 [Books] Response text length:', text.length);
             
             // Additional check for HTML content
             if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
@@ -550,6 +555,7 @@ async function loadBooks() {
             let parsedData;
             try {
                 parsedData = JSON.parse(text);
+                console.log('📚 [Books] JSON parsed successfully, books count:', parsedData.length);
             } catch (parseError) {
                 throw new TypeError(`Invalid JSON format: ${parseError.message}`);
             }
@@ -562,50 +568,23 @@ async function loadBooks() {
             });
             filteredBooks = [...allBooks];
             
-            await displayFeaturedBooks();
-            await displayAllBooks();
+            console.log('📚 [Books] Books loaded successfully:', {
+                allBooksCount: allBooks.length,
+                filteredBooksCount: filteredBooks.length
+            });
             
-            // Emergency cleanup: Remove audiobook buttons for books not in whitelist
-            setTimeout(() => {
-                console.log('🧹 [Emergency] Cleaning up unauthorized audiobook buttons...');
-                console.log('🧹 [Emergency] Whitelist status:', {
-                    exists: !!window.appleAudiobookList,
-                    functionExists: typeof window.isAppleAudiobook === 'function',
-                    audiobooksCount: window.appleAudiobookList?.audiobooks?.length || 0
-                });
-                
-                document.querySelectorAll('.book-card').forEach(card => {
-                    const bookTitle = card.querySelector('.book-title')?.textContent?.trim();
-                    const audiobookButton = card.querySelector('.book-link.audiobook');
-                    
-                    if (audiobookButton && bookTitle) {
-                        console.log('🧹 [Emergency] Checking book:', bookTitle);
-                        
-                        // Direct whitelist check
-                        let shouldHaveAudiobook = false;
-                        
-                        if (window.appleAudiobookList && window.appleAudiobookList.audiobooks) {
-                            const normalizedTitle = bookTitle.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
-                            
-                            shouldHaveAudiobook = window.appleAudiobookList.audiobooks.some(book => {
-                                const whitelistTitle = getLocalizedText(book.title, window.currentLanguage || 'de').toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
-                                return whitelistTitle === normalizedTitle || whitelistTitle.includes(normalizedTitle) || normalizedTitle.includes(whitelistTitle);
-                            });
-                        }
-                        
-                        console.log('🧹 [Emergency] Book:', bookTitle, 'Should have audiobook:', shouldHaveAudiobook);
-                        
-                        if (!shouldHaveAudiobook) {
-                            console.log('🧹 [Emergency] REMOVING unauthorized audiobook button for:', bookTitle);
-                            audiobookButton.remove();
-                        } else {
-                            console.log('🧹 [Emergency] KEEPING authorized audiobook button for:', bookTitle);
-                        }
-                    }
-                });
-                
-                console.log('🧹 [Emergency] Cleanup completed');
-            }, 3000); // Wait 3 seconds after page load
+            // Display books
+            if (featuredContainer) {
+                console.log('📚 [Books] Displaying featured books...');
+                await displayFeaturedBooks();
+            }
+            
+            if (allBooksContainer) {
+                console.log('📚 [Books] Displaying all books...');
+                await displayAllBooks();
+            }
+            
+            console.log('📚 [Books] Book loading and display completed successfully');
             
         } catch (error) {
             console.error('❌ [Books] Fehler beim Laden der Bücher:', error);
@@ -625,6 +604,12 @@ async function loadBooks() {
                 allBooksContainer.innerHTML = errorMessage;
             }
         }
+    } else {
+        console.log('📚 [Books] Skipping book loading:', {
+            hasContainers: !!(featuredContainer || allBooksContainer),
+            isDetailPage: !!bookDetailContainer,
+            reason: bookDetailContainer ? 'Book detail page' : 'No book containers found'
+        });
     }
 }
 
@@ -691,11 +676,18 @@ function removeDuplicateBooks(books) {
 async function displayFeaturedBooks() {
     const featuredContainer = document.getElementById('featuredBooks');
     if (featuredContainer && allBooks) {
+        console.log('📚 [Featured] Displaying featured books...');
         // Remove duplicates before displaying
         const uniqueBooks = removeDuplicateBooks(allBooks);
         const featuredBooks = uniqueBooks.slice(0, 6);
         const bookCards = await Promise.all(featuredBooks.map(book => createBookCard(book)));
         featuredContainer.innerHTML = bookCards.join('');
+        console.log('📚 [Featured] Featured books displayed:', featuredBooks.length);
+    } else {
+        console.log('📚 [Featured] Skipping featured books display:', {
+            hasContainer: !!featuredContainer,
+            hasBooks: !!allBooks
+        });
     }
 }
 
@@ -703,10 +695,13 @@ async function displayFeaturedBooks() {
 async function displayAllBooks() {
     const allBooksContainer = document.getElementById('allBooks');
     if (allBooksContainer && filteredBooks) {
+        console.log('📚 [AllBooks] Displaying all books...');
         // Remove duplicates before displaying
         const uniqueBooks = removeDuplicateBooks(filteredBooks);
         const bookCards = await Promise.all(uniqueBooks.map(book => createBookCard(book)));
         allBooksContainer.innerHTML = bookCards.join('');
+        
+        console.log('📚 [AllBooks] All books displayed:', uniqueBooks.length);
         
         // Add fade-in animation
         setTimeout(() => {
@@ -717,6 +712,11 @@ async function displayAllBooks() {
                 }, index * 100);
             });
         }, 100);
+    } else {
+        console.log('📚 [AllBooks] Skipping all books display:', {
+            hasContainer: !!allBooksContainer,
+            hasFilteredBooks: !!filteredBooks
+        });
     }
 }
 
@@ -2056,7 +2056,7 @@ async function loadAndDisplayBooks() {
         scriptSrc: document.currentScript?.src || 'unknown'
     });
     
-    // ONLY load books on overview page
+    // Load books on overview page or if we have book containers
     if (isOverviewPage && !isBookDetailPage) {
         console.log('🏠 [Init] Initializing main page');
         
@@ -2067,6 +2067,14 @@ async function loadAndDisplayBooks() {
         // Initialize all functionality for main page
         await loadAndDisplayBooks();
         initSmoothScrolling();
+        
+        // Initialize hash navigation
+        initHashNavigation();
+        
+        // Force load books after a short delay to ensure everything is ready
+        setTimeout(() => {
+            forceLoadBooks();
+        }, 1000);
         
         // Only initialize search and filter on overview page
         const isOverviewPage = window.location.pathname === '/' || window.location.pathname === '/index.html';
@@ -2164,6 +2172,12 @@ async function loadAndDisplayBooks() {
         setInterval(() => {
             ensureBookCardsVisibility();
             checkBookCardsStatus(); // Status prüfen
+            
+            // Fallback: Falls keine Bücher geladen wurden, erneut versuchen
+            if (!allBooks || allBooks.length === 0) {
+                console.log('🔄 [Fallback] No books loaded, retrying...');
+                forceLoadBooks();
+            }
         }, 10000);
         
         // 🚨 ULTIMATE CLEANUP: Alle Text-Overlays und HTML-Attribute entfernen (aber Buchkarten schützen)
@@ -2435,5 +2449,49 @@ async function loadAndDisplayBooks() {
             cardsInDOM: bookCards.length,
             visibleCards: visibleCards
         };
+    }
+
+    // 🔄 HASH-ÄNDERUNGEN ÜBERWACHEN: Bücher bei Navigation zu #books laden
+    function initHashNavigation() {
+        console.log('🔄 [Hash] Initializing hash navigation...');
+        
+        // Prüfen, ob wir bereits auf #books sind
+        if (window.location.hash === '#books') {
+            console.log('🔄 [Hash] Already on #books, loading books...');
+            loadAndDisplayBooks();
+        }
+        
+        // Hash-Änderungen überwachen
+        window.addEventListener('hashchange', (event) => {
+            console.log('🔄 [Hash] Hash changed:', window.location.hash);
+            
+            if (window.location.hash === '#books') {
+                console.log('🔄 [Hash] Navigating to #books, loading books...');
+                loadAndDisplayBooks();
+            }
+        });
+        
+        // Auch bei Popstate (Browser-Navigation) reagieren
+        window.addEventListener('popstate', (event) => {
+            console.log('🔄 [Hash] Popstate event, current hash:', window.location.hash);
+            
+            if (window.location.hash === '#books') {
+                console.log('🔄 [Hash] Popstate to #books, loading books...');
+                loadAndDisplayBooks();
+            }
+        });
+    }
+
+    // 🚀 FORCIERTE BUCHLADUNG: Bücher auch ohne Hash laden
+    function forceLoadBooks() {
+        console.log('🚀 [Force] Force loading books...');
+        
+        const allBooksContainer = document.getElementById('allBooks');
+        if (allBooksContainer) {
+            console.log('🚀 [Force] Found allBooks container, loading books...');
+            loadAndDisplayBooks();
+        } else {
+            console.log('🚀 [Force] No allBooks container found');
+        }
     }
 });

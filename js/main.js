@@ -3,6 +3,12 @@ let allBooks = [];
 window.currentLanguage = 'de';
 let filteredBooks = [];
 
+// 📱 MOBILE vs DESKTOP: Plattform-spezifische Erkennung
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isDesktop = !isMobile;
+
+console.log('📱 [Platform] Detected:', isMobile ? 'Mobile' : 'Desktop', 'UserAgent:', navigator.userAgent);
+
 // Markdown Parser für mobile Formatierung
 function parseMarkdown(text) {
     if (typeof marked !== 'undefined') {
@@ -895,23 +901,24 @@ function initGenreFilter() {
 
 // Initialize language switching
 function initLanguageSwitching() {
-    // Check URL parameter first, then localStorage, then default to 'de'
+    // 📱 MOBILE vs DESKTOP: Plattform-spezifische Sprachverwaltung
+    const platformKey = isMobile ? 'preferredLangMobile' : 'preferredLangDesktop';
     const urlParams = new URLSearchParams(window.location.search);
     const urlLang = urlParams.get('lang');
-    const localStorageLang = localStorage.getItem('preferredLang');
+    const localStorageLang = localStorage.getItem(platformKey);
     
     let preferredLang = 'de'; // default
     
     if (urlLang && (urlLang === 'de' || urlLang === 'en')) {
         preferredLang = urlLang;
-        // Update localStorage with URL parameter
-        localStorage.setItem('preferredLang', preferredLang);
-        console.log('🌐 [Language] Language set from URL parameter:', preferredLang);
+        // Update platform-specific localStorage
+        localStorage.setItem(platformKey, preferredLang);
+        console.log(`🌐 [Language] Language set from URL parameter (${isMobile ? 'Mobile' : 'Desktop'}):`, preferredLang);
     } else if (localStorageLang) {
         preferredLang = localStorageLang;
-        console.log('🌐 [Language] Language set from localStorage:', preferredLang);
+        console.log(`🌐 [Language] Language set from localStorage (${isMobile ? 'Mobile' : 'Desktop'}):`, preferredLang);
     } else {
-        console.log('🌐 [Language] Using default language:', preferredLang);
+        console.log(`🌐 [Language] Using default language (${isMobile ? 'Mobile' : 'Desktop'}):`, preferredLang);
     }
     
     window.currentLanguage = preferredLang;
@@ -927,43 +934,75 @@ function initLanguageSwitching() {
     
     // Add click event listeners
     document.querySelectorAll('.lang-btn').forEach(btn => {
-        // 🚨 SPRACHUMSCHALTUNG FIX: Einheitlicher Event-Handler für alle Geräte
+        // 🚨 SPRACHUMSCHALTUNG FIX: Plattform-spezifischer Event-Handler
         const handleLanguageSwitch = function(e) {
             e.preventDefault();
             e.stopPropagation();
             
             const lang = this.dataset.lang;
-            console.log('🌐 [Language] Switching to:', lang);
+            const platformKey = isMobile ? 'preferredLangMobile' : 'preferredLangDesktop';
+            
+            console.log(`🌐 [Language] Switching to: ${lang} (${isMobile ? 'Mobile' : 'Desktop'})`);
             
             // Update active state
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
-            // Update localStorage and global state
-            localStorage.setItem('preferredLang', lang);
+            // Update platform-specific localStorage and global state
+            localStorage.setItem(platformKey, lang);
             window.currentLanguage = lang;
             
             // Apply translation
             translatePage(lang);
             
-            // Force DOM update für mobile Geräte
-            setTimeout(() => {
-                document.querySelectorAll('[data-de], [data-en]').forEach(element => {
-                    if (element.dataset[lang]) {
-                        element.textContent = element.dataset[lang];
+            // 📱 MOBILE: Spezielle Behandlung für mobile Geräte
+            if (isMobile) {
+                setTimeout(() => {
+                    // Force DOM update für mobile Geräte
+                    document.querySelectorAll('[data-de], [data-en]').forEach(element => {
+                        if (element.dataset[lang]) {
+                            element.textContent = element.dataset[lang];
+                        }
+                    });
+                    
+                    // Force re-render of book cards auf Mobile
+                    if (typeof displayFeaturedBooks === 'function') {
+                        displayFeaturedBooks();
                     }
-                });
-                
-                // Force re-render of book cards
-                if (typeof displayFeaturedBooks === 'function') {
-                    displayFeaturedBooks();
-                }
-                if (typeof displayAllBooks === 'function') {
-                    displayAllBooks();
-                }
-            }, 100);
+                    if (typeof displayAllBooks === 'function') {
+                        displayAllBooks();
+                    }
+                    
+                    // Mobile-spezifische Cache-Bereinigung
+                    if (window.caches) {
+                        caches.keys().then(names => {
+                            names.forEach(name => {
+                                if (name.includes('mobile')) {
+                                    caches.delete(name);
+                                }
+                            });
+                        });
+                    }
+                }, 200); // Längere Verzögerung für Mobile
+            } else {
+                // Desktop: Standard-Verhalten
+                setTimeout(() => {
+                    document.querySelectorAll('[data-de], [data-en]').forEach(element => {
+                        if (element.dataset[lang]) {
+                            element.textContent = element.dataset[lang];
+                        }
+                    });
+                    
+                    if (typeof displayFeaturedBooks === 'function') {
+                        displayFeaturedBooks();
+                    }
+                    if (typeof displayAllBooks === 'function') {
+                        displayAllBooks();
+                    }
+                }, 100);
+            }
             
-            console.log('🌐 [Language] Successfully switched to:', lang);
+            console.log(`🌐 [Language] Successfully switched to: ${lang} (${isMobile ? 'Mobile' : 'Desktop'})`);
         };
         
         // Add event listeners for both click and touch

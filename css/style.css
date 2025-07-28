@@ -966,6 +966,82 @@ body {
     padding-top: 1rem;
 }
 
+/* 📱 MOBILE: Horizontale scrollbare Button-Zeile */
+@media screen and (max-width: 768px) {
+    .book-links {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 0.5rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: #6b7280 transparent;
+        justify-content: flex-start;
+    }
+    
+    .book-links::-webkit-scrollbar {
+        height: 4px;
+    }
+    
+    .book-links::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    .book-links::-webkit-scrollbar-thumb {
+        background: #6b7280;
+        border-radius: 2px;
+    }
+    
+    .book-links .book-link {
+        flex-shrink: 0;
+        min-width: fit-content;
+        white-space: nowrap;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        border-radius: 6px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .book-links .mehr-button {
+        min-width: 120px;
+        background: #6a1b9a !important;
+        color: white !important;
+        font-weight: 600 !important;
+    }
+    
+    .book-links .book-link.amazon-de {
+        background: #ff9900;
+        color: white;
+    }
+    
+    .book-links .book-link.amazon-com {
+        background: #ff9900;
+        color: white;
+    }
+    
+    .book-links .book-link.apple-books {
+        background: #000;
+        color: white;
+    }
+    
+    .book-links .book-link.books2read {
+        background: #28a745;
+        color: white;
+    }
+    
+    .book-links .book-link.audiobook {
+        background: #007aff;
+        color: white;
+    }
+}
+
 .book-links .book-link {
     flex: 1 1 auto;
     white-space: nowrap;
@@ -2823,6 +2899,57 @@ html {
     border: 0 !important;
     font-size: 0 !important;
     line-height: 0 !important;
+}
+
+/* 🚨 ULTIMATIVE TITEL-OVERLAY ENTFERNUNG: Alle möglichen Text-Elemente über Buchcovern */
+.book-card .book-image *:not(.book-cover-link):not(.book-cover-image):not(img) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0, 0, 0, 0) !important;
+}
+
+/* 🚨 SPEZIFISCHE TITEL-ENTFERNUNG: Alle H-Tags und Text-Elemente über Buchcovern */
+.book-card .book-image h1,
+.book-card .book-image h2,
+.book-card .book-image h3,
+.book-card .book-image h4,
+.book-card .book-image h5,
+.book-card .book-image h6,
+.book-card .book-image p,
+.book-card .book-image span,
+.book-card .book-image div:not(.book-cover-link):not(.book-cover-image),
+.book-card .book-image strong,
+.book-card .book-image em,
+.book-card .book-image b,
+.book-card .book-image i,
+.book-card .book-image figcaption {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0, 0, 0, 0) !important;
 }
 
 /* Alle Text-Elemente über Buchcovern */

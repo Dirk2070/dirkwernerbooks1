@@ -1,0 +1,263 @@
+APPLE BOOKS SCRAPER OUTPUT
+==========================
+Datum: 27.7.2025, 19:54:21
+URL: https://books.apple.com/de/author/dirk-werner/id316714929?see-all=audio-books
+Methode: iTunes API (Echte Apple Books IDs)
+
+API-ANTWORT ERFOLGREICH:
+========================
+{
+  "resultCount": 12,
+  "results": [
+    {
+      "wrapperType": "artist",
+      "artistType": "Author",
+      "artistName": "Dirk Werner",
+      "artistLinkUrl": "https://books.apple.com/us/author/dirk-werner/id316714929?uo=4",
+      "artistId": 316714929,
+      "primaryGenreName": "Mathematics",
+      "primaryGenreId": 10085
+    },
+    {
+      "wrapperType": "audiobook",
+      "artistId": 316714929,
+      "collectionId": 1799074036,
+      "artistName": "Dirk Werner",
+      "collectionName": "The Legacy of the Lodges: Dr. Seelmanns 3rd case",
+      "collectionCensoredName": "The Legacy of the Lodges: Dr. Seelmanns 3rd case",
+      "artistViewUrl": "https://books.apple.com/us/author/dirk-werner/id316714929?uo=4",
+      "collectionViewUrl": "https://books.apple.com/us/audiobook/the-legacy-of-the-lodges-dr-seelmanns-3rd-case/id1799074036?uo=4",
+      "artworkUrl60": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4d/34/3a/4d343a81-8a6b-609d-e402-6c6a5b097425/gsy4770525154284216141.png/60x60bb.jpg",
+      "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4d/34/3a/4d343a81-8a6b-609d-e402-6c6a5b097425/gsy4770525154284216141.png/100x100bb.jpg",
+      "collectionPrice": 9.99,
+      "collectionExplicitness": "cleaned",
+      "trackCount": 1,
+      "country": "USA",
+      "currency": "USD",
+      "releaseDate": "2025-02-19T08:00:00Z",
+      "primaryGenreName": "Mysteries & Thrillers"
+    },
+    {
+      "wrapperType": "audiobook",
+      "artistId": 316714929,
+      "collectionId": 1798829619,
+      "artistName": "Dirk Werner",
+      "collectionName": "Nanogenesis: The Rise of Superhumans",
+      "collectionCensoredName": "Nanogenesis: The Rise of Superhumans",
+      "artistViewUrl": "https://books.apple.com/us/author/dirk-werner/id316714929?uo=4",
+      "collectionViewUrl": "https://books.apple.com/us/audiobook/nanogenesis-the-rise-of-superhumans/id1798829619?uo=4",
+      "artworkUrl60": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/4a/c7/51/4ac751ff-7702-93f4-41c9-6e1e8a173ece/jmd241998051719821622.png/60x60bb.jpg",
+      "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/4a/c7/51/4ac751ff-7702-93f4-41c9-6e1e8a173ece/jmd241998051719821622.png/100x100bb.jpg",
+      "collectionPrice": 7.99,
+      "collectionExplicitness": "cleaned",
+      "trackCount": 1,
+      "country": "USA",
+      "currency": "USD",
+      "releaseDate": "2025-02-19T08:00:00Z",
+      "primaryGenreName": "Sci-Fi & Fantasy"
+    },
+    {
+      "wrapperType": "audiobook",
+      "artistId": 316714929,
+      "collectionId": 1798551433,
+      "artistName": "Dirk Werner",
+      "collectionName": "The Key of the Enlightened",
+      "collectionCensoredName": "The Key of the Enlightened",
+      "artistViewUrl": "https://books.apple.com/us/author/dirk-werner/id316714929?uo=4",
+      "collectionViewUrl": "https://books.apple.com/us/audiobook/the-key-of-the-enlightened/id1798551433?uo=4",
+      "artworkUrl60": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/d7/04/71/d70471c8-2cc8-86ed-0fe4-743a9610487e/xqo1646652978226496476.png/60x60bb.jpg",
+      "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/d7/04/71/d70471c8-2cc8-86ed-0fe4-743a9610487e/xqo1646652978226496476.png/100x100bb.jpg",
+      "collectionPrice": 7.99,
+      "collectionExplicitness": "cleaned",
+      "trackCount": 1,
+      "country": "USA",
+      "currency": "USD",
+      "releaseDate": "2025-02-19T08:00:00Z",
+      "primaryGenreName": "Sci-Fi & Fantasy"
+    },
+    {
+      "wrapperType": "audiobook",
+      "artistId": 316714929,
+      "collectionId": 1810717567,
+      "artistName": "Dirk Werner",
+      "collectionName": "The Battle Within: A Guide to Overcoming Inner Struggles",
+      "collectionCensoredName": "The Battle Within: A Guide to Overcoming Inner Struggles",
+      "artistViewUrl": "https://books.apple.com/us/author/dirk-werner/id316714929?uo=4",
+      "collectionViewUrl": "https://books.apple.com/us/audiobook/the-battle-within-a-guide-to-overcoming-inner-struggles/id1810717567?uo=4",
+      "artworkUrl60": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2d/32/ac/2d32acc5-f433-186f-92ae-3497ff6342c4/bba3660474734764094753.png/60x60bb.jpg",
+      "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2d/32/ac/2d32acc5-f433-186f-92ae-3497ff6342c4/bba3660474734764094753.png/100x100bb.jpg",
+      "collectionPrice": 9.99,
+      "collectionExplicitness": "cleaned",
+      "trackCount": 1,
+      "country": "USA",
+      "currency": "USD",
+      "releaseDate": "2025-04-22T07:00:00Z",
+      "primaryGenreName": "Nonfiction"
+    },
+    {
+      "wrapperType": "audiobook",
+      "artistId": 316714929,
+      "collectionId": 1810717772,
+      "artistName": "Dirk Werner",
+      "collectionName": "How to Recognize Cults: A Guide to Protecting Yourself from Manipulation and Control",
+      "collectionCensoredName": "How to Recognize Cults: A Guide to Protecting Yourself from Manipulation and Control",
+      "artistViewUrl": "https://books.apple.com/us/author/dirk-werner/id316714929?uo=4",
+      "collectionViewUrl": "https://books.apple.com/us/audiobook/how-to-recognize-cults-a-guide-to-protecting/id1810717772?uo=4",
+      "artworkUrl60": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/64/a7/e2/64a7e2df-d2a7-4f1f-9c53-b2f72e130598/fyj8040409960559151603.png/60x60bb.jpg",
+      "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/64/a7/e2/64a7e2df-d2a7-4f1f-9c53-b2f72e130598/fyj8040409960559151603.png/100x100bb.jpg",
+      "collectionPrice": 9.99,
+      "collectionExplicitness": "cleaned",
+      "trackCount": 1,
+      "country": "USA",
+      "currency": "USD",
+      "releaseDate": "2025-04-22T07:00:00Z",
+      "primaryGenreName": "Nonfiction"
+    },
+    {
+      "wrapperType": "audiobook",
+      "artistId": 316714929,
+      "collectionId": 1811457128,
+      "artistName": "Dirk Werner",
+      "collectionName": "How to Recognize Cults: A Guide to Protecting Yourself from Manipulation and Control",
+      "collectionCensoredName": "How to Recognize Cults: A Guide to Protecting Yourself from Manipulation and Control",
+      "artistViewUrl": "https://books.apple.com/us/author/dirk-werner/id316714929?uo=4",
+      "collectionViewUrl": "https://books.apple.com/us/audiobook/how-to-recognize-cults-a-guide-to-protecting/id1811457128?uo=4",
+      "artworkUrl60": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/7d/69/c0/7d69c0da-869e-8999-32ce-d4305c78fac7/vhq12713158381120078915.png/60x60bb.jpg",
+      "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/7d/69/c0/7d69c0da-869e-8999-32ce-d4305c78fac7/vhq12713158381120078915.png/100x100bb.jpg",
+      "collectionPrice": 9.99,
+      "collectionExplicitness": "cleaned",
+      "trackCount": 1,
+      "country": "USA",
+      "currency": "USD",
+      "releaseDate": "2025-04-22T07:00:00Z",
+      "primaryGenreName": "Nonfiction"
+    },
+    {
+      "wrapperType": "audiobook",
+      "artistId": 316714929,
+      "collectionId": 1799074309,
+      "artistName": "Dirk Werner",
+      "collectionName": "American Shadows: Hecate's Intervention - The Unofficial Sequel to American Gods",
+      "collectionCensoredName": "American Shadows: Hecate's Intervention - The Unofficial Sequel to American Gods",
+      "artistViewUrl": "https://books.apple.com/us/author/dirk-werner/id316714929?uo=4",
+      "collectionViewUrl": "https://books.apple.com/us/audiobook/american-shadows-hecates-intervention-the-unofficial/id1799074309?uo=4",
+      "artworkUrl60": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/45/f8/19/45f8193d-1d21-c858-8865-52936644525c/knv3480853816026648974.png/60x60bb.jpg",
+      "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/45/f8/19/45f8193d-1d21-c858-8865-52936644525c/knv3480853816026648974.png/100x100bb.jpg",
+      "collectionPrice": 9.99,
+      "collectionExplicitness": "cleaned",
+      "trackCount": 1,
+      "country": "USA",
+      "currency": "USD",
+      "releaseDate": "2025-02-19T08:00:00Z",
+      "primaryGenreName": "Sci-Fi & Fantasy"
+    },
+    {
+      "wrapperType": "audiobook",
+      "artistId": 316714929,
+      "collectionId": 1799074224,
+      "artistName": "Dirk Werner",
+      "collectionName": "Instructions for Staying in the Matrix Forever",
+      "collectionCensoredName": "Instructions for Staying in the Matrix Forever",
+      "artistViewUrl": "https://books.apple.com/us/author/dirk-werner/id316714929?uo=4",
+      "collectionViewUrl": "https://books.apple.com/us/audiobook/instructions-for-staying-in-the-matrix-forever/id1799074224?uo=4",
+      "artworkUrl60": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/88/b8/7e/88b87e56-dab9-a62c-eef0-f79e4c221f9e/bqx13037858329587455501.png/60x60bb.jpg",
+      "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/88/b8/7e/88b87e56-dab9-a62c-eef0-f79e4c221f9e/bqx13037858329587455501.png/100x100bb.jpg",
+      "collectionPrice": 7.99,
+      "collectionExplicitness": "cleaned",
+      "trackCount": 1,
+      "country": "USA",
+      "currency": "USD",
+      "releaseDate": "2025-02-19T08:00:00Z",
+      "primaryGenreName": "Sci-Fi & Fantasy"
+    },
+    {
+      "wrapperType": "audiobook",
+      "artistId": 316714929,
+      "collectionId": 1798829616,
+      "artistName": "Dirk Werner",
+      "collectionName": "Deadly Echo: Dr. Seelmann's Second Case",
+      "collectionCensoredName": "Deadly Echo: Dr. Seelmann's Second Case",
+      "artistViewUrl": "https://books.apple.com/us/author/dirk-werner/id316714929?uo=4",
+      "collectionViewUrl": "https://books.apple.com/us/audiobook/deadly-echo-dr-seelmanns-second-case/id1798829616?uo=4",
+      "artworkUrl60": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/d8/7e/63/d87e63bc-02c9-db92-29a5-0a693bf0aa17/ufj16768466145972568878.png/60x60bb.jpg",
+      "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/d8/7e/63/d87e63bc-02c9-db92-29a5-0a693bf0aa17/ufj16768466145972568878.png/100x100bb.jpg",
+      "collectionPrice": 7.99,
+      "collectionExplicitness": "cleaned",
+      "trackCount": 1,
+      "country": "USA",
+      "currency": "USD",
+      "releaseDate": "2025-02-19T08:00:00Z",
+      "primaryGenreName": "Mysteries & Thrillers"
+    },
+    {
+      "wrapperType": "audiobook",
+      "artistId": 316714929,
+      "collectionId": 1799233073,
+      "artistName": "Dirk Werner",
+      "collectionName": "The Simulation Chronicles",
+      "collectionCensoredName": "The Simulation Chronicles",
+      "artistViewUrl": "https://books.apple.com/us/author/dirk-werner/id316714929?uo=4",
+      "collectionViewUrl": "https://books.apple.com/us/audiobook/the-simulation-chronicles/id1799233073?uo=4",
+      "artworkUrl60": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/1a/a4/a9/1aa4a9c2-e367-ddbe-3c8c-2eccd0821f28/trc1172603607624668628.png/60x60bb.jpg",
+      "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/1a/a4/a9/1aa4a9c2-e367-ddbe-3c8c-2eccd0821f28/trc1172603607624668628.png/100x100bb.jpg",
+      "collectionPrice": 7.99,
+      "collectionExplicitness": "cleaned",
+      "trackCount": 1,
+      "country": "USA",
+      "currency": "USD",
+      "releaseDate": "2025-02-19T08:00:00Z",
+      "primaryGenreName": "Sci-Fi & Fantasy"
+    },
+    {
+      "wrapperType": "audiobook",
+      "artistId": 316714929,
+      "collectionId": 1810717883,
+      "artistName": "Dirk Werner",
+      "collectionName": "Self-Love Over Perfection: A Guide to Overcoming Female Narcissism",
+      "collectionCensoredName": "Self-Love Over Perfection: A Guide to Overcoming Female Narcissism",
+      "artistViewUrl": "https://books.apple.com/us/author/dirk-werner/id316714929?uo=4",
+      "collectionViewUrl": "https://books.apple.com/us/audiobook/self-love-over-perfection-a-guide-to-overcoming/id1810717883?uo=4",
+      "artworkUrl60": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b9/1e/f6/b91ef637-5890-6534-f7f3-08686d2d342b/mkk10116702695814483673.png/60x60bb.jpg",
+      "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b9/1e/f6/b91ef637-5890-6534-f7f3-08686d2d342b/mkk10116702695814483673.png/100x100bb.jpg",
+      "collectionPrice": 7.99,
+      "collectionExplicitness": "cleaned",
+      "trackCount": 1,
+      "country": "USA",
+      "currency": "USD",
+      "releaseDate": "2025-04-22T07:00:00Z",
+      "primaryGenreName": "Nonfiction"
+    }
+  ]
+}
+
+EXTRAHIERTE AUDIOBOOKS:
+=======================
+1. "The Legacy of the Lodges: Dr. Seelmanns 3rd case" (ID: 1799074036)
+2. "Nanogenesis: The Rise of Superhumans" (ID: 1798829619)
+3. "The Key of the Enlightened" (ID: 1798551433)
+4. "The Battle Within: A Guide to Overcoming Inner Struggles" (ID: 1810717567)
+5. "How to Recognize Cults: A Guide to Protecting Yourself from Manipulation and Control" (ID: 1810717772)
+6. "How to Recognize Cults: A Guide to Protecting Yourself from Manipulation and Control" (ID: 1811457128) - DUPLIKAT
+7. "American Shadows: Hecate's Intervention - The Unofficial Sequel to American Gods" (ID: 1799074309)
+8. "Instructions for Staying in the Matrix Forever" (ID: 1799074224)
+9. "Deadly Echo: Dr. Seelmann's Second Case" (ID: 1798829616)
+10. "The Simulation Chronicles" (ID: 1799233073)
+11. "Self-Love Over Perfection: A Guide to Overcoming Female Narcissism" (ID: 1810717883)
+
+ZUSAMMENFASSUNG:
+================
+- Gesamtanzahl Audiobooks: 11 (inkl. 1 Duplikat)
+- Echte Apple Books IDs extrahiert
+- Alle Bücher von Dirk Werner bestätigt
+- Preise: 7.99$ - 9.99$
+- Genres: Nonfiction, Sci-Fi & Fantasy, Mysteries & Thrillers
+- Release-Daten: Februar 2025 - April 2025
+
+NÄCHSTE SCHRITTE:
+=================
+1. Whitelist mit echten Apple-IDs aktualisieren
+2. Website mit korrekten Audiobook-Buttons testen
+3. Automatischen Scheduler für regelmäßige Updates einrichten
+
+STATUS: ✅ ERFOLGREICH
+====================== 

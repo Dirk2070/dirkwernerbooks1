@@ -162,60 +162,78 @@ function generateBookPageHTML(book) {
     <main class="book-detail">
         <div class="container">
             <div class="book-detail-content">
-                <div class="book-detail-image">
-                    <img src="${book.image.link}" alt="Buchcover: ${title} von Dirk Werner" loading="lazy">
-                </div>
-                
-                <div class="book-detail-info">
-                    <h1 class="book-detail-title">${title}</h1>
-                    <p class="book-detail-author">von Dirk Werner</p>
-                    
-                    ${description ? `<div class="book-detail-description">
-                        <h2>Über dieses Buch</h2>
-                        <p>${description}</p>
-                    </div>` : ''}
-                    
-                    <div class="book-detail-meta">
-                        <div class="book-meta-item">
-                            <strong>Sprache:</strong> ${book.language === 'en' ? 'Englisch' : 'Deutsch'}
+                <!-- Modern Grid Layout -->
+                <div class="book-detail-grid">
+                    <!-- Book Cover Column -->
+                    <div class="book-detail-cover">
+                        <img src="${book.image.link}" alt="Buchcover: ${title} von Dirk Werner" loading="lazy" class="book-detail-image">
+                        
+                        <!-- Back to Overview Button -->
+                        <div class="back-to-overview">
+                            <a href="/#books" class="btn-back">
+                                ← Zurück zur Übersicht
+                            </a>
                         </div>
-                        <div class="book-meta-item">
-                            <strong>Format:</strong> ${book.bookFormat === 'Paperback' ? 'Taschenbuch' : 'E-Book'}
-                        </div>
-                        ${book.asin ? `<div class="book-meta-item">
-                            <strong>ASIN:</strong> ${book.asin}
-                        </div>` : ''}
                     </div>
                     
-                    <div class="book-detail-links">
-                        <h3>Jetzt kaufen</h3>
-                        <div class="book-links">
-                            ${book.links?.amazon_de ? `<a href="${book.links.amazon_de}" class="book-link amazon-de" target="_blank" rel="noopener noreferrer" aria-label="Buch '${title}' bei Amazon Deutschland kaufen">
-                                📚 Bei Amazon DE kaufen
-                            </a>` : ''}
-                            
-                            ${book.links?.amazon_us ? `<a href="${book.links.amazon_us}" class="book-link amazon-com" target="_blank" rel="noopener noreferrer" aria-label="Buch '${title}' bei Amazon USA kaufen">
-                                🛒 Bei Amazon US kaufen
-                            </a>` : ''}
-                            
-                            ${book.links?.apple_books ? `<a href="${book.links.apple_books}" class="book-link apple-books" target="_blank" rel="noopener noreferrer" aria-label="Buch '${title}' bei Apple Books kaufen">
-                                📱 Bei Apple Books kaufen
-                            </a>` : ''}
-                            
-                            ${book.links?.books2read ? `<a href="${book.links.books2read}" class="book-link books2read" target="_blank" rel="noopener noreferrer" aria-label="Buch '${title}' bei Books2Read ansehen">
-                                🌍 Bei Books2Read ansehen
-                            </a>` : ''}
+                    <!-- Book Info Column -->
+                    <div class="book-detail-info">
+                        <div class="book-detail-header">
+                            <h1 class="book-detail-title">${title}</h1>
+                            <p class="book-detail-author">von Dirk Werner</p>
                         </div>
                         
-                        ${book.hasAudiobook ? `<div class="audiobook-links">
-                            <h4>Hörbuch verfügbar</h4>
-                            <a href="#" class="book-link audiobook btn-audiobook-link" target="_blank" rel="noopener noreferrer" aria-label="Hörbuch '${title}' bei Apple Books anhören">
-                                🎧 Hörbuch bei Apple Books
-                            </a>
+                        ${description ? `<div class="book-detail-description">
+                            <h2>Über dieses Buch</h2>
+                            <p>${description}</p>
                         </div>` : ''}
+                        
+                        <div class="book-detail-meta">
+                            <div class="meta-grid">
+                                <div class="meta-item">
+                                    <span class="meta-label">Sprache:</span>
+                                    <span class="meta-value">${book.language === 'en' ? 'Englisch' : 'Deutsch'}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Format:</span>
+                                    <span class="meta-value">${book.bookFormat === 'Paperback' ? 'Taschenbuch' : 'E-Book'}</span>
+                                </div>
+                                ${book.asin ? `<div class="meta-item">
+                                    <span class="meta-label">ASIN:</span>
+                                    <span class="meta-value">${book.asin}</span>
+                                </div>` : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="book-detail-actions">
+                            <h3>Jetzt kaufen</h3>
+                            <div class="action-buttons">
+                                ${book.links?.amazon_de ? `<a href="${book.links.amazon_de}" class="action-btn amazon-de" target="_blank" rel="noopener noreferrer" aria-label="Buch '${title}' bei Amazon Deutschland kaufen">
+                                    📚 Bei Amazon DE kaufen
+                                </a>` : ''}
+                                
+                                ${book.links?.amazon_us ? `<a href="${book.links.amazon_us}" class="action-btn amazon-com" target="_blank" rel="noopener noreferrer" aria-label="Buch '${title}' bei Amazon USA kaufen">
+                                    🛒 Bei Amazon US kaufen
+                                </a>` : ''}
+                                
+                                ${book.links?.apple_books ? `<a href="${book.links.apple_books}" class="action-btn apple-books" target="_blank" rel="noopener noreferrer" aria-label="Buch '${title}' bei Apple Books kaufen">
+                                    📱 Bei Apple Books kaufen
+                                </a>` : ''}
+                                
+                                ${book.links?.books2read ? `<a href="${book.links.books2read}" class="action-btn books2read" target="_blank" rel="noopener noreferrer" aria-label="Buch '${title}' bei Books2Read ansehen">
+                                    🌍 Bei Books2Read ansehen
+                                </a>` : ''}
+                            </div>
+                            
+                            ${book.hasAudiobook ? `<div class="audiobook-section">
+                                <h4>🎧 Hörbuch verfügbar</h4>
+                                <a href="https://books.apple.com/de/author/dirk-werner/id316714929?see-all=audio-books" class="action-btn audiobook" target="_blank" rel="noopener noreferrer" aria-label="Hörbuch '${title}' bei Apple Books anhören">
+                                    🎧 Hörbuch bei Apple Books
+                                </a>
+                            </div>` : ''}
+                        </div>
                     </div>
                 </div>
-            </div>
             
             <!-- Related Books Section -->
             <div class="related-books">

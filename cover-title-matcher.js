@@ -21,13 +21,13 @@ const COVER_TITLE_MAPPING = {
   // Nanogenesis - Science Fiction Cover
   'https://m.media-amazon.com/images/I/81k1jQeXgbL.jpg': {
     title: 'Nanogenesis: The Rise of Superhumans',
-    keywords: ['Nanogenesis', 'Superhumans', 'Science Fiction', 'Nanotechnologie']
+    keywords: ['Nanogenesis', 'Superhumans', 'Science Fiction', 'Nanotechnologie', 'Nanogenese', 'Supermenschen']
   },
   
   // Self-Love Over Perfection - Rosa/Pink Cover
   'https://m.media-amazon.com/images/I/71D0-qTLOuL.jpg': {
     title: 'Self-Love Over Perfection: A Guide to Overcoming Female Narcissism',
-    keywords: ['Self-Love', 'Perfection', 'Female Narcissism', 'rosa', 'pink']
+    keywords: ['Self-Love', 'Perfection', 'Female Narcissism', 'rosa', 'pink', 'Selbstliebe', 'Perfektion', 'Narzissmus']
   },
   
   // Selbstsabotage - Dunkles Cover mit Gehirn/Neuronen

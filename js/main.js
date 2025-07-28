@@ -2507,64 +2507,78 @@ async function loadAndDisplayBooks() {
         }
     }
 
-    // 🔍 DIAGNOSE-TOOL: Automatische Erkennung und Behebung von Sichtbarkeitsproblemen
-    function diagnoseVisibilityIssues() {
-        console.log('🔍 [Diagnose] Starting visibility diagnosis...');
-        
-        // 1. Overflow-Probleme beheben
-        document.body.style.overflow = 'auto';
-        document.documentElement.style.overflow = 'auto';
-        console.log('🔍 [Diagnose] Fixed body overflow');
-        
-        // 2. Hero-Section Höhe begrenzen
-        const hero = document.querySelector('.hero');
-        if (hero) {
-            hero.style.maxHeight = '80vh';
-            hero.style.overflow = 'visible';
-            console.log('🔍 [Diagnose] Fixed hero section height');
-        }
-        
-        // 3. Weiße Overlays entfernen
-        document.querySelectorAll('*').forEach(el => {
-            const styles = getComputedStyle(el);
-            if (parseInt(styles.zIndex) > 1000 && styles.backgroundColor.includes('255, 255, 255')) {
-                el.style.display = 'none';
-                console.log('🔍 [Diagnose] Removed white overlay:', el);
-            }
-        });
-        
-        // 4. Container-Positionen korrigieren
-        const containers = ['#allBooks', '#featuredBooks', '.books-grid', '.books-section'];
-        containers.forEach(selector => {
-            const container = document.querySelector(selector);
-            if (container) {
-                container.style.position = 'static';
-                container.style.zIndex = 'auto';
-                container.style.overflow = 'visible';
-                container.style.minHeight = '100px';
-                console.log('🔍 [Diagnose] Fixed container:', selector);
-            }
-        });
-        
-        // 5. Buchkarten in sichtbaren Bereich scrollen
-        const firstBookCard = document.querySelector('.book-card');
-        if (firstBookCard) {
-            firstBookCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            console.log('🔍 [Diagnose] Scrolled to first book card');
-        }
-        
-        // 6. allBooks Container in sichtbaren Bereich scrollen
-        const allBooks = document.getElementById('allBooks');
-        if (allBooks) {
-            allBooks.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            console.log('🔍 [Diagnose] Scrolled to allBooks container');
-        }
-        
-        console.log('🔍 [Diagnose] Visibility diagnosis completed');
+    // 🔍 NOTFALL-DIAGNOSE-FUNKTION: Umfassende Sichtbarkeitsreparatur
+function diagnoseVisibilityIssues() {
+    console.log('🔍 Diagnose wird gestartet…');
+
+    // 1. Viewport-Reset
+    document.documentElement.style.overflow = 'auto';
+    document.body.style.overflow = 'auto';
+
+    // 2. Sichtbarkeitsreparatur
+    const allBooks = document.getElementById('allBooks');
+    if (allBooks) {
+        allBooks.style.display = 'block';
+        allBooks.style.visibility = 'visible';
+        allBooks.style.opacity = '1';
+        allBooks.style.minHeight = '400px';
+        allBooks.style.padding = '1rem';
+        allBooks.scrollIntoView({ behavior: 'smooth' });
+        console.log('✅ allBooks Container repariert');
     }
 
-    // 🚨 AUTOMATISCHE DIAGNOSE: Nach 2 Sekunden ausführen
+    // 3. Hero-Sektion entschärfen
+    const hero = document.querySelector('.hero');
+    if (hero) {
+        hero.style.maxHeight = '50vh';
+        hero.style.overflow = 'visible';
+        console.log('✅ Hero-Sektion entschärft');
+    }
+
+    // 4. Overlays entfernen
+    document.querySelectorAll('*').forEach(el => {
+        const style = window.getComputedStyle(el);
+        if (
+            parseInt(style.zIndex) > 1000 &&
+            style.backgroundColor.includes('255, 255, 255')
+        ) {
+            el.style.display = 'none';
+            console.log('❌ Overlay entfernt:', el);
+        }
+    });
+
+    // 5. Erste Buchkarte in den Fokus
+    const firstBook = document.querySelector('.book-card');
+    if (firstBook) {
+        firstBook.scrollIntoView({ behavior: 'smooth' });
+        firstBook.style.border = '2px solid red'; // Sichtbar machen
+        console.log('✅ Erste Buchkarte hervorgehoben');
+    }
+
+    // 6. Zusätzliche Container-Reparatur
+    const containers = ['#featuredBooks', '.books-grid', '.books-section'];
+    containers.forEach(selector => {
+        const container = document.querySelector(selector);
+        if (container) {
+            container.style.display = 'block';
+            container.style.visibility = 'visible';
+            container.style.opacity = '1';
+            container.style.minHeight = '200px';
+            container.style.padding = '1rem';
+            console.log('✅ Container repariert:', selector);
+        }
+    });
+
+    console.log('✅ Diagnose abgeschlossen!');
+}
+
+    // 🚨 AUTOMATISCHE NOTFALL-DIAGNOSE: Nach 1.5 Sekunden ausführen
     setTimeout(() => {
         diagnoseVisibilityIssues();
-    }, 2000);
+    }, 1500);
+    
+    // 🚨 ZUSÄTZLICHE DIAGNOSE: Nach 5 Sekunden für Fallback
+    setTimeout(() => {
+        diagnoseVisibilityIssues();
+    }, 5000);
 });

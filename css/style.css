@@ -532,7 +532,7 @@ body {
 }
 
 .book-link {
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
     justify-content: center;
     padding: 0.75rem 1rem;
@@ -543,6 +543,14 @@ body {
     transition: all 0.3s ease;
     text-align: center;
     min-height: 44px;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: static !important;
+    z-index: auto !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
 }
 
 .book-link:hover {
@@ -936,6 +944,15 @@ body {
         padding: 0.6rem 0.8rem;
         font-size: 0.85rem;
         min-height: 40px;
+        display: inline-flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: static !important;
+        z-index: auto !important;
+        width: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+        pointer-events: auto !important;
     }
     
     .author-content {
@@ -1355,5 +1372,26 @@ link[href*="embed"]:not(.book-card *), link[href*="external"]:not(.book-card *) 
     padding: inherit !important;
     border: inherit !important;
     clip: auto !important;
+}
+
+/* 🚨 CONTAINER SICHTBARKEIT GARANTIEREN: Wichtigste Container explizit sichtbar machen */
+#allBooks,
+#featuredBooks,
+.books-grid,
+.book-grid,
+.books-section,
+.featured-books {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: static !important;
+    z-index: auto !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
+    min-height: 100px !important;
+    padding: 1rem !important;
+    margin: 1rem 0 !important;
 }
 

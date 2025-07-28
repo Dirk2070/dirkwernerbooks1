@@ -72,11 +72,15 @@ body {
     min-height: 64px;
     display: block;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: all 0.2s ease;
+    opacity: 0.9;
+    background: transparent;
 }
 
 .header-logo:hover {
     transform: scale(1.05);
+    opacity: 1;
+    filter: brightness(1.1) contrast(1.1);
 }
 
 .header-text {
@@ -262,14 +266,20 @@ body {
     width: auto;
     min-width: 64px;
     min-height: 64px;
-    filter: brightness(0) invert(1);
-    transition: filter 0.2s ease;
+    /* Remove problematic filters that make logo appear as black square */
+    filter: none;
+    transition: all 0.2s ease;
     display: block;
     cursor: pointer;
+    opacity: 0.8;
+    /* Ensure logo is visible with proper contrast */
+    background: transparent;
 }
 
 .nav-logo-link:hover .nav-logo {
-    filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(200deg);
+    opacity: 1;
+    transform: scale(1.05);
+    filter: brightness(1.1) contrast(1.1);
 }
 
 /* Section Logo Styling */
@@ -303,14 +313,20 @@ body {
     width: auto;
     min-width: 64px;
     min-height: 64px;
-    filter: brightness(0) saturate(100%);
-    transition: filter 0.2s ease;
+    /* Remove problematic filters that make logo appear as black square */
+    filter: none;
+    transition: all 0.2s ease;
     display: block;
     cursor: pointer;
+    opacity: 0.8;
+    /* Ensure logo is visible with proper contrast */
+    background: transparent;
 }
 
 .section-logo-link:hover .section-logo {
-    filter: brightness(0) saturate(100%) sepia(1) saturate(5) hue-rotate(200deg);
+    opacity: 1;
+    transform: scale(1.05);
+    filter: brightness(1.1) contrast(1.1);
 }
 
 /* Hero Section */
@@ -1154,6 +1170,15 @@ body {
     width: 80px;
     height: 80px;
     object-fit: contain;
+    opacity: 0.8;
+    transition: all 0.2s ease;
+    background: transparent;
+}
+
+.footer-logo-link:hover .footer-logo {
+    opacity: 1;
+    transform: scale(1.05);
+    filter: brightness(1.1) contrast(1.1);
 }
 
 .footer-bottom {
@@ -1901,6 +1926,14 @@ body {
     
     .nav-logo {
         height: 1.5rem;
+        filter: none;
+        opacity: 0.8;
+        background: transparent;
+    }
+    
+    .nav-logo-link:hover .nav-logo {
+        opacity: 1;
+        filter: brightness(1.1) contrast(1.1);
     }
     
     .section-header {
@@ -1917,6 +1950,14 @@ body {
     
     .section-logo {
         height: 1.5rem;
+        filter: none;
+        opacity: 0.8;
+        background: transparent;
+    }
+    
+    .section-logo-link:hover .section-logo {
+        opacity: 1;
+        filter: brightness(1.1) contrast(1.1);
     }
     
     .footer-bottom {
@@ -2339,11 +2380,16 @@ html {
     /* Make logo clickable on mobile */
     .header-logo {
         cursor: pointer;
-        transition: transform 0.2s ease;
+        transition: all 0.2s ease;
+        filter: none;
+        opacity: 0.8;
+        background: transparent;
     }
     
     .header-logo:hover {
         transform: scale(1.05);
+        opacity: 1;
+        filter: brightness(1.1) contrast(1.1);
     }
 }
 

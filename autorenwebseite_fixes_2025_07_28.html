@@ -1,0 +1,45 @@
+<!-- Änderungsprotokoll für dirkwernerbooks.com -->
+<!-- Stand: 2025-07-28, 23:18 Uhr -->
+
+<!-- ✅ FIXED -->
+<!-- 1. Sprachumschaltung wieder funktionsfähig (Header-Komponente aktualisiert) -->
+<!-- 2. Buchübersicht-Layout modernisiert: Buttons vergrößert, gleichmäßige Abstände, flexibles Grid-System -->
+<!-- 3. Responsivität für Mobilgeräte erneut sichergestellt -->
+<!-- 4. Detailseiten-Verlinkung aktiv, führen wieder zur richtigen URL -->
+
+<!-- ❌ OFFEN / DRINGEND ZU BEHEBEN -->
+<!-- A. Falsche Cover-Titel-Zuordnung (z. B. "Ein interaktives Tagebuch..." bei Suizidprävention UND Dankbarkeit) -->
+<!-- B. Redundanter Overlay-Text direkt auf den Covers – muss entfernt werden -->
+<!-- C. Detailseiten weiterhin im 90er-Tabellenstil: kein CSS-Grid, keine Buttons, kein Design-Upgrade -->
+<!-- D. Goldstandard-Output des früheren "cover-title-matcher.js" nicht mehr übernommen -->
+<!-- E. Cursor-Regression: Neue Commits überschreiben funktionierende Varianten ohne Checkpoint-Erkennung -->
+
+<!-- 🔁 TO-DO FÜR CURSOR / AGENTEN-PROMPT -->
+<!-- PROMPT BEGINN -->
+Verbessere die Buchübersichtsseite von dirkwernerbooks.com basierend auf folgendem Änderungsprotokoll:
+
+1. Entferne ALLE redundanten Titel-Overlays, die direkt über dem Buchcover eingeblendet werden
+2. Stelle sicher, dass jedes Buchcover dem korrekten Titel entspricht – nutze dazu die geprüften Zuordnungen aus `cover-title-matcher.js`
+3. Verwende das modernisierte Layout mit: 
+   - Flexbox/Grid-Container
+   - Buttons wie auf Screenshot 'Autorenwebseite 49'
+   - Keine Inline-Elemente oder „style="..."“-Konstruktionen
+4. Alle Änderungen bitte mit Zeitstempel und Kommentar dokumentieren
+5. Sicherstellen, dass Cursor keine alten Layout-Dateien mehr verwendet (z. B. `books-legacy.html`, `details-old.css`)
+6. Erstelle nach erfolgreicher Korrektur eine Markdown-Dokumentation `CHANGELOG_AUTOREN_2025-07-28.md`
+   - Was wurde verändert
+   - Welche Dateien waren betroffen
+   - Wie kann der letzte stabile Zustand wiederhergestellt werden
+   - Welche Komponenten wurden regressiv überschrieben (optional Git-Hashs)
+<!-- PROMPT ENDE -->
+
+<!-- 🧠 IDEE -->
+Zukünftig nach jedem funktionierenden Deployment automatisch ein Git-Tag setzen:
+
+```bash
+git tag "stable-2025-07-28_23-18" && git push origin stable-2025-07-28_23-18
+```
+
+Damit Cursor oder andere CI/CD-Tools jederzeit zurückspringen können.
+
+<!-- 👇 Screenshots zur Referenz: siehe Datei `Autorenwebseite 49.png` für Idealzustand -->

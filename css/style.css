@@ -435,7 +435,8 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
-    min-height: 650px;
+    min-height: 680px;
+    position: relative;
 }
 
 .book-card:hover {
@@ -574,6 +575,24 @@ body {
     content: none !important;
 }
 
+/* Ensure no data attributes are displayed as content */
+.book-card[data-title]::before,
+.book-card[data-title]::after,
+.book-card[data-asin]::before,
+.book-card[data-asin]::after,
+.book-card[data-genre]::before,
+.book-card[data-genre]::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Remove any potential content from data attributes */
+.book-card::before,
+.book-card::after {
+    content: none !important;
+    display: none !important;
+}
+
 /* Ensure book cover images are properly displayed */
 .book-image img,
 .book-cover img,
@@ -671,13 +690,17 @@ body {
 .book-links .book-link {
     flex: 1 1 auto;
     white-space: nowrap;
-    min-width: 140px;
-    max-width: 200px;
+    min-width: 160px;
+    max-width: 220px;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 0.9rem;
     padding: 0.75rem 1rem;
     min-height: 44px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .book-link {

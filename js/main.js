@@ -22,6 +22,13 @@ function parseMarkdown(text) {
     return text;
 }
 
+// URL-Parameter-Update-Funktion für temporäre Sprachverwaltung
+function updateURLParameter(key, value) {
+    const url = new URL(window.location);
+    url.searchParams.set(key, value);
+    window.history.replaceState({}, '', url);
+}
+
 // Ensure translations are available globally
 if (typeof window.translations === 'undefined') {
     window.translations = {
@@ -487,7 +494,38 @@ async function createBookCard(book) {
                     <a href="${detailPageUrl}" class="book-title-link" aria-label="Mehr über ${titleString} erfahren">${getLocalizedText(book.title, currentLang)}</a>
                 </h3>
                 <p class="book-author">${book.author}</p>
-                <p class="book-description">${parseMarkdown(getLocalizedText(book.description, currentLang))}</p>
+                
+                <!-- 📱 MOBILE: Markdown-Akkordeon für mobile Geräte -->
+                <div class="book-info-tabs">
+                    <button class="book-info-tab active" data-tab="description" data-de="Beschreibung" data-en="Description">Beschreibung</button>
+                    <button class="book-info-tab" data-tab="meta" data-de="Metadaten" data-en="Metadata">Metadaten</button>
+                    <button class="book-info-tab" data-tab="formats" data-de="Weitere Ausgaben" data-en="Other Editions">Weitere Ausgaben</button>
+                </div>
+                
+                <div class="book-info-content active" data-content="description">
+                    <p class="book-description">${parseMarkdown(getLocalizedText(book.description, currentLang))}</p>
+                </div>
+                
+                <div class="book-info-content" data-content="meta">
+                    <div class="book-meta">
+                        <p><strong>ASIN:</strong> ${book.asin || 'N/A'}</p>
+                        <p><strong>Sprache:</strong> ${book.language || 'Deutsch'}</p>
+                        <p><strong>Format:</strong> ${getLocalizedText(book.bookFormat, currentLang) || 'E-Book'}</p>
+                        <p><strong>Hörbuch:</strong> ${hasAudiobook ? 'Verfügbar' : 'Nicht verfügbar'}</p>
+                    </div>
+                </div>
+                
+                <div class="book-info-content" data-content="formats">
+                    <div class="book-formats">
+                        <p><strong>Verfügbare Formate:</strong></p>
+                        <ul>
+                            <li>📱 E-Book (Kindle, Apple Books)</li>
+                            <li>📖 Taschenbuch (Amazon)</li>
+                            ${hasAudiobook ? '<li>🎧 Hörbuch (Apple Books)</li>' : ''}
+                        </ul>
+                    </div>
+                </div>
+                
                 <div class="book-links">
                     <a href="${detailPageUrl}" class="book-link detail-link mehr-button" aria-label="Mehr über ${titleString} erfahren">
                         📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
@@ -901,24 +939,24 @@ function initGenreFilter() {
 
 // Initialize language switching
 function initLanguageSwitching() {
-    // 📱 MOBILE vs DESKTOP: Plattform-spezifische Sprachverwaltung
-    const platformKey = isMobile ? 'preferredLangMobile' : 'preferredLangDesktop';
+    // 📱 MOBILE vs DESKTOP: Temporäre Sprachverwaltung pro Gerät
     const urlParams = new URLSearchParams(window.location.search);
     const urlLang = urlParams.get('lang');
-    const localStorageLang = localStorage.getItem(platformKey);
+    const sessionLang = sessionStorage.getItem('currentLang');
     
     let preferredLang = 'de'; // default
     
     if (urlLang && (urlLang === 'de' || urlLang === 'en')) {
         preferredLang = urlLang;
-        // Update platform-specific localStorage
-        localStorage.setItem(platformKey, preferredLang);
-        console.log(`🌐 [Language] Language set from URL parameter (${isMobile ? 'Mobile' : 'Desktop'}):`, preferredLang);
-    } else if (localStorageLang) {
-        preferredLang = localStorageLang;
-        console.log(`🌐 [Language] Language set from localStorage (${isMobile ? 'Mobile' : 'Desktop'}):`, preferredLang);
+        // Update URL parameter and session storage
+        sessionStorage.setItem('currentLang', preferredLang);
+        updateURLParameter('lang', preferredLang);
+        console.log(`🌐 [Language] Language set from URL parameter:`, preferredLang);
+    } else if (sessionLang) {
+        preferredLang = sessionLang;
+        console.log(`🌐 [Language] Language set from session storage:`, preferredLang);
     } else {
-        console.log(`🌐 [Language] Using default language (${isMobile ? 'Mobile' : 'Desktop'}):`, preferredLang);
+        console.log(`🌐 [Language] Using default language:`, preferredLang);
     }
     
     window.currentLanguage = preferredLang;
@@ -934,75 +972,45 @@ function initLanguageSwitching() {
     
     // Add click event listeners
     document.querySelectorAll('.lang-btn').forEach(btn => {
-        // 🚨 SPRACHUMSCHALTUNG FIX: Plattform-spezifischer Event-Handler
+        // 🚨 SPRACHUMSCHALTUNG FIX: Temporäre Sprachverwaltung ohne persistente Änderungen
         const handleLanguageSwitch = function(e) {
             e.preventDefault();
             e.stopPropagation();
             
             const lang = this.dataset.lang;
-            const platformKey = isMobile ? 'preferredLangMobile' : 'preferredLangDesktop';
             
-            console.log(`🌐 [Language] Switching to: ${lang} (${isMobile ? 'Mobile' : 'Desktop'})`);
+            console.log(`🌐 [Language] Switching to: ${lang}`);
             
             // Update active state
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
-            // Update platform-specific localStorage and global state
-            localStorage.setItem(platformKey, lang);
+            // Update session storage and URL parameter (temporär)
+            sessionStorage.setItem('currentLang', lang);
             window.currentLanguage = lang;
+            updateURLParameter('lang', lang);
             
-            // Apply translation
+            // Apply translation without persistent DOM changes
             translatePage(lang);
             
-            // 📱 MOBILE: Spezielle Behandlung für mobile Geräte
-            if (isMobile) {
-                setTimeout(() => {
-                    // Force DOM update für mobile Geräte
-                    document.querySelectorAll('[data-de], [data-en]').forEach(element => {
-                        if (element.dataset[lang]) {
-                            element.textContent = element.dataset[lang];
-                        }
-                    });
-                    
-                    // Force re-render of book cards auf Mobile
-                    if (typeof displayFeaturedBooks === 'function') {
-                        displayFeaturedBooks();
+            // Temporäre DOM-Updates (werden beim Reload zurückgesetzt)
+            setTimeout(() => {
+                document.querySelectorAll('[data-de], [data-en]').forEach(element => {
+                    if (element.dataset[lang]) {
+                        element.textContent = element.dataset[lang];
                     }
-                    if (typeof displayAllBooks === 'function') {
-                        displayAllBooks();
-                    }
-                    
-                    // Mobile-spezifische Cache-Bereinigung
-                    if (window.caches) {
-                        caches.keys().then(names => {
-                            names.forEach(name => {
-                                if (name.includes('mobile')) {
-                                    caches.delete(name);
-                                }
-                            });
-                        });
-                    }
-                }, 200); // Längere Verzögerung für Mobile
-            } else {
-                // Desktop: Standard-Verhalten
-                setTimeout(() => {
-                    document.querySelectorAll('[data-de], [data-en]').forEach(element => {
-                        if (element.dataset[lang]) {
-                            element.textContent = element.dataset[lang];
-                        }
-                    });
-                    
-                    if (typeof displayFeaturedBooks === 'function') {
-                        displayFeaturedBooks();
-                    }
-                    if (typeof displayAllBooks === 'function') {
-                        displayAllBooks();
-                    }
-                }, 100);
-            }
+                });
+                
+                // Re-render book cards
+                if (typeof displayFeaturedBooks === 'function') {
+                    displayFeaturedBooks();
+                }
+                if (typeof displayAllBooks === 'function') {
+                    displayAllBooks();
+                }
+            }, 100);
             
-            console.log(`🌐 [Language] Successfully switched to: ${lang} (${isMobile ? 'Mobile' : 'Desktop'})`);
+            console.log(`🌐 [Language] Successfully switched to: ${lang} (temporary)`);
         };
         
         // Add event listeners for both click and touch
@@ -1012,6 +1020,32 @@ function initLanguageSwitching() {
     
     // Apply initial translation
     translatePage(preferredLang);
+    
+    // 📱 MOBILE: Akkordeon-Funktionalität für mobile Geräte
+    initMobileAccordion();
+}
+
+// 📱 MOBILE: Akkordeon-Funktionalität für mobile Geräte
+function initMobileAccordion() {
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('book-info-tab')) {
+            const tab = e.target;
+            const bookCard = tab.closest('.book-card');
+            const tabName = tab.dataset.tab;
+            
+            // Update active tab
+            bookCard.querySelectorAll('.book-info-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // Update active content
+            bookCard.querySelectorAll('.book-info-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            bookCard.querySelector(`[data-content="${tabName}"]`).classList.add('active');
+            
+            console.log('📱 [Mobile] Tab switched to:', tabName);
+        }
+    });
 }
 
 // Add loading animation

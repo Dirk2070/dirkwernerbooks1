@@ -1042,6 +1042,92 @@ body {
     }
 }
 
+/* 📱 MOBILE: Markdown-Akkordeon für mobile Geräte */
+@media screen and (max-width: 768px) {
+    .book-info {
+        position: relative;
+    }
+    
+    .book-info-tabs {
+        display: flex;
+        gap: 0.25rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .book-info-tab {
+        flex: 1;
+        padding: 0.5rem;
+        background: #f9fafb;
+        border: none;
+        border-radius: 0.375rem 0.375rem 0 0;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6b7280;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+    }
+    
+    .book-info-tab.active {
+        background: #6a1b9a;
+        color: white;
+    }
+    
+    .book-info-tab:hover {
+        background: #4a148c;
+        color: white;
+    }
+    
+    .book-info-content {
+        display: none;
+    }
+    
+    .book-info-content.active {
+        display: block;
+    }
+    
+    .book-description {
+        margin-bottom: 0;
+    }
+    
+    .book-meta {
+        display: none;
+    }
+    
+    .book-meta.active {
+        display: block;
+    }
+    
+    .book-formats {
+        display: none;
+    }
+    
+    .book-formats.active {
+        display: block;
+    }
+}
+
+/* 🖥️ DESKTOP: Standard-Layout ohne Akkordeon */
+@media screen and (min-width: 769px) {
+    .book-info-tabs {
+        display: none;
+    }
+    
+    .book-info-content {
+        display: block !important;
+    }
+    
+    .book-description {
+        margin-bottom: 1rem;
+    }
+    
+    .book-meta,
+    .book-formats {
+        display: none;
+    }
+}
+
 .book-links .book-link {
     flex: 1 1 auto;
     white-space: nowrap;

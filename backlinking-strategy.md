@@ -94,7 +94,7 @@ Website: https://dirkwernerbooks.com
 📚 Psychologe & Autor
 🧠 Psychologie, Beziehungen, Thriller
 🌐 dirkwernerbooks.com
-📖 29+ Bücher verfügbar
+📖 28 Bücher verfügbar (DE/EN)
 ```
 
 ## 🔗 Backlink-Tracking

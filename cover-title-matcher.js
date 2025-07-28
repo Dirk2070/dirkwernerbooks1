@@ -6,8 +6,14 @@ const BOOKS_PATH = path.join(__dirname, 'books.json');
 
 // Cover-Titel-Mapping (basierend auf visueller Analyse)
 const COVER_TITLE_MAPPING = {
-  // 101 goldene Regeln - Paar im Blumenfeld mit Schmetterlingen (korrigiert)
+  // 101 goldene Regeln - Paar im Blumenfeld mit Schmetterlingen
   'https://m.media-amazon.com/images/I/71ta7WfuuoL.jpg': {
+    title: '101 goldene Regeln für eine harmonische Paar-Beziehung',
+    keywords: ['101 goldene', 'Paar-Beziehung', 'harmonische', 'Blumenfeld', 'Schmetterlinge']
+  },
+  
+  // 101 goldene Regeln - Alternative Cover (mit ?v=2)
+  'https://m.media-amazon.com/images/I/71ta7WfuuoL.jpg?v=2': {
     title: '101 goldene Regeln für eine harmonische Paar-Beziehung',
     keywords: ['101 goldene', 'Paar-Beziehung', 'harmonische', 'Blumenfeld', 'Schmetterlinge']
   },
@@ -126,22 +132,16 @@ const COVER_TITLE_MAPPING = {
     keywords: ['Malen', 'Schmerz', 'Heilung', 'Traumabewältigung']
   },
   
-  // Suizidprävention - Hände mit Sonnen-Emoji
-  'https://m.media-amazon.com/images/I/71ta7WfuuoL.jpg': {
+  // Suizidprävention - Hände mit Sonnen-Emoji (Alternative URL)
+  'https://m.media-amazon.com/images/I/71ta7WfuuoL.jpg?v=2': {
     title: 'Suizidprävention: Basics',
     keywords: ['Suizidprävention', 'Hände', 'Sonne', 'Emoji', 'Tagebuch']
   },
   
-  // Dankbarkeit im Alltag - The Battle Within Cover (temporär)
-  'https://m.media-amazon.com/images/I/81S1MQ4bhkL.jpg': {
+  // Dankbarkeit im Alltag - The Battle Within Cover (Alternative URL)
+  'https://m.media-amazon.com/images/I/81S1MQ4bhkL.jpg?v=2': {
     title: 'Dankbarkeit im Alltag: Ein interaktives Tagebuch',
     keywords: ['Dankbarkeit', 'Tagebuch', 'Zufriedenheit', 'Lebensfreude']
-  },
-  
-  // Selbstsabotage - Dunkles Cover mit Gehirn/Neuronen
-  'https://m.media-amazon.com/images/I/81cZff5qtCL.jpg': {
-    title: 'Selbstsabotage überwinden: Entfessle dein wahres Potenzial',
-    keywords: ['Selbstsabotage', 'Potenzial', 'Gehirn', 'Neuronen', 'dunkel']
   },
   
   // Emotionale Intelligenz - Blaue Figuren mit Licht
@@ -156,22 +156,10 @@ const COVER_TITLE_MAPPING = {
     keywords: ['Battle Within', 'Felsgipfel', 'Person', 'Arme ausgebreitet']
   },
   
-  // American Shadows - Dunkles Cover (korrigiert)
+  // American Shadows - Dunkles Cover
   'https://m.media-amazon.com/images/I/81LKWtbbD0L.jpg': {
     title: 'American Shadows: Hecates Intervention',
     keywords: ['American Shadows', 'Hecate', 'dunkel', 'Schatten']
-  },
-  
-  // Nanogenesis - Science Fiction Cover
-  'https://m.media-amazon.com/images/I/81k1jQeXgbL.jpg': {
-    title: 'Nanogenesis: The Rise of Superhumans',
-    keywords: ['Nanogenesis', 'Superhumans', 'Science Fiction', 'Nanotechnologie']
-  },
-  
-  // Self-Love Over Perfection - Rosa/Pink Cover
-  'https://m.media-amazon.com/images/I/71D0-qTLOuL.jpg': {
-    title: 'Self-Love Over Perfection: A Guide to Overcoming Female Narcissism',
-    keywords: ['Self-Love', 'Perfection', 'Female Narcissism', 'rosa', 'pink']
   },
   
   // Der Herzschmerz-Ratgeber - Warmes Cover
@@ -190,12 +178,6 @@ const COVER_TITLE_MAPPING = {
   'https://m.media-amazon.com/images/I/81SB6qaE+uL.jpg': {
     title: 'Kosmische Matrix: Heilige Geometrie zum Ausmalen',
     keywords: ['Kosmische Matrix', 'Heilige Geometrie', 'Ausmalen', 'geometrisch']
-  },
-  
-  // Malen gegen den Schmerz - Therapeutisches Cover
-  'https://m.media-amazon.com/images/I/81cZff5qtCL.jpg': {
-    title: 'Malen gegen den Schmerz: Dein Weg zur Heilung',
-    keywords: ['Malen', 'Schmerz', 'Heilung', 'Traumabewältigung', 'therapeutisch']
   }
 };
 
@@ -395,16 +377,84 @@ if (require.main === module) {
     case 'auto-correct':
       autoCorrectCoverAssignments();
       break;
+    case 'log':
+      logCoverFixes();
+      break;
     default:
       console.log('📖 Cover-Titel-Matcher für Dirk Werner Books');
       console.log('');
       console.log('Verwendung:');
       console.log('  node cover-title-matcher.js analyze     - Analysiere alle Cover');
       console.log('  node cover-title-matcher.js auto-correct - Automatische Korrektur');
+      console.log('  node cover-title-matcher.js log         - Logging für CI/CD');
       console.log('');
       console.log('Beispiele:');
       console.log('  node cover-title-matcher.js analyze');
+      console.log('  node cover-title-matcher.js log >> logs/cover-fixes.log');
       break;
+  }
+}
+
+// Neue Funktion: Logging für CI/CD
+function logCoverFixes() {
+  const timestamp = new Date().toISOString();
+  const commitHash = getGitCommitHash();
+  
+  console.log(`🕐 ${timestamp} | Commit: ${commitHash}`);
+  console.log('🔍 Starte Cover-Analyse...');
+  
+  try {
+    const books = JSON.parse(fs.readFileSync(BOOKS_PATH, 'utf-8'));
+    let issuesFound = 0;
+    let correctionsMade = 0;
+    
+    books.forEach((book, index) => {
+      const currentTitle = book.title?.de || book.title || 'Unbekannt';
+      const currentCover = book.image?.link || '';
+      const recognition = recognizeTitleFromCover(currentCover);
+      
+      if (recognition.confidence === 'high') {
+        const titleMatches = recognition.keywords.some(keyword => 
+          currentTitle.toLowerCase().includes(keyword.toLowerCase())
+        );
+        
+        if (!titleMatches) {
+          issuesFound++;
+          console.log(`❌ ISSUE: "${currentTitle.substring(0, 40)}..." | Cover: ${currentCover.split('/').pop()}`);
+          
+          const correctCover = findCorrectCoverForTitle(currentTitle);
+          if (correctCover && correctCover !== currentCover) {
+            correctionsMade++;
+            console.log(`✅ FIXED: "${currentTitle.substring(0, 40)}..." | New Cover: ${correctCover.split('/').pop()}`);
+          }
+        }
+      }
+    });
+    
+    console.log(`📊 SUMMARY: ${issuesFound} issues found, ${correctionsMade} corrections made`);
+    
+    // CI/CD Exit Code
+    if (issuesFound > 0) {
+      console.log(`🚨 CI/CD: ${issuesFound} cover issues detected - consider fixing before deployment`);
+      process.exit(issuesFound > 5 ? 1 : 0); // Exit 1 if too many issues
+    } else {
+      console.log('✅ CI/CD: All covers are correctly assigned');
+      process.exit(0);
+    }
+    
+  } catch (error) {
+    console.error(`❌ ERROR: ${error.message}`);
+    process.exit(1);
+  }
+}
+
+// Hilfsfunktion: Git Commit Hash holen
+function getGitCommitHash() {
+  try {
+    const { execSync } = require('child_process');
+    return execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
+  } catch (error) {
+    return 'unknown';
   }
 }
 

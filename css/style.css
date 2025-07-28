@@ -1927,3 +1927,57 @@ html {
     border-color: #3498db;
 }
 
+/* CRITICAL FIX: Remove ALL redundant title overlays - ULTRA STRONG RULES */
+.book-card[data-title]::before,
+.book-card[data-title]::after,
+.book-card[data-asin]::before,
+.book-card[data-asin]::after,
+.book-card[data-genre]::before,
+.book-card[data-genre]::after,
+.book-card::before,
+.book-card::after,
+.book-image::before,
+.book-image::after,
+.book-content::before,
+.book-content::after,
+.book-title::before,
+.book-title::after,
+.book-author::before,
+.book-author::after,
+.book-description::before,
+.book-description::after {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Additional safety rules for any remaining overlays */
+.book-card *::before,
+.book-card *::after {
+    content: none !important;
+}
+
+/* Ensure no data attributes are displayed as content */
+[data-title]:not([data-title=""])::before,
+[data-title]:not([data-title=""])::after,
+[data-asin]:not([data-asin=""])::before,
+[data-asin]:not([data-asin=""])::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Force remove any remaining overlays */
+.book-card *[data-title]::before,
+.book-card *[data-title]::after,
+.book-card *[data-asin]::before,
+.book-card *[data-asin]::after {
+    display: none !important;
+    content: none !important;
+}
+

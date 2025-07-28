@@ -1015,8 +1015,14 @@ function initResponsiveNav() {
         // Initialize all functionality for main page
         await loadBooks();
         initSmoothScrolling();
-        initSearch();
-        initGenreFilter();
+        
+        // Only initialize search and filter on overview page
+        const isOverviewPage = window.location.pathname === '/' || window.location.pathname === '/index.html';
+        if (isOverviewPage) {
+            initSearch();
+            initGenreFilter();
+        }
+        
         initLanguageSwitching();
         initAnimations();
         initResponsiveNav();

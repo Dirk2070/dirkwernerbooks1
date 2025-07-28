@@ -2569,6 +2569,17 @@ function diagnoseVisibilityIssues() {
         }
     });
 
+    // 7. Sichtbarkeit für alle Vorfahren von #allBooks erzwingen
+    let current = document.getElementById('allBooks');
+    while (current && current !== document.body) {
+        current.style.display = 'block';
+        current.style.visibility = 'visible';
+        current.style.opacity = '1';
+        current.style.height = 'auto';
+        current = current.parentElement;
+        console.log('✅ Vorfahren-Container repariert:', current?.tagName);
+    }
+
     console.log('✅ Diagnose abgeschlossen!');
 }
 

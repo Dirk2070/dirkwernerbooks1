@@ -1445,3 +1445,25 @@ link[href*="embed"]:not(.book-card *), link[href*="external"]:not(.book-card *) 
     min-height: auto !important;
 }
 
+/* 🚨 FINALE HARTE CSS-REGELN: Alles sichtbar machen - auch elterliche Container */
+body, html {
+    overflow: auto !important;
+    height: auto !important;
+}
+
+#allBooks {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: 500px !important;
+    padding: 1rem !important;
+}
+
+main, .container, .books-grid, .book-grid {
+    display: block !important;
+    height: auto !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+

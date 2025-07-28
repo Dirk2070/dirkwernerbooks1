@@ -1260,7 +1260,7 @@ function ultimateTextOverlayCleanup() {
     
     // 1. NUR Text-Elemente über Buchcovern entfernen (nicht die Buchkarten selbst)
     document.querySelectorAll('.book-card .book-image').forEach(imageContainer => {
-        const allowedElements = imageContainer.querySelectorAll('.book-cover-link, .book-cover-image, img');
+        const allowedElements = Array.from(imageContainer.querySelectorAll('.book-cover-link, .book-cover-image, img'));
         imageContainer.querySelectorAll('*').forEach(element => {
             if (!allowedElements.includes(element)) {
                 element.style.display = 'none';

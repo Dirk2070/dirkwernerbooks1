@@ -383,67 +383,45 @@ async function createBookCard(book) {
     const schema = generateBookSchema(book);
     const schemaScript = `<script type="application/ld+json">${JSON.stringify(schema)}</script>`;
     
-    // Generate slug for book detail page with robust detection
+    // Generate slug for book detail page - ALL books should have detail pages
     let slug;
-    let hasDetailPage = false;
+    let hasDetailPage = true; // Default to true for all books
     
-    // Robust title comparison for "Umgang mit Eifersüchtigen"
-    const normalizedTitle = titleString.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
-    const eifersuchtKeywords = ['eifersüchtigen', 'eifersucht', 'umgang mit eifersüchtigen'];
+    // Generate slug from title (same logic as generate-book-pages.js)
+    slug = titleString
+        .toLowerCase()
+        // Replace German umlauts
+        .replace(/ä/g, 'ae')
+        .replace(/ö/g, 'oe')
+        .replace(/ü/g, 'ue')
+        .replace(/ß/g, 'ss')
+        // Remove special characters and parentheses
+        .replace(/[^\w\s-]/g, '')
+        // Replace spaces with hyphens
+        .replace(/\s+/g, '-')
+        // Remove multiple consecutive hyphens
+        .replace(/-+/g, '-')
+        // Remove leading and trailing hyphens
+        .replace(/^-+|-+$/g, '');
     
-    console.log('🔍 [Debug] Checking title:', titleString);
-    console.log('🔍 [Debug] Normalized title:', normalizedTitle);
-    console.log('🔍 [Debug] Keywords to check:', eifersuchtKeywords);
-    console.log('🔍 [Debug] User Agent:', navigator.userAgent);
-    console.log('🔍 [Debug] Is Mobile:', /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    console.log('🔗 [Link] Generated slug for book:', titleString, '→', slug);
     
-    const hasKeyword = eifersuchtKeywords.some(keyword => normalizedTitle.includes(keyword));
-    console.log('🔍 [Debug] Keyword match found:', hasKeyword);
-    
-    if (hasKeyword) {
-        slug = "umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke";
-        hasDetailPage = true;
-        console.log('🔗 [Link] Book has detail page:', titleString, '→', slug);
-        
-        // Log decision for debugging
-        if (window.linkDebugger) {
-            window.linkDebugger.logLinkDecision(
-                titleString, 
-                hasDetailPage, 
-                `/buecher/${slug}`, 
-                'Eifersucht book detected'
-            );
-        }
-        
-        console.log('🔗 [Link] Final decision for', titleString, ':', {
-            hasDetailPage,
-            detailLink: `/buecher/${slug}`,
-            userAgent: navigator.userAgent,
-            isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-        });
-    } else {
-        // All other books use Books2Read fallback
-        slug = null;
-        hasDetailPage = false;
-        console.log('🔗 [Link] Book uses Books2Read fallback:', titleString);
-        
-        // Log decision for debugging
-        if (window.linkDebugger) {
-            window.linkDebugger.logLinkDecision(
-                titleString, 
-                hasDetailPage, 
-                'https://books2read.com/Dirk-Werner-Author', 
-                'No detail page available'
-            );
-        }
-        
-        console.log('🔗 [Link] Final decision for', titleString, ':', {
-            hasDetailPage,
-            detailLink: 'https://books2read.com/Dirk-Werner-Author',
-            userAgent: navigator.userAgent,
-            isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-        });
+    // Log decision for debugging
+    if (window.linkDebugger) {
+        window.linkDebugger.logLinkDecision(
+            titleString, 
+            hasDetailPage, 
+            `/buecher/${slug}`, 
+            'Detail page available for all books'
+        );
     }
+    
+    console.log('🔗 [Link] Final decision for', titleString, ':', {
+        hasDetailPage,
+        detailLink: `/buecher/${slug}`,
+        userAgent: navigator.userAgent,
+        isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    });
     
     // Ensure we have valid URLs
     const detailPageUrl = hasDetailPage ? `/buecher/${slug}` : null;
@@ -455,15 +433,8 @@ async function createBookCard(book) {
         hasDetailPage = false;
     }
     
-    // FORCE consistency: If this is the Eifersucht book, always use detail page
-    const isEifersuchtBook = titleString.toLowerCase().includes('eifersüchtigen') || 
-                            titleString.toLowerCase().includes('eifersucht') ||
-                            titleString.toLowerCase().includes('umgang mit eifersüchtigen');
-    
-    if (isEifersuchtBook) {
-        hasDetailPage = true;
-        console.log('🔧 [Link] FORCING detail page for Eifersucht book:', titleString);
-    }
+    // All books should have detail pages - no special cases needed
+    console.log('🔧 [Link] All books have detail pages:', titleString);
     
     // CRITICAL FIX: Only set data-fallback="true" for books WITHOUT detail pages
     const shouldUseFallback = !hasDetailPage;
@@ -909,8 +880,25 @@ function initGenreFilter() {
 
 // Initialize language switching
 function initLanguageSwitching() {
-    // Get preferred language from localStorage or default to 'de'
-    const preferredLang = localStorage.getItem('preferredLang') || 'de';
+    // Check URL parameter first, then localStorage, then default to 'de'
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlLang = urlParams.get('lang');
+    const localStorageLang = localStorage.getItem('preferredLang');
+    
+    let preferredLang = 'de'; // default
+    
+    if (urlLang && (urlLang === 'de' || urlLang === 'en')) {
+        preferredLang = urlLang;
+        // Update localStorage with URL parameter
+        localStorage.setItem('preferredLang', preferredLang);
+        console.log('🌐 [Language] Language set from URL parameter:', preferredLang);
+    } else if (localStorageLang) {
+        preferredLang = localStorageLang;
+        console.log('🌐 [Language] Language set from localStorage:', preferredLang);
+    } else {
+        console.log('🌐 [Language] Using default language:', preferredLang);
+    }
+    
     window.currentLanguage = preferredLang;
     
     // Set initial active state

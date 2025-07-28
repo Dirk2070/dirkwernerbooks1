@@ -679,10 +679,12 @@ a[href*="books2read"] img:not([src*="arrow"]):not([src*="check"]):not([src*="fal
 }
 
 .book-links .book-link {
-    flex: 1 0 auto;
+    flex: 1 1 auto;
     white-space: nowrap;
-    min-width: 130px;
-    max-width: 200px;
+    min-width: 120px;
+    max-width: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .book-link {

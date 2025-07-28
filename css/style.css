@@ -1191,7 +1191,7 @@ body {
         display: none;
     }
     
-    /* 🚨 MOBILE: Text-Overlays auf Buchcovern komplett entfernen */
+    /* 🚨 GLOBAL: Text-Overlays auf Buchcovern dauerhaft entfernen - ALLE GERÄTE */
     .book-card .book-image *:not(.book-cover-link):not(.book-cover-image):not(img) {
         display: none !important;
         visibility: hidden !important;
@@ -1245,12 +1245,73 @@ body {
         clip: rect(0, 0, 0, 0) !important;
     }
     
-    /* 🚨 MOBILE: Tab-Buttons komplett ausblenden */
+    /* 🚨 GLOBAL: Tab-Buttons komplett ausblenden - ALLE GERÄTE */
     .tab-buttons,
     .book-info-tabs,
     .book-info-tab {
         display: none !important;
     }
+}
+
+/* 🚨 GLOBAL: Text-Overlays auf Buchcovern dauerhaft entfernen - ALLE GERÄTE */
+.book-card .book-image *:not(.book-cover-link):not(.book-cover-image):not(img) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0, 0, 0, 0) !important;
+}
+
+.book-card .book-image span,
+.book-card .book-image [data-hint],
+.book-card .book-image [data-title],
+.book-card .book-image [data-asin],
+.book-card .book-image [data-has-audiobook],
+.book-card .book-image h1,
+.book-card .book-image h2,
+.book-card .book-image h3,
+.book-card .book-image h4,
+.book-card .book-image h5,
+.book-card .book-image h6,
+.book-card .book-image p,
+.book-card .book-image div:not(.book-cover-link):not(.book-cover-image),
+.book-card .book-image strong,
+.book-card .book-image em,
+.book-card .book-image b,
+.book-card .book-image i,
+.book-card .book-image figcaption {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0, 0, 0, 0) !important;
+}
+
+/* 🚨 GLOBAL: Tab-Buttons komplett ausblenden - ALLE GERÄTE */
+.tab-buttons,
+.book-info-tabs,
+.book-info-tab {
+    display: none !important;
 }
 
 /* 🖥️ DESKTOP: Standard-Layout ohne Akkordeon */
@@ -3132,7 +3193,7 @@ html {
     line-height: 0 !important;
 }
 
-/* 🚨 ULTIMATIVE TITEL-OVERLAY ENTFERNUNG: Alle möglichen Text-Elemente über Buchcovern */
+/* 🚨 DAUERHAFTE TITEL-OVERLAY ENTFERNUNG: Alle möglichen Text-Elemente über Buchcovern - GLOBAL */
 .book-card .book-image *:not(.book-cover-link):not(.book-cover-image):not(img) {
     display: none !important;
     visibility: hidden !important;
@@ -3151,7 +3212,7 @@ html {
     clip: rect(0, 0, 0, 0) !important;
 }
 
-/* 🚨 SPEZIFISCHE TITEL-ENTFERNUNG: Alle H-Tags und Text-Elemente über Buchcovern */
+/* 🚨 DAUERHAFTE SPEZIFISCHE TITEL-ENTFERNUNG: Alle H-Tags und Text-Elemente über Buchcovern - GLOBAL */
 .book-card .book-image h1,
 .book-card .book-image h2,
 .book-card .book-image h3,

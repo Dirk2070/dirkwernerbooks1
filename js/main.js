@@ -440,8 +440,11 @@ async function createBookCard(book) {
     const shouldUseFallback = !hasDetailPage;
     console.log('🔧 [Link] Book:', titleString, 'hasDetailPage:', hasDetailPage, 'shouldUseFallback:', shouldUseFallback);
     
+    // 🎯 SAUBERES DATA-TITLE: Nur reiner Text, kein HTML
+    const cleanTitleString = titleString.replace(/<[^>]*>/g, '').replace(/"/g, '&quot;').trim();
+    
     return `
-        <div class="book-card fade-in" data-genre="${genre}" data-title="${titleString.toLowerCase()}" data-asin="${book.asin || ''}" data-has-audiobook="${hasAudiobook}" data-has-detail-page="${hasDetailPage}">
+        <div class="book-card fade-in" data-genre="${genre}" data-title="${cleanTitleString.toLowerCase()}" data-asin="${book.asin || ''}" data-has-audiobook="${hasAudiobook}" data-has-detail-page="${hasDetailPage}">
             ${schemaScript}
             <!-- 🎯 SAUBERES BUCHCOVER: Nur das Bild, keine Titel-Overlays -->
             <div class="book-image">
@@ -1056,6 +1059,37 @@ function testMobileTitleOverlays() {
     return overlayIssues === 0;
 }
 
+// 🚨 NOTFALL-FUNKTION: data-title Attribute bereinigen
+function cleanupDataTitleAttributes() {
+    console.log('🧹 [Cleanup] Bereinigung der data-title Attribute...');
+    
+    const bookCards = document.querySelectorAll('.book-card[data-title]');
+    let cleanedCount = 0;
+    
+    bookCards.forEach((card, index) => {
+        const dataTitle = card.getAttribute('data-title');
+        if (dataTitle && (dataTitle.includes('<') || dataTitle.includes('>') || dataTitle.includes('"') || dataTitle.includes("'"))) {
+            // HTML-Tags und Anführungszeichen entfernen
+            const cleanTitle = dataTitle
+                .replace(/<[^>]*>/g, '') // HTML-Tags entfernen
+                .replace(/"/g, '') // Anführungszeichen entfernen
+                .replace(/'/g, '') // Einfache Anführungszeichen entfernen
+                .replace(/&quot;/g, '') // HTML-Entities entfernen
+                .replace(/&amp;/g, '&') // HTML-Entities konvertieren
+                .replace(/&lt;/g, '<') // HTML-Entities konvertieren
+                .replace(/&gt;/g, '>') // HTML-Entities konvertieren
+                .trim();
+            
+            card.setAttribute('data-title', cleanTitle);
+            cleanedCount++;
+            console.log(`🧹 [Cleanup] Buchkarte ${index + 1}: data-title bereinigt`);
+        }
+    });
+    
+    console.log(`🧹 [Cleanup] ${cleanedCount} data-title Attribute bereinigt`);
+    return cleanedCount;
+}
+
     // Initialize everything when DOM is loaded
     document.addEventListener('DOMContentLoaded', async function() {
         console.log('🚀 [Init] DOMContentLoaded event fired');
@@ -1131,6 +1165,11 @@ function testMobileTitleOverlays() {
         setTimeout(() => {
             testMobileTitleOverlays();
         }, 2000); // 2 Sekunden warten, bis alle Bücher geladen sind
+        
+        // 🚨 NOTFALL-CLEANUP: data-title Attribute bereinigen
+        setTimeout(() => {
+            cleanupDataTitleAttributes();
+        }, 1000); // 1 Sekunde nach dem Laden
         
         // Set initial language
         translatePage('de');

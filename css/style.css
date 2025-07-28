@@ -2400,6 +2400,44 @@ html {
     pointer-events: none !important;
 }
 
+/* 🚨 NOTFALL-REGEL: data-title Attribut komplett deaktivieren */
+.book-card[data-title]::before,
+.book-card[data-title]::after,
+.book-card[data-title] *::before,
+.book-card[data-title] *::after {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0, 0, 0, 0) !important;
+}
+
+/* Absolute Sicherheit: Alle data-* Attribute deaktivieren */
+.book-card[data-*]::before,
+.book-card[data-*]::after {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
 /* 🎯 ENDGÜLTIGE LÖSUNG: Alle möglichen Titel-Overlays über Buchcovern entfernen */
 /* H3-Titel und andere Überschriften über Buchcovern */
 .book-card h3.overlay-title,

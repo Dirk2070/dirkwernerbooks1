@@ -402,6 +402,59 @@ body {
     clip: rect(0,0,0,0) !important;
 }
 
+/* 🚨 HTML-ATTRIBUTE VERSTECKEN: data-* Attribute und style-Attribute ausblenden */
+.book-card[data-asin], .book-card[data-has-audiobook], .book-card[data-has-detail-page], .book-card[data-title] {
+    /* Diese Attribute sind nur für JavaScript, nicht für die Anzeige */
+}
+
+.book-card[data-asin]::before, .book-card[data-asin]::after,
+.book-card[data-has-audiobook]::before, .book-card[data-has-audiobook]::after,
+.book-card[data-has-detail-page]::before, .book-card[data-has-detail-page]::after,
+.book-card[data-title]::before, .book-card[data-title]::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* 🚨 BROKEN HTML-TAGS VERSTECKEN: "erfahren">" Text entfernen */
+.book-card *:contains("erfahren\">"), .book-card *:contains("erfahren\">") {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+}
+
+/* 🚨 REDUNDANTE TITEL ENTFERNEN: Nur den Haupttitel anzeigen */
+.book-card .book-title:not(:first-of-type) {
+    display: none !important;
+}
+
+/* 🚨 ZUSÄTZLICHE SICHERHEIT: Alle möglichen Text-Overlays */
+.book-card .book-image h1, .book-card .book-image h2, .book-card .book-image h3,
+.book-card .book-image h4, .book-card .book-image h5, .book-card .book-image h6,
+.book-card .book-image p, .book-card .book-image span, .book-card .book-image div,
+.book-card .book-image strong, .book-card .book-image em, .book-card .book-image b,
+.book-card .book-image i, .book-card .book-image figcaption {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0,0,0,0) !important;
+}
+
 .book-content {
     padding: 1.5rem;
 }
@@ -412,6 +465,16 @@ body {
     color: #2c3e50;
     margin-bottom: 0.5rem;
     line-height: 1.3;
+}
+
+.book-title a {
+    color: #2c3e50;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.book-title a:hover {
+    color: #3498db;
 }
 
 .book-author {

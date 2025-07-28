@@ -1138,6 +1138,85 @@ function manageAudiobookButtons() {
     console.log(`🎧 [Audiobook] Management complete: ${audiobookButtonsShown} shown, ${audiobookButtonsHidden} hidden`);
 }
 
+// 🚨 ULTIMATIVE TEXT-OVERLAY-BEREINIGUNG: Alle Fehler aus den Bildern beheben
+function ultimateTextOverlayCleanup() {
+    console.log('🚨 [Cleanup] Starting ultimate text overlay cleanup...');
+    
+    // 1. Alle Text-Elemente über Buchcovern entfernen
+    document.querySelectorAll('.book-card .book-image').forEach(imageContainer => {
+        const allowedElements = imageContainer.querySelectorAll('.book-cover-link, .book-cover-image, img');
+        imageContainer.querySelectorAll('*').forEach(element => {
+            if (!allowedElements.includes(element)) {
+                element.style.display = 'none';
+                element.style.visibility = 'hidden';
+                element.style.opacity = '0';
+                element.style.position = 'absolute';
+                element.style.zIndex = '-1';
+                element.style.width = '0';
+                element.style.height = '0';
+                element.style.overflow = 'hidden';
+                element.style.pointerEvents = 'none';
+                element.style.fontSize = '0';
+                element.style.lineHeight = '0';
+                element.style.margin = '0';
+                element.style.padding = '0';
+                element.style.border = '0';
+                element.style.clip = 'rect(0,0,0,0)';
+            }
+        });
+    });
+    
+    // 2. HTML-Attribute aus der Anzeige entfernen
+    document.querySelectorAll('.book-card').forEach(card => {
+        // data-* Attribute sind nur für JavaScript, nicht für die Anzeige
+        const dataAttributes = ['data-asin', 'data-has-audiobook', 'data-has-detail-page', 'data-title'];
+        dataAttributes.forEach(attr => {
+            if (card.hasAttribute(attr)) {
+                // Attribute bleibt für JavaScript, aber wird nicht angezeigt
+                card.style.setProperty(`--${attr}`, 'none');
+            }
+        });
+    });
+    
+    // 3. Broken HTML-Tags entfernen ("erfahren">")
+    document.querySelectorAll('.book-card *').forEach(element => {
+        if (element.textContent && element.textContent.includes('erfahren">')) {
+            element.style.display = 'none';
+            element.style.visibility = 'hidden';
+            element.style.opacity = '0';
+            element.style.fontSize = '0';
+            element.style.lineHeight = '0';
+            element.style.height = '0';
+            element.style.width = '0';
+            element.style.overflow = 'hidden';
+        }
+    });
+    
+    // 4. Redundante Titel entfernen
+    document.querySelectorAll('.book-card').forEach(card => {
+        const titles = card.querySelectorAll('.book-title');
+        if (titles.length > 1) {
+            // Nur den ersten Titel behalten
+            for (let i = 1; i < titles.length; i++) {
+                titles[i].style.display = 'none';
+                titles[i].style.visibility = 'hidden';
+                titles[i].style.opacity = '0';
+            }
+        }
+    });
+    
+    // 5. Style-Attribute aus der Anzeige entfernen
+    document.querySelectorAll('.book-card *[style*="opacity"], .book-card *[style*="transform"]').forEach(element => {
+        if (element.textContent && element.textContent.includes('data-')) {
+            element.style.display = 'none';
+            element.style.visibility = 'hidden';
+            element.style.opacity = '0';
+        }
+    });
+    
+    console.log('🚨 [Cleanup] Ultimate text overlay cleanup completed');
+}
+
 // 🧹 MOBILE CLEANUP: Umfassende Bereinigung für mobile Geräte
 function mobileCleanup() {
     if (window.innerWidth < 768) {
@@ -1184,6 +1263,9 @@ function mobileCleanup() {
         
         // Hörbuch-Buttons verwalten
         manageAudiobookButtons();
+        
+        // Ultimate cleanup aufrufen
+        ultimateTextOverlayCleanup();
         
         console.log('📱 [Mobile Cleanup] Mobile cleanup completed');
     }
@@ -1567,6 +1649,21 @@ function cleanupAmazonWidgets() {
                 mobileCleanup();
             }, 2000);
         }
+        
+        // 🚨 ULTIMATE CLEANUP: Alle Text-Overlays und HTML-Attribute entfernen
+        setTimeout(() => {
+            ultimateTextOverlayCleanup();
+        }, 1000);
+        
+        // Zusätzliche Ultimate Cleanup nach 3 Sekunden
+        setTimeout(() => {
+            ultimateTextOverlayCleanup();
+        }, 3000);
+        
+        // Wiederholte Ultimate Cleanup alle 10 Sekunden
+        setInterval(() => {
+            ultimateTextOverlayCleanup();
+        }, 10000);
         
         // Set initial language
         translatePage('de');

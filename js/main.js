@@ -2623,6 +2623,86 @@ function diagnoseVisibilityIssues() {
     setTimeout(() => {
         diagnoseVisibilityIssues();
     }, 5000);
+
+    // 🛡️ SICHTBARKEITS-WATCHDOG: Verhindert, dass body/html unsichtbar werden
+    function visibilityWatchdog() {
+        const html = document.documentElement;
+        const body = document.body;
+
+        function restoreVisibility() {
+            if (body) {
+                body.style.display = 'block';
+                body.style.visibility = 'visible';
+                body.style.opacity = '1';
+                body.style.overflow = 'auto';
+                body.style.position = 'static';
+                body.style.zIndex = 'auto';
+                body.style.width = 'auto';
+                body.style.height = 'auto';
+                body.style.pointerEvents = 'auto';
+                body.style.fontSize = 'inherit';
+                body.style.lineHeight = 'inherit';
+                body.style.margin = 'inherit';
+                body.style.padding = 'inherit';
+                body.style.border = 'inherit';
+                body.style.clip = 'auto';
+            }
+
+            if (html) {
+                html.style.display = 'block';
+                html.style.visibility = 'visible';
+                html.style.opacity = '1';
+                html.style.overflow = 'auto';
+                html.style.position = 'static';
+                html.style.zIndex = 'auto';
+                html.style.width = 'auto';
+                html.style.height = 'auto';
+            }
+
+            console.log("✅ [Watchdog] Sichtbarkeit wiederhergestellt");
+        }
+
+        // Diagnoseintervall: prüft alle 2 Sekunden
+        setInterval(() => {
+            try {
+                const bodyHidden = !body || 
+                    body.style.display === 'none' || 
+                    body.style.visibility === 'hidden' || 
+                    body.style.opacity === '0' ||
+                    body.style.position === 'absolute' ||
+                    body.style.zIndex === '-1';
+                    
+                const htmlHidden = !html || 
+                    html.style.display === 'none' || 
+                    html.style.visibility === 'hidden' ||
+                    html.style.opacity === '0';
+
+                if (bodyHidden || htmlHidden) {
+                    console.warn("🚨 [Watchdog] Unsichtbarer Seitenstatus erkannt – Korrektur wird ausgeführt");
+                    restoreVisibility();
+                }
+            } catch (e) {
+                console.error("❌ [Watchdog] Fehler bei Diagnose:", e);
+            }
+        }, 2000); // alle 2 Sekunden prüfen
+
+        // Sofortige Wiederherstellung beim Start
+        restoreVisibility();
+    }
+
+    // 🚨 SICHTBARKEITS-NOTENTRIEGELUNG: Sofortige Wiederherstellung
+    setTimeout(() => {
+        document.body.style.display = 'block';
+        document.body.style.visibility = 'visible';
+        document.body.style.opacity = '1';
+        document.body.style.overflow = 'auto';
+        document.documentElement.style.visibility = 'visible';
+        document.documentElement.style.display = 'block';
+        console.log('✅ Sichtbarkeits-Notentriegelung aktiviert');
+    }, 1000);
+
+    // Aktivieren des Watchdogs
+    visibilityWatchdog();
 });
 
 // 🐛 DUMMY-FUNKTION: validateAndFixLinks für Kompatibilität

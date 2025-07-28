@@ -387,14 +387,6 @@ async function createBookCard(book) {
     );
     
     console.log('🎧 [Audiobook] Checking book:', titleString, 'ASIN:', book.asin, 'JSON hasAudiobook:', book.hasAudiobook, 'Final result:', hasAudiobook, 'Whitelist loaded:', !!window.appleAudiobookList);
-    console.log('🎧 [Audiobook] Whitelist details:', {
-        whitelistExists: !!window.appleAudiobookList,
-        whitelistLength: window.appleAudiobookList?.audiobooks?.length || 0,
-        isAppleAudiobookFunction: typeof window.isAppleAudiobook === 'function',
-        bookTitle: titleString,
-        asinCheck: book.asin && typeof window.isAppleAudiobook === 'function' ? window.isAppleAudiobook(book.asin) : 'N/A',
-        titleCheck: typeof window.isAppleAudiobook === 'function' ? window.isAppleAudiobook(titleString) : 'N/A'
-    });
     
     if (hasAudiobook) {
         const ariaLabel = `Hörbuch "${titleString}" bei Apple Books anhören`;
@@ -956,32 +948,37 @@ function initLanguageSwitching() {
             document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
-            // Update session storage and URL parameter
-            sessionStorage.setItem('currentLang', lang);
+            // Update localStorage and URL parameter (reliable for mobile)
+            localStorage.setItem('lang', lang);
             window.currentLanguage = lang;
             updateURLParameter('lang', lang);
             
-            // Apply translation
-            translatePage(lang);
-            
-            // Temporäre DOM-Updates (werden beim Reload zurückgesetzt)
-            setTimeout(() => {
-                document.querySelectorAll('[data-de], [data-en]').forEach(element => {
-                    if (element.dataset[lang]) {
-                        element.textContent = element.dataset[lang];
-                    }
-                });
+            // Force page reload for mobile (more reliable)
+            if (window.innerWidth < 768) {
+                location.reload();
+            } else {
+                // Desktop: Apply translation without reload
+                translatePage(lang);
                 
-                // Re-render book cards
-                if (typeof displayFeaturedBooks === 'function') {
-                    displayFeaturedBooks();
-                }
-                if (typeof displayAllBooks === 'function') {
-                    displayAllBooks();
-                }
-            }, 100);
+                // Temporäre DOM-Updates (werden beim Reload zurückgesetzt)
+                setTimeout(() => {
+                    document.querySelectorAll('[data-de], [data-en]').forEach(element => {
+                        if (element.dataset[lang]) {
+                            element.textContent = element.dataset[lang];
+                        }
+                    });
+                    
+                    // Re-render book cards
+                    if (typeof displayFeaturedBooks === 'function') {
+                        displayFeaturedBooks();
+                    }
+                    if (typeof displayAllBooks === 'function') {
+                        displayAllBooks();
+                    }
+                }, 100);
+            }
             
-            console.log(`🌐 [Language] Successfully switched to: ${lang} (temporary)`);
+            console.log(`🌐 [Language] Successfully switched to: ${lang} (${window.innerWidth < 768 ? 'mobile reload' : 'desktop update'})`);
         };
         
         btn.addEventListener('click', handleLanguageSwitch);

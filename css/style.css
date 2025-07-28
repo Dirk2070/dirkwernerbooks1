@@ -73,8 +73,11 @@ body {
     display: block;
     cursor: pointer;
     transition: all 0.2s ease;
-    opacity: 0.9;
+    opacity: 1;
     background: transparent;
+    /* Logo sichtbar machen */
+    max-height: 60px;
+    filter: brightness(120%) contrast(120%);
 }
 
 .header-logo:hover {
@@ -716,6 +719,37 @@ body {
     font-weight: 600;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(106, 27, 154, 0.3);
+}
+
+/* 🚨 MEHR-ERFAHREN BUTTON FIX: HTML-Encoding-Fehler beheben */
+.mehr-button {
+    display: inline-block !important;
+    background: #6a1b9a !important;
+    color: white !important;
+    text-align: center !important;
+    padding: 10px 16px !important;
+    border-radius: 8px !important;
+    margin-top: 10px !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(106, 27, 154, 0.3) !important;
+    border: none !important;
+    cursor: pointer !important;
+    font-size: 0.9rem !important;
+    line-height: 1.2 !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.mehr-button:hover {
+    background: #4a148c !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(106, 27, 154, 0.4) !important;
+    color: white !important;
+    text-decoration: none !important;
 }
 
 .learn-more-button:hover {

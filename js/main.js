@@ -470,7 +470,7 @@ async function createBookCard(book) {
                 <p class="book-author">${book.author}</p>
                 <p class="book-description">${getLocalizedText(book.description, currentLang)}</p>
                 <div class="book-links">
-                    <a href="${detailPageUrl}" class="book-link detail-link" aria-label="Mehr über ${titleString} erfahren">
+                    <a href="${detailPageUrl}" class="book-link detail-link mehr-button" aria-label="Mehr über ${titleString} erfahren">
                         📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
                     </a>
                     ${shopLinksHTML}
@@ -951,6 +951,34 @@ function initLanguageSwitching() {
             translatePage(lang);
             
             console.log('📱 [Mobile] Touch language switch completed:', lang);
+        });
+        
+        // 📱 MOBILE: Zusätzliche Sicherheit für mobile Sprachumschaltung
+        btn.addEventListener('click', function(e) {
+            // Verhindere doppelte Ausführung
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const lang = this.dataset.lang;
+            
+            // Update active state
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            localStorage.setItem('preferredLang', lang);
+            window.currentLanguage = lang;
+            translatePage(lang);
+            
+            // 📱 MOBILE: Force DOM update für mobile Geräte
+            setTimeout(() => {
+                document.querySelectorAll('[data-de], [data-en]').forEach(element => {
+                    if (element.dataset[lang]) {
+                        element.textContent = element.dataset[lang];
+                    }
+                });
+            }, 100);
+            
+            console.log('📱 [Mobile] Click language switch completed:', lang);
         });
     });
     

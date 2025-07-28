@@ -7,13 +7,7 @@ const BOOKS_PATH = path.join(__dirname, 'books.json');
 // Cover-Titel-Mapping (basierend auf visueller Analyse)
 const COVER_TITLE_MAPPING = {
   // 101 goldene Regeln - Paar im Blumenfeld mit Schmetterlingen
-  'https://m.media-amazon.com/images/I/71ta7WfuuoL.jpg': {
-    title: '101 goldene Regeln für eine harmonische Paar-Beziehung',
-    keywords: ['101 goldene', 'Paar-Beziehung', 'harmonische', 'Blumenfeld', 'Schmetterlinge']
-  },
-  
-  // 101 goldene Regeln - Alternative Cover (mit ?v=2)
-  'https://m.media-amazon.com/images/I/71ta7WfuuoL.jpg?v=2': {
+  'https://m.media-amazon.com/images/I/81PIRCDk7jL.jpg': {
     title: '101 goldene Regeln für eine harmonische Paar-Beziehung',
     keywords: ['101 goldene', 'Paar-Beziehung', 'harmonische', 'Blumenfeld', 'Schmetterlinge']
   },
@@ -132,16 +126,16 @@ const COVER_TITLE_MAPPING = {
     keywords: ['Malen', 'Schmerz', 'Heilung', 'Traumabewältigung']
   },
   
-  // Suizidprävention - Hände mit Sonnen-Emoji (Alternative URL)
-  'https://m.media-amazon.com/images/I/71ta7WfuuoL.jpg?v=2': {
+  // Suizidprävention - Wald-Szene
+  'https://m.media-amazon.com/images/I/81OMcBcTYXL.jpg': {
     title: 'Suizidprävention: Basics',
-    keywords: ['Suizidprävention', 'Hände', 'Sonne', 'Emoji', 'Tagebuch']
+    keywords: ['Suizidprävention', 'Wald', 'Natur', 'Basics']
   },
   
-  // Dankbarkeit im Alltag - The Battle Within Cover (Alternative URL)
-  'https://m.media-amazon.com/images/I/81S1MQ4bhkL.jpg?v=2': {
+  // Dankbarkeit im Alltag - Smiley Sonne
+  'https://m.media-amazon.com/images/I/71ta7WfuuoL.jpg': {
     title: 'Dankbarkeit im Alltag: Ein interaktives Tagebuch',
-    keywords: ['Dankbarkeit', 'Tagebuch', 'Zufriedenheit', 'Lebensfreude']
+    keywords: ['Dankbarkeit', 'Tagebuch', 'Zufriedenheit', 'Lebensfreude', 'Smiley', 'Sonne']
   },
   
   // Emotionale Intelligenz - Blaue Figuren mit Licht

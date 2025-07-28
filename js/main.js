@@ -1258,7 +1258,7 @@ function manageAudiobookButtons() {
 function ultimateTextOverlayCleanup() {
     console.log('🚨 [Cleanup] Starting ultimate text overlay cleanup...');
     
-    // 1. Alle Text-Elemente über Buchcovern entfernen
+    // 1. NUR Text-Elemente über Buchcovern entfernen (nicht die Buchkarten selbst)
     document.querySelectorAll('.book-card .book-image').forEach(imageContainer => {
         const allowedElements = imageContainer.querySelectorAll('.book-cover-link, .book-cover-image, img');
         imageContainer.querySelectorAll('*').forEach(element => {
@@ -1282,7 +1282,7 @@ function ultimateTextOverlayCleanup() {
         });
     });
     
-    // 2. HTML-Attribute aus der Anzeige entfernen
+    // 2. HTML-Attribute aus der Anzeige entfernen (aber Buchkarten intakt lassen)
     document.querySelectorAll('.book-card').forEach(card => {
         // data-* Attribute sind nur für JavaScript, nicht für die Anzeige
         const dataAttributes = ['data-asin', 'data-has-audiobook', 'data-has-detail-page', 'data-title'];
@@ -1294,21 +1294,24 @@ function ultimateTextOverlayCleanup() {
         });
     });
     
-    // 3. Broken HTML-Tags entfernen ("erfahren">")
-    document.querySelectorAll('.book-card *').forEach(element => {
+    // 3. Broken HTML-Tags entfernen ("erfahren">") - aber nur außerhalb der Buchkarten
+    document.querySelectorAll('*').forEach(element => {
         if (element.textContent && element.textContent.includes('erfahren">')) {
-            element.style.display = 'none';
-            element.style.visibility = 'hidden';
-            element.style.opacity = '0';
-            element.style.fontSize = '0';
-            element.style.lineHeight = '0';
-            element.style.height = '0';
-            element.style.width = '0';
-            element.style.overflow = 'hidden';
+            // Nur entfernen, wenn es nicht in einer Buchkarte ist
+            if (!element.closest('.book-card')) {
+                element.style.display = 'none';
+                element.style.visibility = 'hidden';
+                element.style.opacity = '0';
+                element.style.fontSize = '0';
+                element.style.lineHeight = '0';
+                element.style.height = '0';
+                element.style.width = '0';
+                element.style.overflow = 'hidden';
+            }
         }
     });
     
-    // 4. Redundante Titel entfernen
+    // 4. Redundante Titel entfernen - aber nur die, die über den Covern sind
     document.querySelectorAll('.book-card').forEach(card => {
         const titles = card.querySelectorAll('.book-title');
         if (titles.length > 1) {
@@ -1321,59 +1324,68 @@ function ultimateTextOverlayCleanup() {
         }
     });
     
-    // 5. Style-Attribute aus der Anzeige entfernen
-    document.querySelectorAll('.book-card *[style*="opacity"], .book-card *[style*="transform"]').forEach(element => {
+    // 5. Style-Attribute aus der Anzeige entfernen - aber nur außerhalb der Buchkarten
+    document.querySelectorAll('*[style*="opacity"], *[style*="transform"]').forEach(element => {
         if (element.textContent && element.textContent.includes('data-')) {
-            element.style.display = 'none';
-            element.style.visibility = 'hidden';
-            element.style.opacity = '0';
+            // Nur entfernen, wenn es nicht in einer Buchkarte ist
+            if (!element.closest('.book-card')) {
+                element.style.display = 'none';
+                element.style.visibility = 'hidden';
+                element.style.opacity = '0';
+            }
         }
     });
     
-    // 6. EXTERNE INHALTE VON AMAZON/APPLE ENTFERNEN
+    // 6. EXTERNE INHALTE VON AMAZON/APPLE ENTFERNEN - aber nur die Widgets, nicht die Links
     // Amazon Widgets und Overlays
     document.querySelectorAll('.amzn-product-block, .amazon-product-block, [class*="amzn"], [class*="amazon"], [id*="amzn"], [id*="amazon"]').forEach(element => {
         if (element.textContent && (element.textContent.includes('data-') || element.textContent.includes('ASIN') || element.textContent.includes('amazon'))) {
-            element.style.display = 'none';
-            element.style.visibility = 'hidden';
-            element.style.opacity = '0';
-            element.style.position = 'absolute';
-            element.style.zIndex = '-1';
-            element.style.width = '0';
-            element.style.height = '0';
-            element.style.overflow = 'hidden';
-            element.style.pointerEvents = 'none';
-            element.style.fontSize = '0';
-            element.style.lineHeight = '0';
-            element.style.margin = '0';
-            element.style.padding = '0';
-            element.style.border = '0';
-            element.style.clip = 'rect(0,0,0,0)';
+            // Nur entfernen, wenn es nicht ein Link in einer Buchkarte ist
+            if (!element.closest('.book-card .book-links')) {
+                element.style.display = 'none';
+                element.style.visibility = 'hidden';
+                element.style.opacity = '0';
+                element.style.position = 'absolute';
+                element.style.zIndex = '-1';
+                element.style.width = '0';
+                element.style.height = '0';
+                element.style.overflow = 'hidden';
+                element.style.pointerEvents = 'none';
+                element.style.fontSize = '0';
+                element.style.lineHeight = '0';
+                element.style.margin = '0';
+                element.style.padding = '0';
+                element.style.border = '0';
+                element.style.clip = 'rect(0,0,0,0)';
+            }
         }
     });
     
     // Apple Books Widgets und Overlays
     document.querySelectorAll('.apple-books-widget, [class*="apple"], [id*="apple"], [class*="books"], [id*="books"]').forEach(element => {
         if (element.textContent && (element.textContent.includes('data-') || element.textContent.includes('apple') || element.textContent.includes('books'))) {
-            element.style.display = 'none';
-            element.style.visibility = 'hidden';
-            element.style.opacity = '0';
-            element.style.position = 'absolute';
-            element.style.zIndex = '-1';
-            element.style.width = '0';
-            element.style.height = '0';
-            element.style.overflow = 'hidden';
-            element.style.pointerEvents = 'none';
-            element.style.fontSize = '0';
-            element.style.lineHeight = '0';
-            element.style.margin = '0';
-            element.style.padding = '0';
-            element.style.border = '0';
-            element.style.clip = 'rect(0,0,0,0)';
+            // Nur entfernen, wenn es nicht ein Link in einer Buchkarte ist
+            if (!element.closest('.book-card .book-links')) {
+                element.style.display = 'none';
+                element.style.visibility = 'hidden';
+                element.style.opacity = '0';
+                element.style.position = 'absolute';
+                element.style.zIndex = '-1';
+                element.style.width = '0';
+                element.style.height = '0';
+                element.style.overflow = 'hidden';
+                element.style.pointerEvents = 'none';
+                element.style.fontSize = '0';
+                element.style.lineHeight = '0';
+                element.style.margin = '0';
+                element.style.padding = '0';
+                element.style.border = '0';
+                element.style.clip = 'rect(0,0,0,0)';
+            }
         }
     });
     
-    // 7. ALLE MÖGLICHEN EXTERNE WIDGETS UND OVERLAYS
+    // 7. ALLE MÖGLICHEN EXTERNE WIDGETS UND OVERLAYS - aber nur außerhalb der Buchkarten
     const externalSelectors = [
         '[class*="widget"]', '[id*="widget"]',
         '[class*="overlay"]', '[id*="overlay"]',
@@ -1399,26 +1411,29 @@ function ultimateTextOverlayCleanup() {
                 element.textContent.includes('widget') ||
                 element.textContent.includes('overlay')
             )) {
-                element.style.display = 'none';
-                element.style.visibility = 'hidden';
-                element.style.opacity = '0';
-                element.style.position = 'absolute';
-                element.style.zIndex = '-1';
-                element.style.width = '0';
-                element.style.height = '0';
-                element.style.overflow = 'hidden';
-                element.style.pointerEvents = 'none';
-                element.style.fontSize = '0';
-                element.style.lineHeight = '0';
-                element.style.margin = '0';
-                element.style.padding = '0';
-                element.style.border = '0';
-                element.style.clip = 'rect(0,0,0,0)';
+                // Nur entfernen, wenn es nicht in einer Buchkarte ist
+                if (!element.closest('.book-card')) {
+                    element.style.display = 'none';
+                    element.style.visibility = 'hidden';
+                    element.style.opacity = '0';
+                    element.style.position = 'absolute';
+                    element.style.zIndex = '-1';
+                    element.style.width = '0';
+                    element.style.height = '0';
+                    element.style.overflow = 'hidden';
+                    element.style.pointerEvents = 'none';
+                    element.style.fontSize = '0';
+                    element.style.lineHeight = '0';
+                    element.style.margin = '0';
+                    element.style.padding = '0';
+                    element.style.border = '0';
+                    element.style.clip = 'rect(0,0,0,0)';
+                }
             }
         });
     });
     
-    // 8. DYNAMISCH NACHGELADENE ELEMENTE ENTFERNEN
+    // 8. DYNAMISCH NACHGELADENE ELEMENTE ENTFERNEN - aber nur die unerwünschten
     document.querySelectorAll('*').forEach(element => {
         const text = element.textContent || '';
         if (text && (
@@ -1439,7 +1454,14 @@ function ultimateTextOverlayCleanup() {
                              element.closest('.book-author') || 
                              element.closest('.book-description') ||
                              element.closest('.book-links') ||
-                             element.closest('.book-content');
+                             element.closest('.book-content') ||
+                             element.closest('.book-card') ||
+                             element.closest('.book-image') ||
+                             element.closest('.book-cover-link') ||
+                             element.closest('.book-cover-image') ||
+                             element.closest('.book-link') ||
+                             element.closest('.mehr-button') ||
+                             element.closest('.learn-more-button');
             
             if (!isAllowed) {
                 element.style.display = 'none';
@@ -2233,439 +2255,8 @@ function cleanupAmazonWidgets() {
                     (typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(bookTitle))
                 );
                 
-                console.log(`🐞 [Book ${index + 1}] "${bookTitle}"`, {
-                    asin: bookAsin,
-                    shouldHaveAudiobook,
-                    hasAudiobookAttr,
-                    audiobookAllowed,
-                    buttonVisible: !!audiobookButton,
-                    buttonDisplay: audiobookButton?.style.display || 'not found',
-                    identificationMethods: {
-                        jsonField: hasAudiobookAttr === 'true',
-                        asinMatch: bookAsin && typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(bookAsin),
-                        titleMatch: typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(bookTitle)
-                    }
-                });
+                console.log(`🐞 [DEBUG PANEL] Book ${index + 1}: "${bookTitle}" - Audiobook: ${shouldHaveAudiobook ? 'YES' : 'NO'} (Attr: ${hasAudiobookAttr}, Button: ${audiobookButton ? 'Present' : 'Missing'}, Allowed: ${audiobookAllowed})`);
             }
-        });
-        
-        // Show whitelist status
-        console.log('🐞 [DEBUG PANEL] Whitelist Status:', {
-            totalAudiobooks: window.appleAudiobookList?.audiobooks?.length || 0,
-            audiobookTitles: window.appleAudiobookTitles || [],
-            appleIds: window.appleAudiobookIds || [],
-            functionAvailable: typeof window.isAppleAudiobook === 'function',
-            whitelistLoaded: !!window.appleAudiobookList
-        });
-        
-        // Test specific books
-        const testBooks = [
-            "The Key of the Enlightened",
-            "How to Recognize Cults: A Guide to Protecting Yourself from Manipulation and Control",
-            "Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke",
-            "Psychotainment: Wie du auf jeder Party glänzt"
-        ];
-        
-        testBooks.forEach(book => {
-            const hasAudiobook = typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(book);
-            console.log(`🐞 [Test] "${book}": ${hasAudiobook ? '✅ HAS audiobook' : '❌ NO audiobook'}`);
         });
     }, 3000);
-    
-    // EMERGENCY FIX: Remove audiobook buttons for books not in whitelist
-    setTimeout(() => {
-        console.log('🔧 [Emergency Fix] Checking all audiobook buttons...');
-        console.log('🔧 [Emergency Fix] Whitelist loaded:', !!window.appleAudiobookList);
-        console.log('🔧 [Emergency Fix] Audiobooks in whitelist:', window.appleAudiobookList?.audiobooks?.length || 0);
-        
-        document.querySelectorAll('.book-card').forEach(card => {
-            const bookTitle = card.querySelector('.book-title')?.textContent?.trim();
-            if (bookTitle) {
-                // Direct whitelist check
-                let shouldHaveAudiobook = false;
-                
-                if (window.appleAudiobookList && window.appleAudiobookList.audiobooks) {
-                    const normalizedTitle = bookTitle.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
-                    
-                    shouldHaveAudiobook = window.appleAudiobookList.audiobooks.some(book => {
-                        const whitelistTitle = getLocalizedText(book.title, window.currentLanguage || 'de').toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
-                        return whitelistTitle === normalizedTitle || whitelistTitle.includes(normalizedTitle) || normalizedTitle.includes(whitelistTitle);
-                    });
-                }
-                
-                const audiobookButton = card.querySelector('.book-link.audiobook');
-                
-                if (audiobookButton && !shouldHaveAudiobook) {
-                    console.log('🔧 [Emergency Fix] REMOVING audiobook button for:', bookTitle);
-                    audiobookButton.remove();
-                } else if (audiobookButton && shouldHaveAudiobook) {
-                    console.log('🔧 [Emergency Fix] KEEPING audiobook button for:', bookTitle);
-                    // Ensure button has correct attributes
-                    audiobookButton.setAttribute('data-audiobook-allowed', 'true');
-                    audiobookButton.style.display = 'inline-flex';
-                }
-            }
-        });
-        
-            // FINAL CHECK: Hide any remaining unauthorized buttons
-    document.querySelectorAll('.book-link.audiobook:not([data-audiobook-allowed="true"])').forEach(btn => {
-        console.log('🔧 [Final Check] Hiding unauthorized audiobook button');
-        btn.style.display = 'none';
-        btn.style.visibility = 'hidden';
-        btn.style.opacity = '0';
-        btn.style.pointerEvents = 'none';
-    });
-    
-    // INTERSECTION OBSERVER: Lazy audiobook button removal
-    if ('IntersectionObserver' in window) {
-        const audiobookObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const card = entry.target;
-                    const bookTitle = card.querySelector('.book-title')?.textContent;
-                    const bookIsbn = card.getAttribute('data-isbn');
-                    const audiobookButton = card.querySelector('.book-link.audiobook');
-                    
-                    if (audiobookButton && bookTitle) {
-                        // Try multiple identification methods
-                        const shouldHaveAudiobook = (
-                            (bookIsbn && typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(bookIsbn)) ||
-                            (typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(bookTitle))
-                        );
-                        
-                        if (!shouldHaveAudiobook) {
-                            console.log('👁️ [Observer] Removing audiobook button for:', bookTitle);
-                            audiobookButton.remove();
-                        } else {
-                            console.log('👁️ [Observer] Keeping audiobook button for:', bookTitle);
-                            audiobookButton.setAttribute('data-audiobook-allowed', 'true');
-                        }
-                    }
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '50px' });
-        
-        // Observe all book cards
-        document.querySelectorAll('.book-card').forEach(card => {
-            audiobookObserver.observe(card);
-        });
-        
-        console.log('👁️ [Observer] IntersectionObserver initialized for audiobook buttons');
-    }
-    }, 2000);
 });
-
-// Handle window resize
-window.addEventListener('resize', function() {
-    // Recalculate layouts if needed
-    // This can be expanded for more responsive features
-});
-
-// Validate and fix inconsistent links
-function validateAndFixLinks() {
-    console.log('🔧 [LinkFix] Starting link validation...');
-    
-    // Fix ALL books that have detail pages but wrong data-fallback attributes
-    document.querySelectorAll('.book-card').forEach(card => {
-        const hasDetailPage = card.getAttribute('data-has-detail-page') === 'true';
-        const bookTitle = card.querySelector('.book-title')?.textContent?.trim();
-        
-        console.log('🔧 [LinkFix] Checking book:', bookTitle, 'hasDetailPage:', hasDetailPage);
-        
-        if (hasDetailPage) {
-            // This book SHOULD have detail page links (no green arrow)
-            const titleLink = card.querySelector('.book-title a');
-            const mehrErfahrenBtn = card.querySelector('.detail-link');
-            const coverLink = card.querySelector('.book-image a');
-            
-            // Remove data-fallback from all links
-            [titleLink, mehrErfahrenBtn, coverLink].forEach(link => {
-                if (link && link.hasAttribute('data-fallback')) {
-                    console.log('🔧 [LinkFix] Removing data-fallback from link for:', bookTitle);
-                    link.removeAttribute('data-fallback');
-                }
-            });
-            
-            // Ensure links point to detail page (for Eifersucht book)
-            if (bookTitle && bookTitle.toLowerCase().includes('eifersüchtigen')) {
-                const detailUrl = '/buecher/umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke';
-                
-                [titleLink, mehrErfahrenBtn, coverLink].forEach(link => {
-                    if (link && !link.href.includes('/buecher/')) {
-                        console.log('🔧 [LinkFix] Fixing link to detail page for:', bookTitle);
-                        link.href = detailUrl;
-                        link.removeAttribute('target');
-                        link.removeAttribute('rel');
-                    }
-                });
-            }
-        } else {
-            // This book should use Books2Read fallback (with green arrow)
-            console.log('🔧 [LinkFix] Book should use Books2Read fallback:', bookTitle);
-        }
-    });
-    
-    console.log('🔧 [LinkFix] Link validation completed');
-}
-
-// Manual trigger for link validation (for debugging)
-window.fixGreenArrows = function() {
-    console.log('🔧 [Manual] Manually fixing green arrows...');
-    
-    // Force remove all data-fallback attributes (IMMEDIATE FIX)
-    const elementsWithFallback = document.querySelectorAll('[data-fallback="true"]');
-    console.log('🔧 [Manual] Found', elementsWithFallback.length, 'elements with data-fallback="true"');
-    
-    elementsWithFallback.forEach((element, index) => {
-        console.log('🔧 [Manual] Removing data-fallback from element', index + 1, ':', element);
-        element.removeAttribute('data-fallback');
-    });
-    
-    // Also run the full validation
-    validateAndFixLinks();
-    
-    console.log('🔧 [Manual] Green arrows should be fixed now! Check the page...');
-    
-    // Verify the fix
-    const remainingFallbacks = document.querySelectorAll('[data-fallback="true"]');
-    console.log('🔧 [Manual] Remaining elements with data-fallback:', remainingFallbacks.length);
-    
-    return `Fixed ${elementsWithFallback.length} green arrows!`;
-};
-
-// Iron Man's solution for saving Green Arrow
-window.ironManFix = function() {
-    console.log('🦸‍♂️ [Iron Man] Suiting up...');
-    console.log('🦸‍♂️ [Iron Man] JARVIS, locate all green arrows on the website...');
-    
-    const greenArrows = document.querySelectorAll('[data-fallback="true"]');
-    console.log('🦸‍♂️ [Iron Man] Found', greenArrows.length, 'green arrows to rescue!');
-    
-    if (greenArrows.length === 0) {
-        console.log('🦸‍♂️ [Iron Man] No green arrows found! Green Arrow must already be safe.');
-        return 'Green Arrow is already on the island!';
-    }
-    
-    console.log('🦸‍♂️ [Iron Man] Activating repulsors...');
-    
-    greenArrows.forEach((arrow, index) => {
-        console.log(`🦸‍♂️ [Iron Man] Rescuing green arrow ${index + 1}/${greenArrows.length}...`);
-        arrow.removeAttribute('data-fallback');
-        console.log('🦸‍♂️ [Iron Man] Green arrow removed from:', arrow.textContent?.substring(0, 50) + '...');
-    });
-    
-    console.log('🦸‍♂️ [Iron Man] Mission accomplished! Green Arrow is back on the island!');
-    console.log('🦸‍♂️ [Iron Man] JARVIS, confirm all green arrows have been removed...');
-    
-    const remainingArrows = document.querySelectorAll('[data-fallback="true"]');
-    console.log('🦸‍♂️ [Iron Man] Remaining green arrows:', remainingArrows.length);
-    
-    if (remainingArrows.length === 0) {
-        console.log('🦸‍♂️ [Iron Man] Perfect! All green arrows have been successfully removed!');
-        return '🎯 Mission Accomplished! Green Arrow is safe on the island!';
-    } else {
-        console.log('🦸‍♂️ [Iron Man] Some green arrows still remain. Need to call the Avengers...');
-        return '⚠️ Some green arrows still need rescue!';
-    }
-};
-
-// CSS Witchcraft - Advanced Green Arrow Detection and Removal
-window.cssWitchcraft = function() {
-    console.log('🧙‍♂️ [CSS Witchcraft] Casting detection spells...');
-    
-    // Test 1: Find all SVG and IMG elements with arrow/fallback references
-    const svgImgArrows = [...document.querySelectorAll('svg, img')].filter(el => 
-        el.outerHTML.includes('arrow') || 
-        el.outerHTML.includes('fallback') || 
-        el.outerHTML.includes('check')
-    );
-    console.log('🧙‍♂️ [CSS Witchcraft] Found', svgImgArrows.length, 'SVG/IMG elements with arrow references');
-    
-    // Test 2: Direct selector for fallback icons
-    const fallbackIcons = document.querySelectorAll('.fallback-icon, .green-arrow');
-    console.log('🧙‍♂️ [CSS Witchcraft] Found', fallbackIcons.length, 'fallback icons');
-    
-    // Test 3: Background image arrows
-    const backgroundArrows = [...document.querySelectorAll('*')].filter(el => {
-        const style = getComputedStyle(el);
-        return style.backgroundImage && style.backgroundImage.includes('arrow');
-    });
-    console.log('🧙‍♂️ [CSS Witchcraft] Found', backgroundArrows.length, 'elements with arrow background images');
-    
-    // Test 4: CSS pseudo-elements (::after content)
-    const pseudoArrows = [...document.querySelectorAll('*')].filter(el => {
-        const style = getComputedStyle(el, '::after');
-        return style.content && (style.content.includes('↗') || style.content.includes('arrow'));
-    });
-    console.log('🧙‍♂️ [CSS Witchcraft] Found', pseudoArrows.length, 'elements with arrow pseudo-elements');
-    
-    // Test 5: Data-fallback attributes
-    const dataFallbacks = document.querySelectorAll('[data-fallback="true"]');
-    console.log('🧙‍♂️ [CSS Witchcraft] Found', dataFallbacks.length, 'elements with data-fallback="true"');
-    
-    // Comprehensive removal
-    const totalArrows = svgImgArrows.length + fallbackIcons.length + backgroundArrows.length + pseudoArrows.length + dataFallbacks.length;
-    console.log('🧙‍♂️ [CSS Witchcraft] Total arrow-related elements found:', totalArrows);
-    
-    if (totalArrows === 0) {
-        console.log('🧙‍♂️ [CSS Witchcraft] No arrows found! The spell worked!');
-        return '✨ No green arrows detected!';
-    }
-    
-    // Apply CSS Witchcraft
-    console.log('🧙‍♂️ [CSS Witchcraft] Applying removal spells...');
-    
-    // Remove SVG/IMG arrows
-    svgImgArrows.forEach(el => {
-        console.log('🧙‍♂️ [CSS Witchcraft] Removing SVG/IMG arrow:', el);
-        el.remove();
-    });
-    
-    // Remove fallback icons
-    fallbackIcons.forEach(el => {
-        console.log('🧙‍♂️ [CSS Witchcraft] Removing fallback icon:', el);
-        el.remove();
-    });
-    
-    // Remove data-fallback attributes
-    dataFallbacks.forEach(el => {
-        console.log('🧙‍♂️ [CSS Witchcraft] Removing data-fallback from:', el);
-        el.removeAttribute('data-fallback');
-    });
-    
-    // Apply CSS override for background arrows
-    if (backgroundArrows.length > 0) {
-        const css = document.createElement('style');
-        css.id = 'css-witchcraft-override';
-        css.textContent = `
-            *[style*="arrow"] {
-                background-image: none !important;
-            }
-        `;
-        document.head.appendChild(css);
-        console.log('🧙‍♂️ [CSS Witchcraft] Applied CSS override for background arrows');
-    }
-    
-    console.log('🧙‍♂️ [CSS Witchcraft] All spells cast! Green arrows should be gone!');
-    return `✨ Removed ${totalArrows} green arrow elements!`;
-};
-
-// Quick CSS Fix (permanent, fast, effective)
-window.quickCssFix = function() {
-    console.log('🧼 [Quick CSS Fix] Applying instant CSS override...');
-    
-    const css = document.createElement('style');
-    css.id = 'quick-css-fix';
-    css.textContent = `
-        .fallback-icon, 
-        .green-arrow, 
-        svg[data-fallback="true"],
-        [data-fallback="true"]::after,
-        .book-detail-link[data-fallback="true"]::after {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-        }
-    `;
-    
-    document.head.appendChild(css);
-    console.log('🧼 [Quick CSS Fix] CSS override applied! Green arrows should disappear immediately!');
-    return '🧼 Quick CSS Fix applied!';
-};
-
-// Anti-Pfeil-Code - Direct Zombie Icon Removal
-window.antiPfeilCode = function() {
-    console.log('🎯 [Anti-Pfeil] Hunting down zombie icons...');
-    
-    // Find all potential green arrow elements
-    const rogueArrows = [...document.querySelectorAll('svg, span, i, img')]
-        .filter(el => 
-            el.outerHTML.includes('check') || 
-            el.outerHTML.includes('arrow') || 
-            el.className.includes('fallback') || 
-            el.className.includes('green') || 
-            el.dataset.fallback === "true"
-        );
-    
-    console.log('🎯 [Anti-Pfeil] Found', rogueArrows.length, 'rogue green icons');
-    
-    if (rogueArrows.length === 0) {
-        console.log('🎯 [Anti-Pfeil] No zombie icons found!');
-        return '✨ No zombie icons detected!';
-    }
-    
-    // Remove each zombie icon
-    rogueArrows.forEach((el, index) => {
-        console.log(`🧹 [Anti-Pfeil] Removing zombie icon ${index + 1}/${rogueArrows.length}:`, el);
-        el.remove();
-    });
-    
-    console.log('🎯 [Anti-Pfeil] All zombie icons eliminated!');
-    return `🧹 Eliminated ${rogueArrows.length} zombie icons!`;
-};
-
-// CSS Anti-Pfeil Overlay (permanent visual fix)
-window.cssAntiPfeil = function() {
-    console.log('🧼 [CSS Anti-Pfeil] Applying permanent CSS overlay...');
-    
-    const style = document.createElement('style');
-    style.id = 'css-anti-pfeil';
-    style.innerHTML = `
-        .green-arrow, 
-        .fallback-icon, 
-        svg[data-fallback="true"], 
-        span.icon-green, 
-        img[src*="arrow"],
-        [data-fallback="true"]::after,
-        .book-detail-link[data-fallback="true"]::after {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
-    `;
-    
-    document.head.appendChild(style);
-    console.log('🧼 [CSS Anti-Pfeil] Permanent CSS overlay applied!');
-    return '🧼 CSS Anti-Pfeil overlay applied!';
-};
-
-// Ultimate Iron Man Fix (JS + CSS combination)
-window.ultimateIronManFix = function() {
-    console.log('🦸‍♂️ [Ultimate Iron Man] Deploying full arsenal...');
-    
-    // Step 1: Remove zombie icons from DOM
-    const jsResult = window.antiPfeilCode();
-    console.log('🦸‍♂️ [Ultimate Iron Man] JS removal result:', jsResult);
-    
-    // Step 2: Apply CSS overlay for permanent hiding
-    const cssResult = window.cssAntiPfeil();
-    console.log('🦸‍♂️ [Ultimate Iron Man] CSS overlay result:', cssResult);
-    
-    // Step 3: Remove data-fallback attributes
-    const dataFallbacks = document.querySelectorAll('[data-fallback="true"]');
-    dataFallbacks.forEach(el => {
-        el.removeAttribute('data-fallback');
-        console.log('🦸‍♂️ [Ultimate Iron Man] Removed data-fallback from:', el);
-    });
-    
-    console.log('🦸‍♂️ [Ultimate Iron Man] Ultimate mission accomplished!');
-    return `🦸‍♂️ Ultimate Iron Man Fix completed! Removed ${dataFallbacks.length} data-fallback attributes!`;
-};
-
-// Export functions for potential external use
-window.DirkWernerSite = {
-    translatePage,
-    filterByGenre,
-    searchBooks,
-    validateAndFixLinks,
-    fixGreenArrows,
-    ironManFix,
-    cssWitchcraft,
-    quickCssFix,
-    antiPfeilCode,
-    cssAntiPfeil,
-    ultimateIronManFix,
-    // loadBooks removed to prevent external calls on detail pages
-};
-

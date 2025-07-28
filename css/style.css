@@ -1191,11 +1191,11 @@ body {
 }
 
 /* 🚫 EXTERNE INHALTE BLOCKIEREN: Amazon, Apple und andere Widgets dauerhaft verstecken */
-/* Amazon Widgets und Overlays */
+/* Amazon Widgets und Overlays - aber nur die Widgets, nicht die Links in Buchkarten */
 .amzn-product-block, .amazon-product-block, 
-[class*="amzn"], [class*="amazon"], 
-[id*="amzn"], [id*="amazon"],
-[data-amzn], [data-amazon] {
+[class*="amzn"]:not(.book-card *), [class*="amazon"]:not(.book-card *), 
+[id*="amzn"]:not(.book-card *), [id*="amazon"]:not(.book-card *),
+[data-amzn]:not(.book-card *), [data-amazon]:not(.book-card *) {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
@@ -1213,11 +1213,11 @@ body {
     clip: rect(0,0,0,0) !important;
 }
 
-/* Apple Books Widgets und Overlays */
-.apple-books-widget, 
-[class*="apple"], [id*="apple"], 
-[class*="books"], [id*="books"],
-[data-apple], [data-books] {
+/* Apple Books Widgets und Overlays - aber nur die Widgets, nicht die Links in Buchkarten */
+.apple-books-widget:not(.book-card *), 
+[class*="apple"]:not(.book-card *), [id*="apple"]:not(.book-card *), 
+[class*="books"]:not(.book-card *), [id*="books"]:not(.book-card *),
+[data-apple]:not(.book-card *), [data-books]:not(.book-card *) {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
@@ -1235,18 +1235,18 @@ body {
     clip: rect(0,0,0,0) !important;
 }
 
-/* Alle möglichen externen Widgets und Overlays */
-[class*="widget"], [id*="widget"],
-[class*="overlay"], [id*="overlay"],
-[class*="embed"], [id*="embed"],
-[class*="iframe"], [id*="iframe"],
-[class*="script"], [id*="script"],
-[class*="external"], [id*="external"],
-[class*="third-party"], [id*="third-party"],
-[class*="api"], [id*="api"],
-[class*="sdk"], [id*="sdk"],
-[class*="plugin"], [id*="plugin"],
-[class*="addon"], [id*="addon"] {
+/* Alle möglichen externen Widgets und Overlays - aber nur außerhalb der Buchkarten */
+[class*="widget"]:not(.book-card *), [id*="widget"]:not(.book-card *),
+[class*="overlay"]:not(.book-card *), [id*="overlay"]:not(.book-card *),
+[class*="embed"]:not(.book-card *), [id*="embed"]:not(.book-card *),
+[class*="iframe"]:not(.book-card *), [id*="iframe"]:not(.book-card *),
+[class*="script"]:not(.book-card *), [id*="script"]:not(.book-card *),
+[class*="external"]:not(.book-card *), [id*="external"]:not(.book-card *),
+[class*="third-party"]:not(.book-card *), [id*="third-party"]:not(.book-card *),
+[class*="api"]:not(.book-card *), [id*="api"]:not(.book-card *),
+[class*="sdk"]:not(.book-card *), [id*="sdk"]:not(.book-card *),
+[class*="plugin"]:not(.book-card *), [id*="plugin"]:not(.book-card *),
+[class*="addon"]:not(.book-card *), [id*="addon"]:not(.book-card *) {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
@@ -1264,11 +1264,11 @@ body {
     clip: rect(0,0,0,0) !important;
 }
 
-/* Externe iframes blockieren */
-iframe[src*="amazon"], iframe[src*="amzn"],
-iframe[src*="apple"], iframe[src*="books"],
-iframe[src*="widget"], iframe[src*="overlay"],
-iframe[src*="embed"], iframe[src*="external"] {
+/* Externe iframes blockieren - aber nur die, die nicht in Buchkarten sind */
+iframe[src*="amazon"]:not(.book-card *), iframe[src*="amzn"]:not(.book-card *),
+iframe[src*="apple"]:not(.book-card *), iframe[src*="books"]:not(.book-card *),
+iframe[src*="widget"]:not(.book-card *), iframe[src*="overlay"]:not(.book-card *),
+iframe[src*="embed"]:not(.book-card *), iframe[src*="external"]:not(.book-card *) {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
@@ -1282,11 +1282,11 @@ iframe[src*="embed"], iframe[src*="external"] {
     clip: rect(0,0,0,0) !important;
 }
 
-/* Externe Scripts blockieren */
-script[src*="amazon"], script[src*="amzn"],
-script[src*="apple"], script[src*="books"],
-script[src*="widget"], script[src*="overlay"],
-script[src*="embed"], script[src*="external"] {
+/* Externe Scripts blockieren - aber nur die, die nicht in Buchkarten sind */
+script[src*="amazon"]:not(.book-card *), script[src*="amzn"]:not(.book-card *),
+script[src*="apple"]:not(.book-card *), script[src*="books"]:not(.book-card *),
+script[src*="widget"]:not(.book-card *), script[src*="overlay"]:not(.book-card *),
+script[src*="embed"]:not(.book-card *), script[src*="external"]:not(.book-card *) {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
@@ -1304,11 +1304,11 @@ script[src*="embed"], script[src*="external"] {
     clip: rect(0,0,0,0) !important;
 }
 
-/* Externe Styles blockieren */
-link[href*="amazon"], link[href*="amzn"],
-link[href*="apple"], link[href*="books"],
-link[href*="widget"], link[href*="overlay"],
-link[href*="embed"], link[href*="external"] {
+/* Externe Styles blockieren - aber nur die, die nicht in Buchkarten sind */
+link[href*="amazon"]:not(.book-card *), link[href*="amzn"]:not(.book-card *),
+link[href*="apple"]:not(.book-card *), link[href*="books"]:not(.book-card *),
+link[href*="widget"]:not(.book-card *), link[href*="overlay"]:not(.book-card *),
+link[href*="embed"]:not(.book-card *), link[href*="external"]:not(.book-card *) {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
@@ -1324,5 +1324,36 @@ link[href*="embed"], link[href*="external"] {
     padding: 0 !important;
     border: 0 !important;
     clip: rect(0,0,0,0) !important;
+}
+
+/* 🚨 BUCHKARTEN SCHÜTZEN: Sicherstellen, dass Buchkarten und deren Inhalte sichtbar bleiben */
+.book-card,
+.book-card *,
+.book-card .book-title,
+.book-card .book-author,
+.book-card .book-description,
+.book-card .book-links,
+.book-card .book-content,
+.book-card .book-image,
+.book-card .book-cover-link,
+.book-card .book-cover-image,
+.book-card .book-link,
+.book-card .mehr-button,
+.book-card .learn-more-button {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: static !important;
+    z-index: auto !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+    margin: inherit !important;
+    padding: inherit !important;
+    border: inherit !important;
+    clip: auto !important;
 }
 

@@ -443,13 +443,13 @@ async function createBookCard(book) {
     return `
         <div class="book-card fade-in" data-genre="${genre}" data-title="${titleString.toLowerCase()}" data-asin="${book.asin || ''}" data-has-audiobook="${hasAudiobook}" data-has-detail-page="${hasDetailPage}">
             ${schemaScript}
-            <!-- Buchcover-Bereich - NUR das Cover, keine Titel-Overlays -->
+            <!-- 🎯 SAUBERES BUCHCOVER: Nur das Bild, keine Titel-Overlays -->
             <div class="book-image">
                 <a href="${detailPageUrl}" class="book-cover-link" aria-label="Mehr über ${titleString} erfahren">
-                    <img src="${cacheBustedCover}" alt="Buchcover" loading="lazy" class="book-cover-image">
+                    <img src="${cacheBustedCover}" alt="Buchcover" loading="lazy" class="book-cover-image" title="">
                 </a>
             </div>
-            <!-- Buch-Info-Bereich - Titel und Beschreibung UNTERHALB des Covers -->
+            <!-- 📚 BUCH-INFO: Titel und Beschreibung NUR unterhalb des Covers -->
             <div class="book-info">
                 <h3 class="book-title">
                     <a href="${detailPageUrl}" class="book-title-link" aria-label="Mehr über ${getLocalizedText(book.title, currentLang)} erfahren">${getLocalizedText(book.title, currentLang)}</a>

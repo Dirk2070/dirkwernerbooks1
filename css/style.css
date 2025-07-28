@@ -2400,6 +2400,109 @@ html {
     pointer-events: none !important;
 }
 
+/* 🎯 ENDGÜLTIGE LÖSUNG: Alle möglichen Titel-Overlays über Buchcovern entfernen */
+/* H3-Titel und andere Überschriften über Buchcovern */
+.book-card h3.overlay-title,
+.book-card .title-overlay,
+.book-card .book-image h3,
+.book-card .book-image h1,
+.book-card .book-image h2,
+.book-card .book-image h4,
+.book-card .book-image h5,
+.book-card .book-image h6,
+.book-card .book-image .title,
+.book-card .book-image .book-title,
+.book-card .book-image .overlay-title,
+.book-card .book-image .title-overlay {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    clip: rect(0, 0, 0, 0) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+}
+
+/* Container-Overlays über Buchcovern */
+.book-card .overlay-container,
+.book-card .title-container,
+.book-card .book-image .overlay,
+.book-card .book-image .overlay-container,
+.book-card .book-image .title-container {
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Figcaption und andere Bild-Beschreibungen über Buchcovern */
+.book-card .book-image figcaption,
+.book-card .book-image .caption,
+.book-card .book-image .image-caption,
+.book-card .book-image .cover-caption {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Absolute Sicherheit: Alle Text-Elemente über Buchcovern entfernen */
+.book-card .book-image h1,
+.book-card .book-image h2,
+.book-card .book-image h3,
+.book-card .book-image h4,
+.book-card .book-image h5,
+.book-card .book-image h6,
+.book-card .book-image p,
+.book-card .book-image span,
+.book-card .book-image div:not(.book-cover-link) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Sicherstellen, dass nur das Buchcover-Bild im .book-image sichtbar ist */
+.book-card .book-image {
+    position: relative !important;
+    overflow: hidden !important;
+    background: transparent !important;
+}
+
+.book-card .book-image *:not(.book-cover-link):not(.book-cover-image) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
 /* ADDITIONAL: Remove any title overlays that might appear above book covers */
 .book-card::before,
 .book-card::after,
@@ -2408,6 +2511,68 @@ html {
     display: none !important;
     content: none !important;
     visibility: hidden !important;
+}
+
+/* 🚨 NOTFALL-REGELN: Alle möglichen Titel-Overlays über Buchcovern entfernen */
+/* Alle H-Tags über Buchcovern */
+.book-card .book-image h1,
+.book-card .book-image h2,
+.book-card .book-image h3,
+.book-card .book-image h4,
+.book-card .book-image h5,
+.book-card .book-image h6 {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    clip: rect(0, 0, 0, 0) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+}
+
+/* Alle Text-Elemente über Buchcovern */
+.book-card .book-image p,
+.book-card .book-image span,
+.book-card .book-image div:not(.book-cover-link),
+.book-card .book-image strong,
+.book-card .book-image em,
+.book-card .book-image b,
+.book-card .book-image i {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Alle Overlay-Klassen über Buchcovern */
+.book-card .book-image .overlay,
+.book-card .book-image .title-overlay,
+.book-card .book-image .overlay-title,
+.book-card .book-image .title-container,
+.book-card .book-image .overlay-container {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
     opacity: 0 !important;
     position: absolute !important;
     z-index: -1 !important;

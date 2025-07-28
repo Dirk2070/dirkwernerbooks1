@@ -165,6 +165,33 @@ body {
     transform: translateY(-2px);
 }
 
+/* Navigation Logo Styling */
+.nav-logo-item {
+    margin-left: auto;
+}
+
+.nav-logo-link {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    transition: transform 0.2s ease;
+}
+
+.nav-logo-link:hover {
+    transform: scale(1.1);
+}
+
+.nav-logo {
+    height: 2rem;
+    width: auto;
+    filter: brightness(0) invert(1);
+    transition: filter 0.2s ease;
+}
+
+.nav-logo-link:hover .nav-logo {
+    filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(200deg);
+}
+
 /* Hero Section */
 .hero {
     background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
@@ -1745,6 +1772,16 @@ body {
         gap: 0.5rem;
     }
     
+    .nav-logo-item {
+        margin-left: 0;
+        margin-top: 1rem;
+        text-align: center;
+    }
+    
+    .nav-logo {
+        height: 1.5rem;
+    }
+    
     .footer-bottom {
         flex-direction: column;
         gap: 1rem;
@@ -1981,6 +2018,51 @@ html {
     content: none !important;
 }
 
+/* ENHANCED: Remove ALL possible redundant text overlays */
+.book-card::before,
+.book-card::after,
+.book-image::before,
+.book-image::after,
+.book-content::before,
+.book-content::after,
+.book-title::before,
+.book-title::after,
+.book-author::before,
+.book-author::after,
+.book-description::before,
+.book-description::after,
+.book-links::before,
+.book-links::after,
+.book-link::before,
+.book-link::after {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* Ensure no data attributes create content */
+[data-title]::before,
+[data-title]::after,
+[data-asin]::before,
+[data-asin]::after,
+[data-genre]::before,
+[data-genre]::after,
+[data-format]::before,
+[data-format]::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Remove any potential title overlays on book covers */
+.book-image img::before,
+.book-image img::after,
+.book-cover img::before,
+.book-cover img::after {
+    display: none !important;
+    content: none !important;
+}
+
 /* MOBILE UX OPTIMIZATION - Responsive Button Improvements */
 .book-buttons button,
 .action-buttons .action-btn,
@@ -2046,7 +2128,8 @@ html {
 @media screen and (max-width: 768px) {
     .book-links {
         flex-direction: column;
-        gap: 8px;
+        gap: 12px;
+        margin-top: 1rem;
     }
     
     .book-links .book-link {
@@ -2054,8 +2137,14 @@ html {
         min-width: auto;
         max-width: none;
         font-size: 0.9rem;
-        padding: 12px 16px;
-        min-height: 48px;
+        padding: 14px 16px;
+        min-height: 52px;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.2;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
     }
     
     .book-card {

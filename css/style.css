@@ -2884,3 +2884,135 @@ html {
     }
 }
 
+/* 🎯 MOBILE-SPEZIFISCHE REGELN: Titel-Overlays auf Smartphones entfernen */
+@media screen and (max-width: 768px) {
+    /* Alle Titel-Overlays über Buchcovern auf mobilen Geräten entfernen */
+    .book-card .book-image h1,
+    .book-card .book-image h2,
+    .book-card .book-image h3,
+    .book-card .book-image h4,
+    .book-card .book-image h5,
+    .book-card .book-image h6,
+    .book-card .book-image p,
+    .book-card .book-image span,
+    .book-card .book-image div:not(.book-cover-link),
+    .book-card .book-image strong,
+    .book-card .book-image em,
+    .book-card .book-image b,
+    .book-card .book-image i {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        z-index: -1 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+    }
+    
+    /* Container-Overlays auf mobilen Geräten entfernen */
+    .book-card .book-image .overlay,
+    .book-card .book-image .title-overlay,
+    .book-card .book-image .overlay-title,
+    .book-card .book-image .title-container,
+    .book-card .book-image .overlay-container {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        z-index: -1 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+    }
+    
+    /* Sicherstellen, dass nur das Buchcover-Bild auf mobilen Geräten sichtbar ist */
+    .book-card .book-image {
+        position: relative !important;
+        overflow: hidden !important;
+        background: transparent !important;
+    }
+    
+    .book-card .book-image *:not(.book-cover-link):not(.book-cover-image) {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        z-index: -1 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+    }
+    
+    /* Buchcover-Bild auf mobilen Geräten optimieren */
+    .book-card .book-image img,
+    .book-card .book-cover-image {
+        display: block !important;
+        width: 100% !important;
+        height: 250px !important; /* Kleinere Höhe für mobile Geräte */
+        object-fit: cover !important;
+        position: relative !important;
+        z-index: 1 !important;
+        background: transparent !important;
+        border: none !important;
+        outline: none !important;
+    }
+}
+
+/* 🎯 KLEINE MOBILE GERÄTE: Zusätzliche Sicherheit */
+@media screen and (max-width: 480px) {
+    /* Alle möglichen Titel-Overlays auf kleinen mobilen Geräten entfernen */
+    .book-card .book-image * {
+        position: relative !important;
+    }
+    
+    .book-card .book-image h1,
+    .book-card .book-image h2,
+    .book-card .book-image h3,
+    .book-card .book-image h4,
+    .book-card .book-image h5,
+    .book-card .book-image h6,
+    .book-card .book-image p,
+    .book-card .book-image span,
+    .book-card .book-image div:not(.book-cover-link),
+    .book-card .book-image strong,
+    .book-card .book-image em,
+    .book-card .book-image b,
+    .book-card .book-image i,
+    .book-card .book-image .overlay,
+    .book-card .book-image .title-overlay,
+    .book-card .book-image .overlay-title,
+    .book-card .book-image .title-container,
+    .book-card .book-image .overlay-container {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        z-index: -1 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        clip: rect(0, 0, 0, 0) !important;
+    }
+    
+    /* Buchcover-Bild auf kleinen mobilen Geräten optimieren */
+    .book-card .book-image img,
+    .book-card .book-cover-image {
+        height: 200px !important; /* Noch kleinere Höhe für kleine mobile Geräte */
+    }
+}
+

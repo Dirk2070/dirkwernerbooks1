@@ -992,6 +992,70 @@ function initResponsiveNav() {
     }
 }
 
+// 🎯 MOBILE-TEST: Überprüfung der Titel-Overlays auf mobilen Geräten
+function testMobileTitleOverlays() {
+    console.log('📱 [Mobile Test] Überprüfung der Titel-Overlays auf mobilen Geräten...');
+    
+    const isMobile = window.innerWidth <= 768;
+    const isSmallMobile = window.innerWidth <= 480;
+    
+    console.log('📱 [Mobile Test] Geräte-Erkennung:', {
+        windowWidth: window.innerWidth,
+        isMobile: isMobile,
+        isSmallMobile: isSmallMobile
+    });
+    
+    // Überprüfe alle Buchkarten auf Titel-Overlays
+    const bookCards = document.querySelectorAll('.book-card');
+    let overlayIssues = 0;
+    
+    bookCards.forEach((card, index) => {
+        const bookImage = card.querySelector('.book-image');
+        if (bookImage) {
+            // Suche nach möglichen Titel-Overlays
+            const titleOverlays = bookImage.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div:not(.book-cover-link), strong, em, b, i, .overlay, .title-overlay, .overlay-title, .title-container, .overlay-container');
+            
+            if (titleOverlays.length > 0) {
+                overlayIssues++;
+                console.warn(`⚠️ [Mobile Test] Buchkarte ${index + 1}: ${titleOverlays.length} Titel-Overlays gefunden!`);
+                titleOverlays.forEach(overlay => {
+                    console.warn(`   - Overlay: ${overlay.tagName}${overlay.className ? '.' + overlay.className : ''}`);
+                });
+            } else {
+                console.log(`✅ [Mobile Test] Buchkarte ${index + 1}: Keine Titel-Overlays gefunden`);
+            }
+        }
+    });
+    
+    if (overlayIssues === 0) {
+        console.log('✅ [Mobile Test] Alle Buchkarten sind sauber - keine Titel-Overlays gefunden!');
+    } else {
+        console.error(`❌ [Mobile Test] ${overlayIssues} Buchkarten haben noch Titel-Overlays!`);
+    }
+    
+    // Überprüfe CSS-Regeln
+    const styleSheets = Array.from(document.styleSheets);
+    let mobileRulesFound = 0;
+    
+    styleSheets.forEach(sheet => {
+        try {
+            const rules = Array.from(sheet.cssRules || sheet.rules);
+            rules.forEach(rule => {
+                if (rule.media && (rule.media.mediaText.includes('max-width: 768px') || rule.media.mediaText.includes('max-width: 480px'))) {
+                    mobileRulesFound++;
+                    console.log(`📱 [Mobile Test] Mobile CSS-Regel gefunden: ${rule.media.mediaText}`);
+                }
+            });
+        } catch (e) {
+            // Cross-origin stylesheets können nicht gelesen werden
+        }
+    });
+    
+    console.log(`📱 [Mobile Test] ${mobileRulesFound} mobile CSS-Regeln gefunden`);
+    
+    return overlayIssues === 0;
+}
+
     // Initialize everything when DOM is loaded
     document.addEventListener('DOMContentLoaded', async function() {
         console.log('🚀 [Init] DOMContentLoaded event fired');
@@ -1062,6 +1126,11 @@ function initResponsiveNav() {
         initLanguageSwitching();
         initAnimations();
         initResponsiveNav();
+        
+        // 🎯 MOBILE-TEST: Überprüfung der Titel-Overlays
+        setTimeout(() => {
+            testMobileTitleOverlays();
+        }, 2000); // 2 Sekunden warten, bis alle Bücher geladen sind
         
         // Set initial language
         translatePage('de');

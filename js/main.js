@@ -898,12 +898,14 @@ function initGenreFilter() {
     }
 }
 
-// Initialize language switching
+// 🌐 SPRACHUMSCHALTUNG: Vollständig funktionsfähig machen
 function initLanguageSwitching() {
-    // 📱 MOBILE vs DESKTOP: Geräteabhängige Sprachverwaltung
+    console.log('🌐 [Language] Initializing language switching...');
+    
+    // Aktuelle Sprache ermitteln
     const urlParams = new URLSearchParams(window.location.search);
     const urlLang = urlParams.get('lang');
-    const localStorageLang = localStorage.getItem('lang'); // Changed to localStorage for mobile reliability
+    const localStorageLang = localStorage.getItem('lang');
     const isMobile = window.innerWidth < 768;
     
     let preferredLang = 'de'; // default
@@ -922,7 +924,7 @@ function initLanguageSwitching() {
     
     window.currentLanguage = preferredLang;
     
-    // Set active language button for all devices
+    // Aktive Button-Zustände setzen
     document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(btn => {
         if (btn.dataset.lang === preferredLang) {
             btn.classList.add('active');
@@ -932,51 +934,138 @@ function initLanguageSwitching() {
     });
     console.log('🌐 [Language] All language buttons initialized:', preferredLang);
     
-    // Add event listeners for language switching (einheitlich für alle Geräte)
+    // Event-Listener für alle Sprachbuttons hinzufügen
     document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(btn => {
-        const handleLanguageSwitch = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const lang = this.dataset.lang;
-            
-            console.log(`🌐 [Language] Switching to: ${lang}`);
-            
-            // Update active state for all language buttons
-            document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Update localStorage and URL parameter (reliable for mobile)
-            localStorage.setItem('lang', lang);
-            window.currentLanguage = lang;
-            updateURLParameter('lang', lang);
-            
-            // Force page reload for mobile (more reliable)
-            if (window.innerWidth < 768) {
-                location.reload();
-            } else {
-                // Desktop: Apply translation without reload
-                translatePage(lang);
-                setTimeout(() => {
-                    document.querySelectorAll('[data-de], [data-en]').forEach(element => {
-                        if (element.dataset[lang]) {
-                            element.textContent = element.dataset[lang];
-                        }
-                    });
-                    if (typeof displayFeaturedBooks === 'function') { displayFeaturedBooks(); }
-                    if (typeof displayAllBooks === 'function') { displayAllBooks(); }
-                }, 100);
-            }
-            
-            console.log(`🌐 [Language] Successfully switched to: ${lang} (${window.innerWidth < 768 ? 'mobile reload' : 'desktop update'})`);
-        };
+        // Alle bestehenden Event-Listener entfernen
+        btn.removeEventListener('click', handleLanguageSwitch);
+        btn.removeEventListener('touchend', handleLanguageSwitch);
         
+        // Neue Event-Listener hinzufügen
         btn.addEventListener('click', handleLanguageSwitch);
         btn.addEventListener('touchend', handleLanguageSwitch);
+        
+        console.log(`🌐 [Language] Event listeners added for ${btn.dataset.lang} button`);
     });
     
-    // Apply initial translation
+    // Initiale Übersetzung anwenden
     translatePage(preferredLang);
+    
+    console.log('🌐 [Language] Language switching fully initialized');
+}
+
+// 🌐 SPRACHWECHSEL-HANDLER: Einheitlich für alle Geräte
+function handleLanguageSwitch(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const lang = this.dataset.lang;
+    console.log(`🌐 [Language] Switching to: ${lang}`);
+    
+    // Aktive Button-Zustände aktualisieren
+    document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(b => {
+        b.classList.remove('active');
+    });
+    this.classList.add('active');
+    
+    // Sprache speichern
+    localStorage.setItem('lang', lang);
+    window.currentLanguage = lang;
+    updateURLParameter('lang', lang);
+    
+    // Übersetzung anwenden
+    if (window.innerWidth < 768) {
+        // Mobile: Page reload für bessere Stabilität
+        console.log('🌐 [Language] Mobile detected - reloading page');
+        location.reload();
+    } else {
+        // Desktop: Sofortige Übersetzung ohne Reload
+        console.log('🌐 [Language] Desktop detected - applying translation');
+        translatePage(lang);
+        
+        // DOM-Updates nach der Übersetzung
+        setTimeout(() => {
+            updateAllTranslatableElements(lang);
+            if (typeof displayFeaturedBooks === 'function') { 
+                displayFeaturedBooks(); 
+            }
+            if (typeof displayAllBooks === 'function') { 
+                displayAllBooks(); 
+            }
+        }, 100);
+    }
+    
+    console.log(`🌐 [Language] Successfully switched to: ${lang}`);
+}
+
+// 🌐 ALLE ÜBERSETZBAREN ELEMENTE AKTUALISIEREN
+function updateAllTranslatableElements(lang) {
+    console.log(`🌐 [Translation] Updating all translatable elements to ${lang}`);
+    
+    // data-de und data-en Attribute verarbeiten
+    document.querySelectorAll('[data-de], [data-en]').forEach(element => {
+        if (element.dataset[lang]) {
+            const newText = element.dataset[lang];
+            
+            // Verschiedene Element-Typen behandeln
+            if (element.tagName === 'INPUT' && element.type === 'placeholder') {
+                element.placeholder = newText;
+            } else if (element.tagName === 'META') {
+                element.setAttribute('content', newText);
+            } else {
+                element.textContent = newText;
+            }
+            
+            console.log(`🌐 [Translation] Updated element: ${element.tagName} -> ${newText}`);
+        }
+    });
+    
+    // HTML lang Attribut aktualisieren
+    document.documentElement.lang = lang;
+    
+    // Title-Tag aktualisieren
+    const titleElement = document.querySelector('title');
+    if (titleElement && titleElement.dataset[lang]) {
+        titleElement.textContent = titleElement.dataset[lang];
+    }
+    
+    // Meta description aktualisieren
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription && metaDescription.dataset[lang]) {
+        metaDescription.setAttribute('content', metaDescription.dataset[lang]);
+    }
+    
+    console.log(`🌐 [Translation] All elements updated to ${lang}`);
+}
+
+// 🌐 ERWEITERTE ÜBERSETZUNGSFUNKTION
+function translatePage(lang) {
+    console.log(`🌐 [Translation] Translating page to ${lang}`);
+    
+    // Basis-Übersetzungen anwenden
+    updateAllTranslatableElements(lang);
+    
+    // Spezielle Übersetzungen für dynamische Inhalte
+    if (typeof window.translations !== 'undefined' && window.translations[lang]) {
+        const translations = window.translations[lang];
+        
+        // Navigation übersetzen
+        Object.keys(translations).forEach(key => {
+            const elements = document.querySelectorAll(`[data-translate="${key}"]`);
+            elements.forEach(element => {
+                element.textContent = translations[key];
+            });
+        });
+    }
+    
+    // Buchkarten neu rendern falls vorhanden
+    if (typeof displayFeaturedBooks === 'function') {
+        displayFeaturedBooks();
+    }
+    if (typeof displayAllBooks === 'function') {
+        displayAllBooks();
+    }
+    
+    console.log(`🌐 [Translation] Page translation to ${lang} completed`);
 }
 
 // 🎧 AUDIOBOOK BUTTON MANAGEMENT: Robuste Hörbuch-Button-Logik
@@ -1338,6 +1427,10 @@ function cleanupAmazonWidgets() {
     // Initialize everything when DOM is loaded
     document.addEventListener('DOMContentLoaded', async function() {
         console.log('🚀 [Init] DOMContentLoaded event fired');
+        
+        // 🌐 SPRACHUMSCHALTUNG SOFORT INITIALISIEREN
+        console.log('🌐 [Language] Initializing language switching on DOM load');
+        initLanguageSwitching();
         
         // WAIT FOR WHITELIST TO LOAD
         if (!window.appleAudiobookList) {

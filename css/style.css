@@ -1,3 +1,5 @@
+/* 🎨 MODERNES LAYOUT: Zeitgemäßes Design mit verbesserter Typografie und Effekten */
+
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -6,44 +8,30 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
-    color: #333;
-    background-color: #f8f9fa;
+    color: #1a1a1a;
+    background-color: #ffffff;
+    overflow-x: hidden;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 24px;
 }
 
-/* Error message styling */
-.error-message {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    border-radius: 8px;
-    padding: 1rem;
-    margin: 1rem 0;
-    color: #dc2626;
-    text-align: center;
-}
-
-.error-message p {
-    margin-bottom: 0.5rem;
-}
-
-.error-message small {
-    color: #9ca3af;
-    font-size: 0.875rem;
-}
-
-/* Header */
+/* 🎨 MODERNER HEADER: Kompakter und eleganter */
 .header {
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 1rem 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .header-content {
@@ -61,29 +49,27 @@ body {
 .header-brand {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 .header-logo {
-    height: 2.5rem;
+    height: 3rem;
     width: auto;
     object-fit: contain;
-    min-width: 64px;
-    min-height: 64px;
+    min-width: 48px;
+    min-height: 48px;
     display: block;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     opacity: 1;
     background: transparent;
-    /* Logo sichtbar machen */
-    max-height: 60px;
-    filter: brightness(120%) contrast(120%);
+    filter: brightness(1.1) contrast(1.1);
+    border-radius: 8px;
 }
 
 .header-logo:hover {
-    transform: scale(1.05);
-    opacity: 1;
-    filter: brightness(1.1) contrast(1.1);
+    transform: scale(1.05) rotate(2deg);
+    filter: brightness(1.2) contrast(1.2);
 }
 
 .header-text {
@@ -92,134 +78,159 @@ body {
 }
 
 .header-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.2rem;
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
     color: white;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
 }
 
 .header-subtitle {
-    font-size: 0.875rem;
-    color: #cbd5e1;
-    opacity: 0.9;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.025em;
 }
 
 .header-right {
     display: flex;
     align-items: center;
-    gap: 1rem;
 }
 
+/* 🎨 MODERNE SPRACHUMSCHALTUNG: Funktional und elegant */
 .language-switch {
     display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    background: rgba(255,255,255,0.1);
-    padding: 0.25rem;
-    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 4px;
     backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .lang-btn {
-    background: #475569;
+    background: transparent;
     border: none;
-    color: white;
-    font-weight: 700;
-    cursor: pointer;
-    padding: 0.375rem 1rem;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-size: 0.875rem;
-}
-
-.lang-btn.active {
-    background: white;
-    color: #1e293b;
-}
-
-.lang-btn:hover {
-    background: #64748b;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.lang-btn.active:hover {
-    background: #f1f5f9;
-}
-
-/* 📱 MOBILE: Dropdown-Sprachumschalter */
-.language-dropdown {
-    display: none;
-    padding: 0.5rem;
-    border: 2px solid #6a1b9a;
-    background: white;
-    color: #6a1b9a;
-    border-radius: 0.375rem;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 8px 16px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
     font-size: 0.9rem;
     transition: all 0.3s ease;
-    min-width: 120px;
+    position: relative;
+    overflow: hidden;
 }
 
-.language-dropdown:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.2);
-}
-
-.language-dropdown option {
-    background: white;
-    color: #6a1b9a;
-    padding: 0.5rem;
-}
-
-/* 🖥️ DESKTOP: Button-Sprachumschalter */
-.desktop-only {
-    display: flex;
-}
-
-/* 📱 MOBILE: Desktop-Buttons ausblenden, Dropdown anzeigen */
-@media screen and (max-width: 768px) {
-    .desktop-only {
-        display: none;
-    }
-    
-    .language-dropdown {
-        display: block;
-        font-size: 14px;
-        width: 100%;
-        max-width: 140px;
-    }
-}
-
-/* Navigation */
-.nav {
-    background: white;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    position: sticky;
+.lang-btn::before {
+    content: '';
+    position: absolute;
     top: 0;
-    z-index: 100;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
-/* 🖥️ DESKTOP: Standard-Navigation */
+.lang-btn:hover::before {
+    left: 100%;
+}
+
+.lang-btn.active {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+.lang-btn:hover {
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* 🎨 MODERNE NAVIGATION: Clean und funktional */
+.nav {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0.75rem 0;
+}
+
 .desktop-nav {
     display: flex;
+    justify-content: center;
+    align-items: center;
     list-style: none;
     gap: 2rem;
-    padding: 1rem 0;
-    justify-content: center;
-    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
 }
 
-/* 📱 MOBILE: Vereinfachte Navigation in einer Zeile */
+.desktop-nav a {
+    color: #374151;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.desktop-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.desktop-nav a:hover::after {
+    width: 80%;
+}
+
+.desktop-nav a:hover {
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+}
+
+.nav-logo-item {
+    margin-left: 2rem;
+}
+
+.nav-logo-link {
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.nav-logo {
+    height: 2rem;
+    width: auto;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    border-radius: 6px;
+}
+
+.nav-logo-link:hover .nav-logo {
+    opacity: 1;
+    transform: scale(1.1) rotate(2deg);
+}
+
+/* 🎨 MODERNE MOBILE NAVIGATION: Touch-optimiert */
 .mobile-nav {
     display: none;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 0;
+    gap: 1rem;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    padding: 0.5rem 0;
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
@@ -232,3811 +243,254 @@ body {
     color: #374151;
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.875rem;
-    padding: 0.5rem;
-    border-radius: 0.375rem;
-    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
     white-space: nowrap;
-    flex-shrink: 0;
+    background: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.2);
 }
 
 .mobile-nav-link:hover {
-    background: #f3f4f6;
-    color: #1f2937;
+    background: rgba(102, 126, 234, 0.2);
+    color: #667eea;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .mobile-language-toggle {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
-    margin-left: auto;
-    flex-shrink: 0;
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 12px;
+    padding: 2px;
+    border: 1px solid rgba(102, 126, 234, 0.2);
 }
 
 .mobile-lang-btn {
-    background: none;
+    background: transparent;
     border: none;
-    color: #6b7280;
-    font-weight: 600;
-    font-size: 0.875rem;
+    color: #374151;
+    padding: 6px 12px;
+    border-radius: 8px;
     cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    transition: all 0.2s ease;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    min-width: 40px;
+    min-height: 36px;
 }
 
 .mobile-lang-btn.active {
-    color: #6a1b9a;
-    background: #f3f4f6;
+    background: #667eea;
+    color: white;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
 }
 
 .mobile-lang-btn:hover {
-    color: #6a1b9a;
-    background: #f3f4f6;
+    background: rgba(102, 126, 234, 0.2);
+    color: #667eea;
+    transform: translateY(-1px);
 }
 
 .mobile-lang-separator {
-    color: #d1d5db;
-    font-weight: 400;
-    font-size: 0.875rem;
+    color: #9ca3af;
+    font-weight: 300;
+    margin: 0 2px;
 }
 
-/* 📱 MOBILE: Desktop-Navigation ausblenden, Mobile-Navigation anzeigen */
-@media screen and (max-width: 768px) {
-    .desktop-nav {
-        display: none;
-    }
-    
-    .mobile-nav {
-        display: flex;
-    }
-}
-    
-    .nav-list li:last-child {
-        border-bottom: none;
-    }
-    
-    .nav-list a {
-        display: block;
-        padding: 1rem 2rem;
-        border-radius: 0;
-        text-align: left;
-    }
-    
-    .nav-list a:hover {
-        background: #f8f9fa;
-        color: #3498db;
-        transform: none;
-    }
-    
-    .nav-logo-item {
-        margin-left: 0;
-        margin-top: 0;
-        text-align: center;
-        border-bottom: 1px solid #f3f4f6;
-    }
-}
-
-.nav-list a {
-    text-decoration: none;
-    color: #2c3e50;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
-    border-radius: 25px;
-    transition: all 0.3s ease;
-}
-
-.nav-list a:hover {
-    background: #3498db;
-    color: white;
-    transform: translateY(-2px);
-}
-
-/* Navigation Logo Styling */
-.nav-logo-item {
-    margin-left: auto;
-}
-
-.nav-logo-link {
-    display: flex;
-    align-items: center;
-    padding: 0.5rem;
-    transition: transform 0.2s ease;
-}
-
-.nav-logo-link:hover {
-    transform: scale(1.1);
-}
-
-.nav-logo {
-    height: 2rem;
-    width: auto;
-    min-width: 64px;
-    min-height: 64px;
-    /* Remove problematic filters that make logo appear as black square */
-    filter: none;
-    transition: all 0.2s ease;
-    display: block;
-    cursor: pointer;
-    opacity: 0.8;
-    /* Ensure logo is visible with proper contrast */
-    background: transparent;
-}
-
-.nav-logo-link:hover .nav-logo {
-    opacity: 1;
-    transform: scale(1.05);
-    filter: brightness(1.1) contrast(1.1);
-}
-
-/* Section Logo Styling */
-.section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 2rem;
-}
-
-.author-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-}
-
-.section-logo-link {
-    display: flex;
-    align-items: center;
-    padding: 0.5rem;
-    transition: transform 0.2s ease;
-}
-
-.section-logo-link:hover {
-    transform: scale(1.1);
-}
-
-.section-logo {
-    height: 2rem;
-    width: auto;
-    min-width: 64px;
-    min-height: 64px;
-    /* Remove problematic filters that make logo appear as black square */
-    filter: none;
-    transition: all 0.2s ease;
-    display: block;
-    cursor: pointer;
-    opacity: 0.8;
-    /* Ensure logo is visible with proper contrast */
-    background: transparent;
-}
-
-.section-logo-link:hover .section-logo {
-    opacity: 1;
-    transform: scale(1.05);
-    filter: brightness(1.1) contrast(1.1);
-}
-
-/* Hero Section */
+/* 🎨 MODERNE HERO SECTION: Dynamisch und ansprechend */
 .hero {
-    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 4rem 0;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+    animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(1deg); }
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .hero-title {
     font-size: 3rem;
-    margin-bottom: 1rem;
-    font-weight: 700;
+    font-weight: 900;
+    margin-bottom: 1.5rem;
     line-height: 1.2;
+    letter-spacing: -0.025em;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    animation: fadeInUp 1s ease-out;
 }
 
 .hero-subtitle {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
     font-weight: 600;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    color: white;
+    margin-bottom: 1rem;
     opacity: 0.95;
+    animation: fadeInUp 1s ease-out 0.2s both;
 }
 
 .hero-tagline {
-    font-size: 1.125rem;
-    margin-bottom: 2rem;
-    color: #e0f2fe;
-    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
+    animation: fadeInUp 1s ease-out 0.4s both;
 }
 
 .hero-buttons {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    gap: 1.5rem;
     flex-wrap: wrap;
+    animation: fadeInUp 1s ease-out 0.6s both;
 }
 
+/* 🎨 MODERNE CTA BUTTONS: Attraktiv und interaktiv */
 .cta-button {
-    display: inline-block;
-    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 1rem 2rem;
+    border-radius: 12px;
     text-decoration: none;
-    border-radius: 8px;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1.1rem;
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    min-width: 200px;
+    min-height: 56px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.cta-button:hover::before {
+    left: 100%;
+}
+
 .cta-button.primary {
-    background: #ef4444;
-    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    border: none;
 }
 
 .cta-button.primary:hover {
-    background: #dc2626;
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+    background: linear-gradient(135deg, #ff5252, #d63031);
 }
 
 .cta-button.secondary {
-    background: #f97316;
-    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+    background: linear-gradient(135deg, #ffa726, #ff9800);
+    color: white;
+    border: none;
 }
 
 .cta-button.secondary:hover {
-    background: #ea580c;
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+    box-shadow: 0 8px 25px rgba(255, 167, 38, 0.4);
+    background: linear-gradient(135deg, #ff9800, #f57c00);
 }
 
-/* Featured Books Section */
-.featured-books {
-    padding: 4rem 0;
-    background: white;
-}
-
-.featured-books h2 {
-    text-align: center;
-    font-size: 2.2rem;
-    margin-bottom: 3rem;
-    color: #2c3e50;
-}
-
-/* Author Section */
-.author-section {
-    padding: 4rem 0;
-    background: #f8f9fa;
-}
-
-.author-content {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 3rem;
-    align-items: center;
-}
-
-.author-image img {
-    width: 100%;
-    max-width: 300px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-.author-text h2 {
-    font-size: 2.2rem;
-    margin-bottom: 1rem;
-    color: #2c3e50;
-}
-
-.author-text h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: #3498db;
-}
-
-.author-text p {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-    line-height: 1.8;
-}
-
-.author-links {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.author-links a {
-    background: #3498db;
-    color: white;
-    padding: 0.8rem 1.5rem;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.author-links a:hover {
-    background: #2980b9;
-    transform: translateY(-2px);
-}
-
-/* Genres Section */
-.genres-section {
-    padding: 4rem 0;
-    background: white;
-}
-
-.genres-section h2 {
-    text-align: center;
-    font-size: 2.2rem;
-    margin-bottom: 3rem;
-    color: #2c3e50;
-}
-
-.genres-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-}
-
-.genre-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-.genre-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    border-color: #3498db;
-}
-
-.genre-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-.genre-card h3 {
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-    color: #2c3e50;
-}
-
-.genre-card p {
-    color: #666;
-    line-height: 1.6;
-}
-
-/* Books Section */
-.books-section {
-    padding: 4rem 0;
-    background: #f8f9fa;
-}
-
-.books-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 3rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.books-header h2 {
-    font-size: 2.2rem;
-    color: #2c3e50;
-}
-
-.books-controls {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.search-box input {
-    padding: 0.8rem 1.2rem;
-    border: 2px solid #ddd;
-    border-radius: 25px;
-    font-size: 1rem;
-    width: 250px;
-    transition: all 0.3s ease;
-}
-
-.search-box input:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 10px rgba(52, 152, 219, 0.2);
-}
-
-.filter-dropdown select {
-    padding: 0.8rem 1.2rem;
-    border: 2px solid #ddd;
-    border-radius: 25px;
-    font-size: 1rem;
-    background: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.filter-dropdown select:focus {
-    outline: none;
-    border-color: #3498db;
-}
-
-/* Books Grid */
-.books-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-}
-
-.book-card {
-    background: white;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    min-height: 680px;
-    position: relative;
-}
-
-.book-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    border-color: #3498db;
-}
-
-.book-image {
-    position: relative;
-    overflow: hidden;
-}
-
-.book-image img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.book-card:hover .book-image img {
-    transform: scale(1.05);
-}
-
-.book-content {
-    padding: 1.5rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.book-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #2c3e50;
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.book-author {
-    color: #666;
-    font-size: 0.9em;
-    margin-bottom: 0.5rem;
-}
-
-.book-description {
-    color: #555;
-    font-size: 0.85em;
-    line-height: 1.4;
-    margin-bottom: 1rem;
-    max-height: none;
-    overflow: visible;
-    text-overflow: unset;
-    display: block;
-    -webkit-line-clamp: unset;
-    -webkit-box-orient: unset;
-}
-
-/* 📱 MOBILE: Markdown-Styling für mobile Geräte */
-.book-description {
-    line-height: 1.6;
-    color: #374151;
-}
-
-.book-description h1,
-.book-description h2,
-.book-description h3,
-.book-description h4,
-.book-description h5,
-.book-description h6 {
-    margin: 1rem 0 0.5rem 0;
-    font-weight: 600;
-    color: #1f2937;
-}
-
-.book-description p {
-    margin: 0.5rem 0;
-}
-
-.book-description ul,
-.book-description ol {
-    margin: 0.5rem 0;
-    padding-left: 1.5rem;
-}
-
-.book-description li {
-    margin: 0.25rem 0;
-}
-
-.book-description strong,
-.book-description b {
-    font-weight: 600;
-    color: #1f2937;
-}
-
-.book-description em,
-.book-description i {
-    font-style: italic;
-}
-
-.book-description code {
-    background: #f3f4f6;
-    padding: 0.125rem 0.25rem;
-    border-radius: 0.25rem;
-    font-family: monospace;
-    font-size: 0.875em;
-}
-
-.book-description blockquote {
-    border-left: 4px solid #6b7280;
-    padding-left: 1rem;
-    margin: 1rem 0;
-    font-style: italic;
-    color: #6b7280;
-}
-
-/* Book Detail Link Button */
-.book-detail-link {
-    margin-top: 1rem;
-    text-align: center;
-}
-
-.btn-detail-link {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-}
-
-.btn-detail-link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
-}
-
-/* Detail link button styling */
-.detail-link {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-weight: 600;
-    border-radius: 8px;
-    padding: 8px 16px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-}
-
-/* 📱 MOBILE: "Mehr erfahren"-Button als echten Button */
-.learn-more-button {
-    display: block;
-    background: #6a1b9a;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    border-radius: 8px;
-    margin-top: 10px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(106, 27, 154, 0.3);
-}
-
-/* 🚨 MEHR-ERFAHREN BUTTON FIX: HTML-Encoding-Fehler beheben */
-.mehr-button {
-    display: inline-block !important;
-    background: #6a1b9a !important;
-    color: white !important;
-    text-align: center !important;
-    padding: 10px 16px !important;
-    border-radius: 8px !important;
-    margin-top: 10px !important;
-    text-decoration: none !important;
-    font-weight: 600 !important;
-    transition: all 0.3s ease !important;
-    box-shadow: 0 2px 8px rgba(106, 27, 154, 0.3) !important;
-    border: none !important;
-    cursor: pointer !important;
-    font-size: 0.9rem !important;
-    line-height: 1.2 !important;
-    min-height: 44px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-.mehr-button:hover {
-    background: #4a148c !important;
-    transform: translateY(-1px) !important;
-    box-shadow: 0 4px 12px rgba(106, 27, 154, 0.4) !important;
-    color: white !important;
-    text-decoration: none !important;
-}
-
-.learn-more-button:hover {
-    background: #4a148c;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(106, 27, 154, 0.4);
-    color: white;
-    text-decoration: none;
-}
-
-.detail-link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
-    color: white;
-    text-decoration: none;
-}
-
-/* Fallback link styling (Books2Read) */
-.detail-link[data-fallback="true"] {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-}
-
-.detail-link[data-fallback="true"]:hover {
-    background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
-    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
-}
-
-.book-detail-link[data-fallback="true"] {
-    position: relative;
-}
-
-/* Clean design: Remove any pseudo-elements that might add redundant content */
-.book-detail-link::before,
-.book-detail-link::after,
-.book-link::before,
-.book-link::after,
-.detail-link::before,
-.detail-link::after,
-.book-card::before,
-.book-card::after {
-    display: none !important;
-    content: none !important;
-}
-
-/* Ensure no data attributes are displayed as content */
-.book-card[data-title]::before,
-.book-card[data-title]::after,
-.book-card[data-asin]::before,
-.book-card[data-asin]::after,
-.book-card[data-genre]::before,
-.book-card[data-genre]::after {
-    display: none !important;
-    content: none !important;
-}
-
-/* Remove any potential content from data attributes */
-.book-card::before,
-.book-card::after {
-    content: none !important;
-    display: none !important;
-}
-
-/* Ensure book cover images are properly displayed */
-.book-image img,
-.book-cover img,
-.book-card img {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-}
-
-/* Minimalistisches Design: Entferne redundante visuelle Elemente */
-.book-link::after,
-.book-detail-link::after,
-.detail-link::after {
-    display: none !important;
-}
-
-/* Clean button design: Focus on content, not decoration */
-.book-link,
-.book-detail-link,
-.detail-link {
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-/* Remove ONLY arrow icons from buttons, preserve other SVGs */
-.book-link svg[data-fallback="true"],
-.book-detail-link svg[data-fallback="true"],
-.detail-link svg[data-fallback="true"],
-.book-link svg.fallback-icon,
-.book-detail-link svg.fallback-icon,
-.detail-link svg.fallback-icon {
-    display: none !important;
-}
-
-/* Optimize audiobook button styling for consistent length */
-.book-link.audiobook {
-    min-width: 200px;
-    justify-content: center;
-    text-align: center;
-    white-space: nowrap;
-    padding: 10px 15px;
-}
-
-/* Ensure consistent button sizing across languages */
-.book-link.audiobook[data-lang="en"] {
-    min-width: 280px;
-}
-
-.book-link.audiobook[data-lang="de"] {
-    min-width: 200px;
-}
-
-/* PRESERVE other SVG icons (like book icons, etc.) */
-.book-link svg:not([data-fallback="true"]):not(.fallback-icon),
-.book-detail-link svg:not([data-fallback="true"]):not(.fallback-icon),
-.detail-link svg:not([data-fallback="true"]):not(.fallback-icon) {
-    display: inline-block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-/* Make book titles clickable */
-.book-title a {
-    color: inherit;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.book-title a:hover {
-    color: #3498db;
-}
-
-/* Make book images clickable */
-.book-image a {
-    display: block;
-    transition: transform 0.3s ease;
-}
-
-.book-image a:hover {
-    transform: scale(1.02);
-}
-
-.book-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: auto;
-    justify-content: center;
-    padding-top: 1rem;
-}
-
-/* 📱 MOBILE: Vereinfachte lineare Darstellung */
-@media screen and (max-width: 768px) {
-    .book-links {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        margin-top: 1rem;
-    }
-    
-    .book-links .book-link {
-        width: 100%;
-        padding: 12px 16px;
-        font-size: 0.9rem;
-        border-radius: 8px;
-        text-align: center;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        font-weight: 600;
-    }
-    
-    .book-links .mehr-button {
-        background: #6a1b9a !important;
-        color: white !important;
-        font-weight: 600 !important;
-        order: -1; /* Mehr erfahren Button zuerst */
-    }
-    
-    .book-links .book-link.amazon-de {
-        background: #ff9900;
-        color: white;
-    }
-    
-    .book-links .book-link.amazon-com {
-        background: #ff9900;
-        color: white;
-    }
-    
-    .book-links .book-link.apple-books {
-        background: #000;
-        color: white;
-    }
-    
-    .book-links .book-link.books2read {
-        background: #28a745;
-        color: white;
-    }
-    
-    .book-links .book-link.audiobook {
-        background: #007aff;
-        color: white;
-    }
-    
-    /* 📱 MOBILE: Markdown-Styling vereinfachen */
-    .book-description {
-        line-height: 1.6;
-        color: #374151;
-        margin-bottom: 1rem;
-    }
-    
-    .book-description h1,
-    .book-description h2,
-    .book-description h3,
-    .book-description h4,
-    .book-description h5,
-    .book-description h6 {
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin: 1rem 0 0.5rem 0;
-        color: #1f2937;
-    }
-    
-    .book-description p {
-        margin: 0.5rem 0;
-        line-height: 1.6;
-    }
-    
-    .book-description ul,
-    .book-description ol {
-        margin: 0.5rem 0;
-        padding-left: 1.5rem;
-    }
-    
-    .book-description li {
-        margin: 0.25rem 0;
-        line-height: 1.5;
-    }
-    
-    .book-description strong,
-    .book-description b {
-        font-weight: 600;
-        color: #1f2937;
-    }
-    
-    .book-description em,
-    .book-description i {
-        font-style: italic;
-    }
-    
-    .book-description code {
-        background: #f3f4f6;
-        padding: 0.125rem 0.25rem;
-        border-radius: 0.25rem;
-        font-size: 0.875rem;
-        font-family: monospace;
-    }
-    
-    .book-description blockquote {
-        border-left: 3px solid #6a1b9a;
-        padding-left: 1rem;
-        margin: 1rem 0;
-        font-style: italic;
-        color: #6b7280;
-    }
-}
-
-/* 📱 MOBILE: Einheitliche Darstellung wie Desktop */
-@media screen and (max-width: 768px) {
-    .book-info {
-        position: relative;
-    }
-    
-    .book-info-tabs {
-        display: none;
-    }
-    
-    .book-info-content {
-        display: block !important;
-    }
-    
-    .book-description {
-        margin-bottom: 1rem;
-        line-height: 1.6;
-        color: #374151;
-    }
-    
-    .book-meta,
-    .book-formats {
-        display: none;
-    }
-    
-    /* 🚨 GLOBAL: Text-Overlays auf Buchcovern dauerhaft entfernen - ALLE GERÄTE */
-    .book-card .book-image *:not(.book-cover-link):not(.book-cover-image):not(img) {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        position: absolute !important;
-        z-index: -1 !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-        pointer-events: none !important;
-        font-size: 0 !important;
-        line-height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: 0 !important;
-        clip: rect(0, 0, 0, 0) !important;
-    }
-    
-    .book-card .book-image span,
-    .book-card .book-image [data-hint],
-    .book-card .book-image [data-title],
-    .book-card .book-image [data-asin],
-    .book-card .book-image [data-has-audiobook],
-    .book-card .book-image h1,
-    .book-card .book-image h2,
-    .book-card .book-image h3,
-    .book-card .book-image h4,
-    .book-card .book-image h5,
-    .book-card .book-image h6,
-    .book-card .book-image p,
-    .book-card .book-image div:not(.book-cover-link):not(.book-cover-image),
-    .book-card .book-image strong,
-    .book-card .book-image em,
-    .book-card .book-image b,
-    .book-card .book-image i,
-    .book-card .book-image figcaption {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        position: absolute !important;
-        z-index: -1 !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-        pointer-events: none !important;
-        font-size: 0 !important;
-        line-height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: 0 !important;
-        clip: rect(0, 0, 0, 0) !important;
-    }
-    
-    /* 🚨 GLOBAL: Tab-Buttons komplett ausblenden - ALLE GERÄTE */
-    .tab-buttons,
-    .book-info-tabs,
-    .book-info-tab {
-        display: none !important;
-    }
-}
-
-/* 🚨 GLOBAL: Text-Overlays auf Buchcovern dauerhaft entfernen - ALLE GERÄTE */
-.book-card .book-image *:not(.book-cover-link):not(.book-cover-image):not(img) {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    clip: rect(0, 0, 0, 0) !important;
-}
-
-.book-card .book-image span,
-.book-card .book-image [data-hint],
-.book-card .book-image [data-title],
-.book-card .book-image [data-asin],
-.book-card .book-image [data-has-audiobook],
-.book-card .book-image h1,
-.book-card .book-image h2,
-.book-card .book-image h3,
-.book-card .book-image h4,
-.book-card .book-image h5,
-.book-card .book-image h6,
-.book-card .book-image p,
-.book-card .book-image div:not(.book-cover-link):not(.book-cover-image),
-.book-card .book-image strong,
-.book-card .book-image em,
-.book-card .book-image b,
-.book-card .book-image i,
-.book-card .book-image figcaption {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    clip: rect(0, 0, 0, 0) !important;
-}
-
-/* 🚨 GLOBAL: Tab-Buttons komplett ausblenden - ALLE GERÄTE */
-.tab-buttons,
-.book-info-tabs,
-.book-info-tab {
-    display: none !important;
-}
-
-/* 🖥️ DESKTOP: Standard-Layout ohne Akkordeon */
-@media screen and (min-width: 769px) {
-    .book-info-tabs {
-        display: none;
-    }
-    
-    .book-info-content {
-        display: block !important;
-    }
-    
-    .book-description {
-        margin-bottom: 1rem;
-    }
-    
-    .book-meta,
-    .book-formats {
-        display: none;
-    }
-}
-
-.book-links .book-link {
-    flex: 1 1 auto;
-    white-space: nowrap;
-    min-width: 160px;
-    max-width: 220px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 0.9rem;
-    padding: 0.75rem 1rem;
-    min-height: 44px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.book-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem 1rem;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    text-align: center;
-    min-width: 100px;
-    min-height: 40px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.book-link:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-}
-
-.book-link.amazon-de {
-    background: #f97316;
-    color: white;
-}
-
-.book-link.amazon-de:hover {
-    background: #ea580c;
-}
-
-.book-link.paperback {
-    background: #8B4513;
-    color: white;
-    border: 2px solid #8B4513;
-}
-
-.book-link.paperback:hover {
-    background: #A0522D;
-    border-color: #A0522D;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
-}
-
-.book-link.amazon-com {
-    background: #374151;
-    color: white;
-}
-
-.book-link.amazon-com:hover {
-    background: #4b5563;
-}
-
-.book-link.apple-books {
-    background: #2563eb;
-    color: white;
-}
-
-.book-link.apple-books:hover {
-    background: #1d4ed8;
-}
-
-.book-link.books2read {
-    background: #16a34a;
-    color: white;
-}
-
-.book-link.books2read:hover {
-    background: #15803d;
-}
-
-.book-link.audiobook {
-    background: #7c3aed;
-    color: white;
-    display: inline-flex !important;
-}
-
-.book-link.audiobook:hover {
-    background: #6d28d9;
-}
-
-/* Audiobook button visibility rules - MULTIPLE LAYERS OF PROTECTION */
-.book-link.audiobook {
-    display: none !important; /* Hide by default */
-}
-
-/* Only show if explicitly allowed by JavaScript */
-.book-link.audiobook[data-audiobook-allowed="true"] {
-    display: inline-flex !important;
-}
-
-/* Fallback: Show only if data-has-audiobook is true */
-.book-card[data-has-audiobook="true"] .book-link.audiobook {
-    display: inline-flex !important;
-}
-
-/* Hide ALL audiobook buttons that don't have explicit permission */
-.book-link.audiobook:not([data-audiobook-allowed="true"]) {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-}
-
-.audiobook-links {
-    margin-top: 0.5rem;
-    padding-top: 0.5rem;
-    border-top: 1px solid #e5e7eb;
-}
-
-.audiobook-button.apple-books {
-  background-color: #9333ea;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 8px;
-  margin-top: 0.5rem;
-  display: inline-block;
-  text-align: center;
-  font-size: 0.9rem;
-}
-
-
-
-/* Related Books Section */
-.related-books {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 4rem 0;
-    margin-top: 3rem;
-}
-
-.related-books h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: #2c3e50;
-    font-size: 2rem;
-    font-weight: 600;
-}
-
-.related-books-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.related-books .book-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.related-books .book-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.related-books .book-cover {
-    height: 200px;
-    overflow: hidden;
-}
-
-.related-books .book-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.related-books .book-card:hover .book-cover img {
-    transform: scale(1.05);
-}
-
-.related-books .book-info {
-    padding: 1.5rem;
-}
-
-.related-books .book-info h3 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.1rem;
-    color: #2c3e50;
-}
-
-.related-books .book-info h3 a {
-    color: inherit;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.related-books .book-info h3 a:hover {
-    color: #3498db;
-}
-
-.related-books .book-info p {
-    color: #6c757d;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    margin-bottom: 1rem;
-}
-
-.related-books .book-links {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.related-books .btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.related-books .btn-primary {
-    background: #3498db;
-    color: white;
-    border: none;
-}
-
-.related-books .btn-primary:hover {
-    background: #2980b9;
-    transform: translateY(-2px);
-}
-
-/* Internal Links */
-.internal-link {
-    color: #3498db;
-    text-decoration: none;
-    border-bottom: 1px dotted #3498db;
-    transition: all 0.3s ease;
-}
-
-.internal-link:hover {
-    color: #2980b9;
-    border-bottom-color: #2980b9;
-    background: rgba(52, 152, 219, 0.1);
-    padding: 2px 4px;
-    border-radius: 4px;
-}
-
-/* Footer */
-.footer {
-    background: #2c3e50;
-    color: white;
-    padding: 3rem 0 1rem;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.footer-section h3 {
-    margin-bottom: 1rem;
-    color: #ffffff;
-    font-weight: 600;
-}
-
-.footer-section p {
-    color: #bdc3c7;
-    text-decoration: none;
-    margin-bottom: 0.5rem;
-    display: block;
-}
-
-.footer-section a:not(.social-link) {
-    color: #bdc3c7;
-    text-decoration: none;
-    margin-bottom: 0.5rem;
-    display: block;
-}
-
-.footer-section a:hover {
-    color: #3498db;
-}
-
-.footer-links,
-.social-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.footer-logo-link {
-    display: inline-block;
-    transition: all 0.3s ease;
-}
-
-.footer-logo-link:hover {
-    transform: scale(1.05);
-}
-
-.footer-logo {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    opacity: 0.8;
-    transition: all 0.2s ease;
-    background: transparent;
-}
-
-.footer-logo-link:hover .footer-logo {
-    opacity: 1;
-    transform: scale(1.05);
-    filter: brightness(1.1) contrast(1.1);
-}
-
-.footer-bottom {
-    border-top: 1px solid #34495e;
-    padding-top: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.footer-legal {
-    display: flex;
-    gap: 1rem;
-}
-
-.footer-legal a {
-    color: #ffffff;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    font-weight: 500;
-}
-
-.footer-legal a:hover {
-    color: #2c3e50;
-    background: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
-}
-
-/* Breadcrumb Styles */
-.breadcrumb {
-    background: #f8f9fa;
-    padding: 1rem 0;
-    border-bottom: 1px solid #e9ecef;
-}
-
-.breadcrumb-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-}
-
-.breadcrumb-list li:not(:last-child)::after {
-    content: '›';
-    margin-left: 0.5rem;
-    color: #6c757d;
-}
-
-.breadcrumb-list a {
-    color: #3498db;
-    text-decoration: none;
-}
-
-.breadcrumb-list a:hover {
-    text-decoration: underline;
-}
-
-.breadcrumb-list li:last-child {
-    color: #6c757d;
-    font-weight: 500;
-}
-
-/* Modern Book Detail Page Styles */
-.book-detail {
-    padding: 3rem 0;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    min-height: 100vh;
-}
-
-.book-detail-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-}
-
-/* Modern Grid Layout */
-.book-detail-grid {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 3rem;
-    align-items: start;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    padding: 3rem;
-    margin-top: 2rem;
-}
-
-/* Book Cover Column */
-.book-detail-cover {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-}
-
-.book-detail-image {
-    width: 100%;
-    max-width: 400px;
-    height: auto;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    transition: transform 0.3s ease;
-}
-
-.book-detail-image:hover {
-    transform: scale(1.02);
-}
-
-/* Back to Overview Button */
-.back-to-overview {
-    width: 100%;
-    text-align: center;
-}
-
-.btn-back {
-    display: inline-block;
-    padding: 1rem 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    text-decoration: none;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-}
-
-.btn-back:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
-}
-
-/* Book Info Column */
-.book-detail-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.book-detail-header {
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 1.5rem;
-}
-
-.book-detail-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
-    line-height: 1.2;
-}
-
-.book-detail-author {
-    font-size: 1.2rem;
-    color: #666;
-    font-weight: 500;
-}
-
-.book-detail-subtitle {
-    font-size: 1.1rem;
-    color: #555;
-    font-style: italic;
-    margin-bottom: 1.5rem;
-    text-align: center;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.book-rating {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    border-radius: 10px;
-    border: 1px solid #f59e0b;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.stars {
-    display: flex;
-    gap: 2px;
-}
-
-.star {
-    font-size: 1.2rem;
-    color: #d1d5db;
-}
-
-.star.filled {
-    color: #fbbf24;
-}
-
-.rating-text {
-    font-size: 0.95rem;
-    color: #92400e;
-    font-weight: 600;
-}
-
-.book-detail-description {
-    background: #f8f9fa;
-    padding: 2rem;
-    border-radius: 15px;
-    border-left: 4px solid #3498db;
-}
-
-.book-detail-description h2 {
-    font-size: 1.5rem;
-    color: #2c3e50;
-    margin-bottom: 1rem;
-}
-
-.book-detail-description p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #555;
-}
-
-/* Meta Information */
-.book-detail-meta {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 15px;
-}
-
-.meta-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-}
-
-.meta-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.meta-label {
-    font-weight: 600;
-    color: #2c3e50;
-}
-
-.meta-value {
-    color: #666;
-    font-weight: 500;
-}
-
-.book-features {
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    padding: 2rem;
-    border-radius: 15px;
-    margin: 2.5rem auto;
-    border-left: 5px solid #3b82f6;
-    max-width: 700px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.book-features h3 {
-    font-size: 1.4rem;
-    margin-bottom: 1.5rem;
-    color: #1e293b;
-    font-weight: 700;
-    text-align: center;
-}
-
-.book-features ul {
-    list-style: none;
-    padding: 0;
-}
-
-.book-features li {
-    padding: 0.75rem 0;
-    font-size: 1.05rem;
-    color: #374151;
-    line-height: 1.6;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.book-features li:last-child {
-    border-bottom: none;
-}
-
-.book-cta {
-    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-    color: #1e40af;
-    padding: 2rem;
-    border-radius: 15px;
-    text-align: center;
-    margin: 3rem auto;
-    font-size: 1.2rem;
-    font-weight: 600;
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
-    max-width: 600px;
-    border: 2px solid #3b82f6;
-    line-height: 1.6;
-}
-
-.book-detail-meta {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 10px;
-    margin-bottom: 2rem;
-}
-
-.book-meta-item {
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
-}
-
-.book-meta-item:last-child {
-    margin-bottom: 0;
-}
-
-/* Action Buttons */
-.book-detail-actions {
-    background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-
-.book-detail-actions h3 {
-    font-size: 1.5rem;
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
-
-.action-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.action-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem 1.5rem;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    min-height: 50px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-}
-
-.action-btn.amazon-de {
-    background: linear-gradient(135deg, #ff9900 0%, #ff8800 100%);
-    color: white;
-}
-
-.action-btn.amazon-com {
-    background: linear-gradient(135deg, #232f3e 0%, #1a1a1a 100%);
-    color: white;
-}
-
-.action-btn.apple-books {
-    background: linear-gradient(135deg, #007aff 0%, #0056cc 100%);
-    color: white;
-}
-
-.action-btn.books2read {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    color: white;
-}
-
-.action-btn.audiobook {
-    background: linear-gradient(135deg, #9c27b0 0%, #673ab7 100%);
-    color: white;
-}
-
-/* Audiobook Section */
-.audiobook-section {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 1.5rem;
-    border-radius: 15px;
-    text-align: center;
-    border: 2px dashed #9c27b0;
-}
-
-.audiobook-section h4 {
-    color: #9c27b0;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    font-weight: 600;
-}
-
-/* Book detail page specific styles */
-.book-detail .book-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 1rem;
-}
-
-.book-detail .book-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 1.5rem;
-    text-decoration: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    text-align: center;
-    min-width: 120px;
-    min-height: 48px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.book-detail .book-link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.book-detail .book-link.primary {
-    background: #2563eb;
-    color: white;
-    font-weight: 700;
-    font-size: 1.1rem;
-    order: -1;
-}
-
-.book-detail .book-link.primary:hover {
-    background: #1d4ed8;
-}
-
-/* Related books section */
-.related-books {
-    margin-top: 4rem;
-    padding-top: 2rem;
-    border-top: 1px solid #e5e7eb;
-}
-
-.related-books h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2rem;
-    color: #1f2937;
-}
-
-.related-books .books-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-}
-
-.related-books .book-card {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    border: 1px solid #e5e7eb;
-}
-
-.related-books .book-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.related-books .book-image {
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.related-books .book-image img {
-    max-width: 150px;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.related-books .book-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: #1f2937;
-    line-height: 1.3;
-}
-
-.related-books .book-author {
-    font-size: 0.9rem;
-    color: #6b7280;
-    margin-bottom: 0.75rem;
-}
-
-.related-books .book-description {
-    font-size: 0.875rem;
-    color: #4b5563;
-    line-height: 1.5;
-    margin-bottom: 1rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.related-books .book-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.related-books .book-link {
-    width: 100%;
-    justify-content: center;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    min-height: 40px;
-}
-
-/* Ensure audiobook buttons are visible in related books */
-.related-books .book-card[data-has-audiobook="true"] .book-link.audiobook {
-    display: inline-flex !important;
-    width: 100%;
-}
-
-.related-books .book-card[data-has-audiobook="false"] .book-link.audiobook {
-    display: none !important;
-}
-
-/* Responsive Design for Book Detail */
-@media (max-width: 768px) {
-    /* Global mobile audiobook button visibility */
-    .book-link.audiobook {
-        display: inline-flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        pointer-events: auto !important;
-    }
-    
-    /* Override any hiding rules for mobile */
-    .book-link.audiobook[style*="display: none"] {
-        display: inline-flex !important;
-    }
-    
-    .book-link.audiobook[style*="visibility: hidden"] {
-        visibility: visible !important;
-    }
-    
-    .book-link.audiobook[style*="opacity: 0"] {
-        opacity: 1 !important;
-    }
-    
-    /* Force all audiobook buttons to be visible on mobile */
-    .book-link.audiobook {
-        display: inline-flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        pointer-events: auto !important;
-        width: 100% !important;
-        justify-content: center !important;
-        min-height: 44px !important;
-    }
-    .book-detail-content {
-        flex-direction: column;
-        gap: 2rem;
-    }
-    
-    .book-detail-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        padding: 2rem;
-    }
-    
-    .book-detail-title {
-        font-size: 2rem;
-    }
-    
-    .action-buttons {
-        grid-template-columns: 1fr;
-    }
-    
-    .meta-grid {
-        grid-template-columns: 1fr;
+/* 🎨 ANIMATIONEN: Smooth und modern */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
     }
-    
-    .book-detail-image {
-        text-align: center;
-    }
-    
-    .book-detail-image img {
-        max-width: 250px;
-    }
-    
-    .book-detail-title {
-        font-size: 1.75rem;
-        line-height: 1.2;
-    }
-    
-    .book-detail-subtitle {
-        font-size: 1rem;
-        line-height: 1.4;
-    }
-    
-    .book-rating {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-    
-    .rating-text {
-        font-size: 0.875rem;
-    }
-    
-    .book-detail-description p {
-        font-size: 0.95rem;
-        line-height: 1.6;
-    }
-    
-    .book-features {
-        margin: 1.5rem 0;
-    }
-    
-    .book-cta {
-        font-size: 1.1rem;
-        padding: 1rem;
-    }
-    
-    .book-detail-links .book-links {
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-    
-    .book-detail-links .book-link {
-        width: 100%;
-        justify-content: center;
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
-    }
-    
-    .book-detail-links .book-link.primary {
-        order: -1;
-        font-weight: 700;
-        font-size: 1.1rem;
-    }
-    
-    .book-detail-links .book-link.primary:hover {
-        transform: translateY(-2px);
-    }
-    
-    .header-content {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .header-brand {
-        justify-content: center;
-    }
-    
-    .header-logo {
-        height: 2rem;
-    }
-    
-    .header-title {
-        font-size: 1.25rem;
-    }
-    
-    .header-subtitle {
-        font-size: 0.75rem;
-    }
-    
-    .hero-title {
-        font-size: 1.75rem;
-    }
-    
-    .hero-subtitle {
-        font-size: 1rem;
-    }
-    
-    .hero-tagline {
-        font-size: 0.9rem;
-    }
-    
-    .hero-buttons {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .author-content {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .books-header {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .books-controls {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .search-box input {
-        width: 100%;
-    }
-    
-    .nav-list {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .nav-logo-item {
-        margin-left: 0;
-        margin-top: 1rem;
-        text-align: center;
-    }
-    
-    .nav-logo {
-        height: 1.5rem;
-        filter: none;
-        opacity: 0.8;
-        background: transparent;
-    }
-    
-    .nav-logo-link:hover .nav-logo {
-        opacity: 1;
-        filter: brightness(1.1) contrast(1.1);
-    }
-    
-    .section-header {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-    }
-    
-    .author-header {
-        flex-direction: column;
-        gap: 0.5rem;
-        text-align: center;
-    }
-    
-    .section-logo {
-        height: 1.5rem;
-        filter: none;
-        opacity: 0.8;
-        background: transparent;
-    }
-    
-    .section-logo-link:hover .section-logo {
-        opacity: 1;
-        filter: brightness(1.1) contrast(1.1);
-    }
-    
-    .footer-bottom {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-    }
-    
-    .social-links {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .social-link {
-        text-align: center;
-        padding: 0.5rem;
-    }
-    
-    .footer-legal {
-        flex-direction: column;
-        gap: 0.5rem;
-        text-align: center;
-    }
-    
-    .footer-legal a {
-        display: block;
-        padding: 0.25rem 0;
-    }
-    
-    /* Mobile book card improvements */
-    .book-links {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .book-link {
-        width: 100%;
-        justify-content: center;
-        padding: 0.75rem 1rem;
-        font-size: 0.9rem;
-        min-height: 44px; /* Better touch target */
-    }
-    
-    /* Ensure audiobook buttons are visible on mobile */
-    .book-card[data-has-audiobook="true"] .book-link.audiobook,
-    .book-card[data-audiobook-allowed="true"] .book-link.audiobook,
-    .book-link.audiobook[data-audiobook-allowed="true"] {
-        display: inline-flex !important;
-        width: 100%;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        padding: 0 15px;
-    }
-    
-    .hero {
-        padding: 2rem 0;
-    }
-    
-    .hero-title {
-        font-size: 1.5rem;
-    }
-    
-    .hero-subtitle {
-        font-size: 0.9rem;
-    }
-    
-    .books-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    .genres-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-    
-    .book-links {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .book-link {
-        width: 100%;
-        justify-content: center;
-        padding: 0.75rem 1rem;
-        font-size: 0.875rem;
-        min-height: 44px;
-    }
-    
-    /* Ensure audiobook buttons are visible on small screens */
-    .book-card[data-has-audiobook="true"] .book-link.audiobook,
-    .book-card[data-audiobook-allowed="true"] .book-link.audiobook,
-    .book-link.audiobook[data-audiobook-allowed="true"] {
-        display: inline-flex !important;
-        width: 100%;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-}
-
-/* Smooth Scrolling */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Loading Animation */
-.loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-}
-
-.loading::after {
-    content: '';
-    width: 40px;
-    height: 40px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Fade In Animation */
-.fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeIn 0.6s ease forwards;
-}
-
-@keyframes fadeIn {
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-/* Hidden class for filtering */
-.hidden {
-    display: none !important;
-}
-
-/* Social Media Links */
-.social-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-}
-
-.social-link {
-    display: inline-block;
-    padding: 0.75rem 1.25rem;
-    background: #ffffff;
-    color: #000000;
-    text-decoration: none;
-    border-radius: 25px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    border: 2px solid #e2e8f0;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
-}
-
-.social-link:hover {
-    background: #3498db;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
-    border-color: #3498db;
-}
-
-/* CRITICAL FIX: Remove ALL redundant title overlays - ULTRA STRONG RULES */
-.book-card[data-title]::before,
-.book-card[data-title]::after,
-.book-card[data-asin]::before,
-.book-card[data-asin]::after,
-.book-card[data-genre]::before,
-.book-card[data-genre]::after,
-.book-card::before,
-.book-card::after,
-.book-image::before,
-.book-image::after,
-.book-content::before,
-.book-content::after,
-.book-title::before,
-.book-title::after,
-.book-author::before,
-.book-author::after,
-.book-description::before,
-.book-description::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-}
-
-/* ADDITIONAL: Prevent any title overlays from appearing above book covers */
-.book-card::before,
-.book-card::after,
-.book-image::before,
-.book-image::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-
-/* Ensure book covers are clean without any text overlays */
-.book-image {
-    position: relative;
-    overflow: hidden;
-}
-
-.book-image img {
-    display: block !important;
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    position: relative;
-    z-index: 1;
-}
-
-/* Remove any potential pseudo-elements that might add text */
-.book-card *::before,
-.book-card *::after {
-    content: none !important;
-    display: none !important;
-}
-
-/* ENHANCED: Additional protection against title overlays */
-.book-card[data-title]::before,
-.book-card[data-title]::after,
-.book-card[data-asin]::before,
-.book-card[data-asin]::after,
-.book-card[data-genre]::before,
-.book-card[data-genre]::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-
-/* ULTRA-COMPREHENSIVE: Final protection against any title overlays */
-.book-card::before,
-.book-card::after,
-.book-image::before,
-.book-image::after,
-.book-content::before,
-.book-content::after,
-.book-title::before,
-.book-title::after,
-.book-author::before,
-.book-author::after,
-.book-description::before,
-.book-description::after,
-.book-links::before,
-.book-links::after,
-.book-link::before,
-.book-link::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-
-/* ENDGÜLTIGE LÖSUNG: Komplette Entfernung aller Titel-Overlays über Buchcovern */
-.book-image {
-    position: relative !important;
-    overflow: hidden !important;
-    background: transparent !important;
-}
-
-.book-image::before,
-.book-image::after,
-.book-image *::before,
-.book-image *::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-
-/* Sicherstellen, dass nur das Buchcover-Bild sichtbar ist */
-.book-image img {
-    display: block !important;
-    width: 100% !important;
-    height: 300px !important;
-    object-fit: cover !important;
-    position: relative !important;
-    z-index: 1 !important;
-    background: transparent !important;
-    border: none !important;
-    outline: none !important;
-}
-
-/* Entfernen aller möglichen Text-Overlays über Buchcovern */
-.book-image a::before,
-.book-image a::after,
-.book-image a *::before,
-.book-image a *::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-
-/* Neue Klassen für saubere Trennung von Cover und Inhalt */
-.book-cover-link {
-    display: block !important;
-    text-decoration: none !important;
-    background: transparent !important;
-    border: none !important;
-    outline: none !important;
-}
-
-.book-cover-link::before,
-.book-cover-link::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-.book-cover-image {
-    display: block !important;
-    width: 100% !important;
-    height: 300px !important;
-    object-fit: cover !important;
-    position: relative !important;
-    z-index: 1 !important;
-    background: transparent !important;
-    border: none !important;
-    outline: none !important;
-    transition: transform 0.3s ease !important;
-}
-
-.book-cover-link:hover .book-cover-image {
-    transform: scale(1.05) !important;
-}
-
-.book-title-link {
-    color: inherit !important;
-    text-decoration: none !important;
-    transition: color 0.3s ease !important;
-}
-
-.book-title-link:hover {
-    color: #3498db !important;
-}
-
-/* Sicherstellen, dass Buch-Info sauber unterhalb des Covers steht */
-.book-info {
-    padding: 1.5rem !important;
-    flex: 1 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    background: white !important;
-}
-
-.book-title {
-    font-size: 1.1rem !important;
-    font-weight: 600 !important;
-    margin-bottom: 0.5rem !important;
-    color: #2c3e50 !important;
-    line-height: 1.4 !important;
-    display: -webkit-box !important;
-    -webkit-line-clamp: 2 !important;
-    -webkit-box-orient: vertical !important;
-    overflow: hidden !important;
-}
-
-/* Ensure no data attributes create visible content */
-[data-title]::before,
-[data-title]::after,
-[data-asin]::before,
-[data-asin]::after,
-[data-genre]::before,
-[data-genre]::after,
-[data-format]::before,
-[data-format]::after,
-[data-has-detail-page]::before,
-[data-has-detail-page]::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-
-/* 🚨 NOTFALL-REGEL: data-title Attribut komplett deaktivieren */
-.book-card[data-title]::before,
-.book-card[data-title]::after,
-.book-card[data-title] *::before,
-.book-card[data-title] *::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    clip: rect(0, 0, 0, 0) !important;
-}
-
-/* Absolute Sicherheit: Alle data-* Attribute deaktivieren */
-.book-card[data-*]::before,
-.book-card[data-*]::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-
-/* 🚨 ULTIMATIVE SICHERHEIT: Alle möglichen Text-Inhalte über Buchcovern entfernen */
-.book-card {
-    position: relative !important;
-}
-
-.book-card::before,
-.book-card::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    clip: rect(0, 0, 0, 0) !important;
-}
-
-/* Sicherstellen, dass nur die gewünschten Elemente sichtbar sind */
-.book-card > *:not(.book-image):not(.book-info) {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-
-/* 🚨 AMAZON-SPEZIFISCHE OVERRIDES: Amazon-Widget Overlays entfernen */
-/* Amazon Product Block Text Overlays komplett ausblenden */
-.amzn-product-block-text,
-#amzn-assoc-carousel-1 .amzn-product-block-text,
-#amzn-assoc-carousel-2 .amzn-product-block-text,
-.amazon-product-block-text,
-.amazon-widget-text,
-.amazon-overlay-text {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    clip: rect(0, 0, 0, 0) !important;
-}
-
-/* Amazon Product Blocks ohne Text-Overlays */
-.amzn-product-block,
-.amazon-product-block,
-.amazon-widget {
-    position: relative !important;
-}
-
-.amzn-product-block-text,
-.amazon-product-block-text,
-.amazon-widget-text {
-    position: static !important;
-    background: transparent !important;
-    margin-top: 0.5em !important;
-    padding: 0 !important;
-    width: auto !important;
-    display: none !important; /* Zusätzliche Sicherheit */
-}
-
-/* Alle möglichen Amazon-Overlay-Klassen */
-[class*="amzn"],
-[class*="amazon"],
-[class*="product-block"],
-[class*="widget-text"],
-[class*="overlay-text"] {
-    position: relative !important;
-}
-
-[class*="amzn"]::before,
-[class*="amzn"]::after,
-[class*="amazon"]::before,
-[class*="amazon"]::after,
-[class*="product-block"]::before,
-[class*="product-block"]::after,
-[class*="widget-text"]::before,
-[class*="widget-text"]::after,
-[class*="overlay-text"]::before,
-[class*="overlay-text"]::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-
-/* 🎯 ENDGÜLTIGE LÖSUNG: Alle möglichen Titel-Overlays über Buchcovern entfernen */
-/* H3-Titel und andere Überschriften über Buchcovern */
-.book-card h3.overlay-title,
-.book-card .title-overlay,
-.book-card .book-image h3,
-.book-card .book-image h1,
-.book-card .book-image h2,
-.book-card .book-image h4,
-.book-card .book-image h5,
-.book-card .book-image h6,
-.book-card .book-image .title,
-.book-card .book-image .book-title,
-.book-card .book-image .overlay-title,
-.book-card .book-image .title-overlay {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    clip: rect(0, 0, 0, 0) !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-}
-
-/* Container-Overlays über Buchcovern */
-.book-card .overlay-container,
-.book-card .title-container,
-.book-card .book-image .overlay,
-.book-card .book-image .overlay-container,
-.book-card .book-image .title-container {
-    visibility: hidden !important;
-    height: 0 !important;
-    width: 0 !important;
-    overflow: hidden !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-}
-
-/* Figcaption und andere Bild-Beschreibungen über Buchcovern */
-.book-card .book-image figcaption,
-.book-card .book-image .caption,
-.book-card .book-image .image-caption,
-.book-card .book-image .cover-caption {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-
-/* Absolute Sicherheit: Alle Text-Elemente über Buchcovern entfernen */
-.book-card .book-image h1,
-.book-card .book-image h2,
-.book-card .book-image h3,
-.book-card .book-image h4,
-.book-card .book-image h5,
-.book-card .book-image h6,
-.book-card .book-image p,
-.book-card .book-image span,
-.book-card .book-image div:not(.book-cover-link):not(.book-cover-image) {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-
-/* Sicherstellen, dass nur das Buchcover-Bild im .book-image sichtbar ist */
-.book-card .book-image {
-    position: relative !important;
-    overflow: hidden !important;
-    background: transparent !important;
-}
-
-.book-card .book-image *:not(.book-cover-link):not(.book-cover-image) {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-
-/* ADDITIONAL: Remove any title overlays that might appear above book covers */
-.book-card::before,
-.book-card::after,
-.book-image::before,
-.book-image::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-}
-
-/* 🚨 NOTFALL-REGELN: Alle möglichen Titel-Overlays über Buchcovern entfernen */
-/* Alle H-Tags über Buchcovern */
-.book-card .book-image h1,
-.book-card .book-image h2,
-.book-card .book-image h3,
-.book-card .book-image h4,
-.book-card .book-image h5,
-.book-card .book-image h6 {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    clip: rect(0, 0, 0, 0) !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-}
-
-/* 🚨 DATA-ATTRIBUTE OVERLAY ENTFERNUNG: Alle data-* Attribute sichtbar machen */
-.book-card .book-image [data-asin],
-.book-card .book-image [data-has-audiobook],
-.book-card .book-image [data-title],
-.book-card .book-image [data-*] {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    clip: rect(0, 0, 0, 0) !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-}
-
-/* 🚨 DAUERHAFTE TITEL-OVERLAY ENTFERNUNG: Alle möglichen Text-Elemente über Buchcovern - GLOBAL */
-.book-card .book-image *:not(.book-cover-link):not(.book-cover-image):not(img) {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    clip: rect(0, 0, 0, 0) !important;
-}
-
-/* 🚨 DAUERHAFTE SPEZIFISCHE TITEL-ENTFERNUNG: Alle H-Tags und Text-Elemente über Buchcovern - GLOBAL */
-.book-card .book-image h1,
-.book-card .book-image h2,
-.book-card .book-image h3,
-.book-card .book-image h4,
-.book-card .book-image h5,
-.book-card .book-image h6,
-.book-card .book-image p,
-.book-card .book-image span,
-.book-card .book-image div:not(.book-cover-link):not(.book-cover-image),
-.book-card .book-image strong,
-.book-card .book-image em,
-.book-card .book-image b,
-.book-card .book-image i,
-.book-card .book-image figcaption {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    clip: rect(0, 0, 0, 0) !important;
-}
-
-/* Alle Text-Elemente über Buchcovern */
-.book-card .book-image p,
-.book-card .book-image span,
-.book-card .book-image div:not(.book-cover-link),
-.book-card .book-image strong,
-.book-card .book-image em,
-.book-card .book-image b,
-.book-card .book-image i {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-
-/* Alle Overlay-Klassen über Buchcovern */
-.book-card .book-image .overlay,
-.book-card .book-image .title-overlay,
-.book-card .book-image .overlay-title,
-.book-card .book-image .title-container,
-.book-card .book-image .overlay-container {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-    opacity: 0 !important;
-    position: absolute !important;
-    z-index: -1 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-
-/* Ensure book covers are clean without any text overlays */
-.book-image {
-    position: relative;
-    overflow: hidden;
-}
-
-.book-image img {
-    display: block !important;
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    position: relative;
-    z-index: 1;
-}
-
-/* Remove any potential pseudo-elements that might add text */
-.book-card *::before,
-.book-card *::after {
-    content: none !important;
-    display: none !important;
-}
-
-/* Additional safety rules for any remaining overlays */
-.book-card *::before,
-.book-card *::after {
-    content: none !important;
-}
-
-/* Ensure no data attributes are displayed as content */
-[data-title]:not([data-title=""])::before,
-[data-title]:not([data-title=""])::after,
-[data-asin]:not([data-asin=""])::before,
-[data-asin]:not([data-asin=""])::after {
-    display: none !important;
-    content: none !important;
-}
-
-/* Force remove any remaining overlays */
-.book-card *[data-title]::before,
-.book-card *[data-title]::after,
-.book-card *[data-asin]::before,
-.book-card *[data-asin]::after {
-    display: none !important;
-    content: none !important;
-}
-
-/* ENHANCED: Remove ALL possible redundant text overlays */
-.book-card::before,
-.book-card::after,
-.book-image::before,
-.book-image::after,
-.book-content::before,
-.book-content::after,
-.book-title::before,
-.book-title::after,
-.book-author::before,
-.book-author::after,
-.book-description::before,
-.book-description::after,
-.book-links::before,
-.book-links::after,
-.book-link::before,
-.book-link::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* Ensure no data attributes create content */
-[data-title]::before,
-[data-title]::after,
-[data-asin]::before,
-[data-asin]::after,
-[data-genre]::before,
-[data-genre]::after,
-[data-format]::before,
-[data-format]::after {
-    display: none !important;
-    content: none !important;
-}
-
-/* Remove any potential title overlays on book covers */
-.book-image img::before,
-.book-image img::after,
-.book-cover img::before,
-.book-cover img::after {
-    display: none !important;
-    content: none !important;
-}
-
-/* ULTRA-COMPREHENSIVE: Remove ALL possible redundant text overlays */
-.book-card *::before,
-.book-card *::after,
-.book-image *::before,
-.book-image *::after,
-.book-content *::before,
-.book-content *::after,
-.book-title *::before,
-.book-title *::after,
-.book-author *::before,
-.book-author *::after,
-.book-description *::before,
-.book-description *::after,
-.book-links *::before,
-.book-links *::after,
-.book-link *::before,
-.book-link *::after {
-    display: none !important;
-    content: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* Ensure no title overlays in grid rendering */
-.books-grid .book-card::before,
-.books-grid .book-card::after,
-.featured-books .book-card::before,
-.featured-books .book-card::after {
-    display: none !important;
-    content: none !important;
-}
-
-/* Remove any potential data attribute content */
-[data-title]::before,
-[data-title]::after,
-[data-asin]::before,
-[data-asin]::after,
-[data-genre]::before,
-[data-genre]::after,
-[data-format]::before,
-[data-format]::after,
-[data-has-detail-page]::before,
-[data-has-detail-page]::after {
-    display: none !important;
-    content: none !important;
-}
-
-/* MOBILE UX OPTIMIZATION - Responsive Button Improvements */
-.book-buttons button,
-.action-buttons .action-btn,
-.book-detail-actions .action-btn {
-    width: 100%;
-    margin-bottom: 8px;
-    font-size: 1rem;
-    padding: 12px 16px;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-@media screen and (max-width: 600px) {
-    .book-buttons button,
-    .action-buttons .action-btn,
-    .book-detail-actions .action-btn {
-        font-size: 0.9rem;
-        padding: 10px 14px;
-        min-height: 48px;
-    }
-    
-    /* Mobile header optimization */
-    .header-content {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-    }
-    
-    .header-brand {
-        justify-content: center;
-    }
-    
-    .header-logo {
-        max-width: 90px;
-        height: auto;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        filter: none;
-        opacity: 0.8;
-        background: transparent;
-    }
-    
-    .header-logo:hover {
-        transform: scale(1.05);
-        opacity: 1;
-        filter: brightness(1.1) contrast(1.1);
-    }
+/* 🎨 RESPONSIVE DESIGN: Mobile-first Ansatz */
+@media screen and (max-width: 768px) {
+    .desktop-nav { display: none; }
+    .mobile-nav { display: flex; }
     
     .header-title {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
     }
     
     .header-subtitle {
-        font-size: 0.8rem;
-    }
-    
-    /* 📱 MOBILE: Logo-Backlink optimieren */
-    .header-brand a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.5rem;
-        border-radius: 8px;
-        transition: all 0.2s ease;
-    }
-    
-    .header-brand a:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: scale(1.05);
-    }
-}
-
-/* Enhanced mobile responsiveness for book cards */
-@media screen and (max-width: 768px) {
-    .book-links {
-        flex-direction: column;
-        gap: 12px;
-        margin-top: 1rem;
-    }
-    
-    .book-links .book-link {
-        width: 100%;
-        min-width: auto;
-        max-width: none;
-        font-size: clamp(0.85rem, 2.5vw, 0.95rem);
-        padding: clamp(12px, 3vw, 16px) clamp(12px, 3vw, 16px);
-        min-height: clamp(48px, 12vw, 56px);
-        white-space: normal;
-        text-align: center;
-        line-height: 1.3;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        hyphens: auto;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-sizing: border-box;
-        /* Responsive button sizing */
-        min-height: 44px;
-        font-size: 0.9rem;
-        padding: 12px 16px;
-        border-radius: 8px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Ensure buttons adapt to text content */
-    .book-link {
-        width: auto;
-        min-width: fit-content;
-        max-width: 100%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    
-    /* Touch-friendly button sizing */
-    .book-link, .action-btn, .cta-button {
-        min-height: 44px;
-        min-width: 44px;
-        padding: 12px 16px;
-        font-size: 0.9rem;
-        line-height: 1.2;
-    }
-    
-    .book-card {
-        min-height: auto;
-        padding: 1rem;
-    }
-    
-    .book-content {
-        gap: 0.75rem;
-    }
-    
-    .book-title {
-        font-size: clamp(1rem, 3vw, 1.2rem);
-        line-height: 1.3;
-    }
-    
-    .book-description {
-        font-size: clamp(0.85rem, 2.5vw, 0.95rem);
-        line-height: 1.4;
-    }
-}
-
-/* Ultra-mobile optimization */
-@media screen and (max-width: 480px) {
-    .container {
-        padding: 0 12px;
-    }
-    
-    .book-buttons button,
-    .action-buttons .action-btn,
-    .book-detail-actions .action-btn {
         font-size: 0.85rem;
-        padding: 12px 12px;
-        min-height: 52px;
     }
     
-    .header-title {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
         font-size: 1.1rem;
     }
     
-    .header-subtitle {
-        font-size: 0.75rem;
+    .hero-tagline {
+        font-size: 1rem;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .cta-button {
+        width: 100%;
+        max-width: 300px;
     }
 }
 
-/* 🎯 MOBILE-SPEZIFISCHE REGELN: Titel-Overlays auf Smartphones entfernen */
-@media screen and (max-width: 768px) {
-    /* Alle Titel-Overlays über Buchcovern auf mobilen Geräten entfernen */
-    .book-card .book-image h1,
-    .book-card .book-image h2,
-    .book-card .book-image h3,
-    .book-card .book-image h4,
-    .book-card .book-image h5,
-    .book-card .book-image h6,
-    .book-card .book-image p,
-    .book-card .book-image span,
-    .book-card .book-image div:not(.book-cover-link),
-    .book-card .book-image strong,
-    .book-card .book-image em,
-    .book-card .book-image b,
-    .book-card .book-image i {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        position: absolute !important;
-        z-index: -1 !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-        pointer-events: none !important;
-        font-size: 0 !important;
-        line-height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: 0 !important;
-    }
-    
-    /* Container-Overlays auf mobilen Geräten entfernen */
-    .book-card .book-image .overlay,
-    .book-card .book-image .title-overlay,
-    .book-card .book-image .overlay-title,
-    .book-card .book-image .title-container,
-    .book-card .book-image .overlay-container {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        position: absolute !important;
-        z-index: -1 !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-        pointer-events: none !important;
-    }
-    
-    /* Sicherstellen, dass nur das Buchcover-Bild auf mobilen Geräten sichtbar ist */
-    .book-card .book-image {
-        position: relative !important;
-        overflow: hidden !important;
-        background: transparent !important;
-    }
-    
-    .book-card .book-image *:not(.book-cover-link):not(.book-cover-image) {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        position: absolute !important;
-        z-index: -1 !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-        pointer-events: none !important;
-    }
-    
-    /* Buchcover-Bild auf mobilen Geräten optimieren */
-    .book-card .book-image img,
-    .book-card .book-cover-image {
-        display: block !important;
-        width: 100% !important;
-        height: 250px !important; /* Kleinere Höhe für mobile Geräte */
-        object-fit: cover !important;
-        position: relative !important;
-        z-index: 1 !important;
-        background: transparent !important;
-        border: none !important;
-        outline: none !important;
-    }
-}
-
-/* 🎯 KLEINE MOBILE GERÄTE: Zusätzliche Sicherheit */
 @media screen and (max-width: 480px) {
-    /* Alle möglichen Titel-Overlays auf kleinen mobilen Geräten entfernen */
-    .book-card .book-image * {
-        position: relative !important;
+    .container {
+        padding: 0 16px;
     }
     
-    .book-card .book-image h1,
-    .book-card .book-image h2,
-    .book-card .book-image h3,
-    .book-card .book-image h4,
-    .book-card .book-image h5,
-    .book-card .book-image h6,
-    .book-card .book-image p,
-    .book-card .book-image span,
-    .book-card .book-image div:not(.book-cover-link),
-    .book-card .book-image strong,
-    .book-card .book-image em,
-    .book-card .book-image b,
-    .book-card .book-image i,
-    .book-card .book-image .overlay,
-    .book-card .book-image .title-overlay,
-    .book-card .book-image .overlay-title,
-    .book-card .book-image .title-container,
-    .book-card .book-image .overlay-container {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        position: absolute !important;
-        z-index: -1 !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-        pointer-events: none !important;
-        font-size: 0 !important;
-        line-height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: 0 !important;
-        clip: rect(0, 0, 0, 0) !important;
+    .header-brand {
+        gap: 1rem;
     }
     
-    /* Buchcover-Bild auf kleinen mobilen Geräten optimieren */
-    .book-card .book-image img,
-    .book-card .book-cover-image {
-        height: 200px !important; /* Noch kleinere Höhe für kleine mobile Geräte */
-    }
-}
-
-/* 🚨 MOBILE-LAYOUT-FIXES: Umfassende Behebung aller mobilen Probleme */
-
-/* 📱 MOBILE: Alle Text-Overlays über Buchcovern dauerhaft entfernen */
-@media screen and (max-width: 768px) {
-    /* 🚨 ULTIMATIVE TEXT-OVERLAY-ENTFERNUNG: Alle möglichen Text-Elemente */
-    .book-card .book-image *:not(.book-cover-link):not(.book-cover-image):not(img) {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        position: absolute !important;
-        z-index: -1 !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-        pointer-events: none !important;
-        font-size: 0 !important;
-        line-height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: 0 !important;
-        clip: rect(0, 0, 0, 0) !important;
+    .header-logo {
+        height: 2.5rem;
     }
     
-    /* 🚨 SPEZIFISCHE ELEMENT-AUSBLENDUNG: Alle H-Tags, P-Tags, Spans, etc. */
-    .book-card .book-image h1, .book-card .book-image h2, .book-card .book-image h3, 
-    .book-card .book-image h4, .book-card .book-image h5, .book-card .book-image h6,
-    .book-card .book-image p, .book-card .book-image span, 
-    .book-card .book-image div:not(.book-cover-link):not(.book-cover-image),
-    .book-card .book-image strong, .book-card .book-image em, 
-    .book-card .book-image b, .book-card .book-image i, .book-card .book-image figcaption,
-    .book-card .book-image [data-title], .book-card .book-image [data-asin],
-    .book-card .book-image [data-has-audiobook], .book-card .book-image [data-hint] {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        position: absolute !important;
-        z-index: -1 !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-        pointer-events: none !important;
-        font-size: 0 !important;
-        line-height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: 0 !important;
-        clip: rect(0, 0, 0, 0) !important;
+    .hero {
+        padding: 3rem 0;
     }
     
-    /* 🚨 TAB-BUTTONS KOMPLETT AUSBLENDEN: "Beschreibung", "Metadaten", "Weitere Ausgaben" */
-    .tab-buttons,
-    .book-info-tabs,
-    .book-info-tab,
-    .book-info-tab-button,
-    .book-tab-button,
-    [class*="tab-button"],
-    [class*="info-tab"] {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        position: absolute !important;
-        z-index: -1 !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-        pointer-events: none !important;
-        font-size: 0 !important;
-        line-height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: 0 !important;
-        clip: rect(0, 0, 0, 0) !important;
-    }
-    
-    /* 🚨 ZWISCHENTEXTE ENTFERNEN: Alle unerwünschten Text-Fragmente zwischen Buttons */
-    .book-card .book-content *:not(.book-title):not(.book-author):not(.book-description):not(.book-links):not(.mehr-button):not(.learn-more-button) {
-        font-size: 0 !important;
-        line-height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-    }
-    
-    /* 🚨 SPEZIFISCHE ZWISCHENTEXTE: "erfahren", "Mehr", etc. */
-    .book-card .book-content span:not(.book-title):not(.book-author),
-    .book-card .book-content div:not(.book-title):not(.book-author):not(.book-description):not(.book-links),
-    .book-card .book-content p:not(.book-description) {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        position: absolute !important;
-        z-index: -1 !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-        pointer-events: none !important;
-        font-size: 0 !important;
-        line-height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: 0 !important;
-        clip: rect(0, 0, 0, 0) !important;
-    }
-    
-    /* 📱 MOBILE: Sprachumschaltung reparieren - Touch-Events und Sichtbarkeit */
-    .mobile-lang-btn {
-        display: inline-flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        position: relative !important;
-        z-index: 10 !important;
-        pointer-events: auto !important;
-        min-height: 44px !important;
-        min-width: 44px !important;
-        padding: 8px 12px !important;
-        margin: 0 4px !important;
-        border: 2px solid #6a1b9a !important;
-        border-radius: 8px !important;
-        background: #6a1b9a !important;
-        color: white !important;
-        font-size: 14px !important;
-        font-weight: bold !important;
-        text-align: center !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease !important;
-        user-select: none !important;
-        -webkit-user-select: none !important;
-        -webkit-touch-callout: none !important;
-        -webkit-tap-highlight-color: transparent !important;
-    }
-    
-    .mobile-lang-btn.active {
-        background: #4a148c !important;
-        border-color: #4a148c !important;
-        box-shadow: 0 2px 8px rgba(106, 27, 154, 0.3) !important;
-    }
-    
-    .mobile-lang-btn:hover {
-        background: #4a148c !important;
-        border-color: #4a148c !important;
-        transform: translateY(-1px) !important;
-        box-shadow: 0 4px 12px rgba(106, 27, 154, 0.4) !important;
-    }
-    
-    /* 📱 MOBILE: Hörbuch-Buttons korrekt anzeigen - für alle Bücher mit hasAudiobook=true */
-    .book-card[data-has-audiobook="true"] .book-link.audiobook {
-        display: inline-flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        position: relative !important;
-        z-index: 5 !important;
-        pointer-events: auto !important;
-        width: 100% !important;
-        min-height: 44px !important;
-        padding: 10px 16px !important;
-        margin: 4px 0 !important;
-        background: #ff6b35 !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 8px !important;
-        font-size: 14px !important;
-        font-weight: bold !important;
-        text-align: center !important;
-        text-decoration: none !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease !important;
-        justify-content: center !important;
-        align-items: center !important;
-        box-shadow: 0 2px 4px rgba(255, 107, 53, 0.3) !important;
-    }
-    
-    .book-card[data-has-audiobook="true"] .book-link.audiobook:hover {
-        background: #e55a2b !important;
-        transform: translateY(-1px) !important;
-        box-shadow: 0 4px 8px rgba(255, 107, 53, 0.4) !important;
-    }
-    
-    /* 📱 MOBILE: Hörbuch-Buttons für Bücher ohne Audiobook ausblenden */
-    .book-card[data-has-audiobook="false"] .book-link.audiobook,
-    .book-card:not([data-has-audiobook]) .book-link.audiobook {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        position: absolute !important;
-        z-index: -1 !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-        pointer-events: none !important;
-        font-size: 0 !important;
-        line-height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: 0 !important;
-        clip: rect(0, 0, 0, 0) !important;
-    }
-    
-    /* 📱 MOBILE: Button-Layout optimieren - Linear und responsiv */
-    .book-links {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 8px !important;
-        width: 100% !important;
-        margin-top: 12px !important;
-    }
-    
-    .book-links .book-link {
-        width: 100% !important;
-        min-height: 44px !important;
-        padding: 10px 16px !important;
-        margin: 0 !important;
-        font-size: 14px !important;
-        font-weight: bold !important;
-        text-align: center !important;
-        border-radius: 8px !important;
-        transition: all 0.2s ease !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        text-decoration: none !important;
-        cursor: pointer !important;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-    }
-    
-    .book-links .book-link:hover {
-        transform: translateY(-1px) !important;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
-    }
-    
-    /* 📱 MOBILE: "Mehr erfahren" Button korrekt stylen */
-    .mehr-button,
-    .learn-more-button {
-        display: block !important;
-        width: 100% !important;
-        min-height: 44px !important;
-        padding: 10px 16px !important;
-        margin: 8px 0 0 0 !important;
-        background: #6a1b9a !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 8px !important;
-        font-size: 14px !important;
-        font-weight: bold !important;
-        text-align: center !important;
-        text-decoration: none !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease !important;
-        box-shadow: 0 2px 4px rgba(106, 27, 154, 0.3) !important;
-    }
-    
-    .mehr-button:hover,
-    .learn-more-button:hover {
-        background: #4a148c !important;
-        transform: translateY(-1px) !important;
-        box-shadow: 0 4px 8px rgba(106, 27, 154, 0.4) !important;
-    }
-    
-    /* 📱 MOBILE: Buchcover-Bilder optimieren */
-    .book-card .book-image img {
-        width: 100% !important;
-        height: 250px !important;
-        object-fit: cover !important;
-        border-radius: 8px !important;
-        display: block !important;
-    }
-    
-    /* 📱 MOBILE: Buchbeschreibung linear anzeigen */
-    .book-description {
-        display: block !important;
-        max-height: none !important;
-        overflow: visible !important;
-        text-overflow: unset !important;
-        -webkit-line-clamp: unset !important;
-        -webkit-box-orient: unset !important;
-        margin-bottom: 12px !important;
-        line-height: 1.5 !important;
-        font-size: 14px !important;
-    }
-}
-
-/* 📱 KLEINE MOBILE GERÄTE: Zusätzliche Optimierungen */
-@media screen and (max-width: 480px) {
-    .book-card .book-image img {
-        height: 200px !important;
-    }
-    
-    .book-links .book-link {
-        font-size: 13px !important;
-        padding: 8px 12px !important;
-    }
-    
-    .mehr-button,
-    .learn-more-button {
-        font-size: 13px !important;
-        padding: 8px 12px !important;
-    }
-    
-    .mobile-lang-btn {
-        font-size: 12px !important;
-        padding: 6px 10px !important;
-        min-width: 40px !important;
-        min-height: 40px !important;
+    .hero-title {
+        font-size: 1.75rem;
     }
 }
 

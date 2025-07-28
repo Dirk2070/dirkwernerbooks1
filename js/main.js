@@ -267,17 +267,40 @@ async function setAudiobookLinksByCountry() {
   };
 
   let link = fallback;
-
-  try {
-    const res = await fetch("https://ipapi.co/json/");
-    const data = await res.json();
-    const countryCode = (data.country_code || "").toUpperCase();
-    if (linksByCountry[countryCode]) {
-      link = linksByCountry[countryCode];
-    }
-  } catch (e) {
-    console.warn("Geolocation failed. Using fallback link.");
+  
+  // 🚨 CORS-SICHERHEIT: Verwende Browser-Sprache statt IP-Geolocation
+  const userLang = navigator.language || navigator.userLanguage || 'de';
+  if (userLang.startsWith('en')) {
+    link = linksByCountry['US'];
+    console.log('🎧 [Audiobook] Using US link based on browser language:', userLang);
+  } else if (userLang.startsWith('de')) {
+    link = linksByCountry['DE'];
+    console.log('🎧 [Audiobook] Using DE link based on browser language:', userLang);
+  } else {
+    console.log('🎧 [Audiobook] Using fallback link for language:', userLang);
   }
+
+  // 🚨 CORS-PROBLEM BEHOBEN: ipapi.co-Abfrage deaktiviert
+  // try {
+  //   const res = await fetch("https://ipapi.co/json/");
+  //   if (!res.ok) {
+  //     throw new Error(`HTTP error! status: ${res.status}`);
+  //   }
+  //   const data = await res.json();
+  //   const countryCode = (data.country_code || "").toUpperCase();
+  //   if (linksByCountry[countryCode]) {
+  //     link = linksByCountry[countryCode];
+  //   }
+  // } catch (e) {
+  //   console.warn("Geolocation failed (CORS or network error). Using fallback link:", e.message);
+  //   // Fallback: Verwende Browser-Sprache statt IP-Geolocation
+  //   const userLang = navigator.language || navigator.userLanguage || 'de';
+  //   if (userLang.startsWith('en')) {
+  //     link = linksByCountry['US'];
+  //   } else if (userLang.startsWith('de')) {
+  //     link = linksByCountry['DE'];
+  //   }
+  // }
 
   // Alle Buttons auf der Seite setzen
   document.querySelectorAll('.btn-audiobook-link').forEach(btn => {

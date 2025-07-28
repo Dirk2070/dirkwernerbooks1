@@ -2259,6 +2259,124 @@ html {
     pointer-events: none !important;
 }
 
+/* ENDGÜLTIGE LÖSUNG: Komplette Entfernung aller Titel-Overlays über Buchcovern */
+.book-image {
+    position: relative !important;
+    overflow: hidden !important;
+    background: transparent !important;
+}
+
+.book-image::before,
+.book-image::after,
+.book-image *::before,
+.book-image *::after {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Sicherstellen, dass nur das Buchcover-Bild sichtbar ist */
+.book-image img {
+    display: block !important;
+    width: 100% !important;
+    height: 300px !important;
+    object-fit: cover !important;
+    position: relative !important;
+    z-index: 1 !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+}
+
+/* Entfernen aller möglichen Text-Overlays über Buchcovern */
+.book-image a::before,
+.book-image a::after,
+.book-image a *::before,
+.book-image a *::after {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Neue Klassen für saubere Trennung von Cover und Inhalt */
+.book-cover-link {
+    display: block !important;
+    text-decoration: none !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+}
+
+.book-cover-link::before,
+.book-cover-link::after {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+.book-cover-image {
+    display: block !important;
+    width: 100% !important;
+    height: 300px !important;
+    object-fit: cover !important;
+    position: relative !important;
+    z-index: 1 !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    transition: transform 0.3s ease !important;
+}
+
+.book-cover-link:hover .book-cover-image {
+    transform: scale(1.05) !important;
+}
+
+.book-title-link {
+    color: inherit !important;
+    text-decoration: none !important;
+    transition: color 0.3s ease !important;
+}
+
+.book-title-link:hover {
+    color: #3498db !important;
+}
+
+/* Sicherstellen, dass Buch-Info sauber unterhalb des Covers steht */
+.book-info {
+    padding: 1.5rem !important;
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: white !important;
+}
+
+.book-title {
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+    color: #2c3e50 !important;
+    line-height: 1.4 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+}
+
 /* Ensure no data attributes create visible content */
 [data-title]::before,
 [data-title]::after,

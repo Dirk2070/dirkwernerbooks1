@@ -903,27 +903,25 @@ function initLanguageSwitching() {
     // 📱 MOBILE vs DESKTOP: Geräteabhängige Sprachverwaltung
     const urlParams = new URLSearchParams(window.location.search);
     const urlLang = urlParams.get('lang');
-    const sessionLang = sessionStorage.getItem('currentLang');
+    const localStorageLang = localStorage.getItem('lang'); // Changed to localStorage for mobile reliability
     const isMobile = window.innerWidth < 768;
     
     let preferredLang = 'de'; // default
     
     if (urlLang && (urlLang === 'de' || urlLang === 'en')) {
         preferredLang = urlLang;
-        // Update URL parameter and session storage
-        sessionStorage.setItem('currentLang', preferredLang);
+        localStorage.setItem('lang', preferredLang);
         updateURLParameter('lang', preferredLang);
         console.log(`🌐 [Language] Language set from URL parameter:`, preferredLang);
-    } else if (sessionLang) {
-        preferredLang = sessionLang;
-        console.log(`🌐 [Language] Language set from session storage:`, preferredLang);
+    } else if (localStorageLang) {
+        preferredLang = localStorageLang;
+        console.log(`🌐 [Language] Language set from localStorage:`, preferredLang);
     } else {
         console.log(`🌐 [Language] Using default language:`, preferredLang);
     }
     
     window.currentLanguage = preferredLang;
     
-    // Set initial active state
     // Set active language button for all devices
     document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(btn => {
         if (btn.dataset.lang === preferredLang) {
@@ -959,22 +957,14 @@ function initLanguageSwitching() {
             } else {
                 // Desktop: Apply translation without reload
                 translatePage(lang);
-                
-                // Temporäre DOM-Updates (werden beim Reload zurückgesetzt)
                 setTimeout(() => {
                     document.querySelectorAll('[data-de], [data-en]').forEach(element => {
                         if (element.dataset[lang]) {
                             element.textContent = element.dataset[lang];
                         }
                     });
-                    
-                    // Re-render book cards
-                    if (typeof displayFeaturedBooks === 'function') {
-                        displayFeaturedBooks();
-                    }
-                    if (typeof displayAllBooks === 'function') {
-                        displayAllBooks();
-                    }
+                    if (typeof displayFeaturedBooks === 'function') { displayFeaturedBooks(); }
+                    if (typeof displayAllBooks === 'function') { displayAllBooks(); }
                 }, 100);
             }
             
@@ -987,6 +977,127 @@ function initLanguageSwitching() {
     
     // Apply initial translation
     translatePage(preferredLang);
+}
+
+// 🎧 AUDIOBOOK BUTTON MANAGEMENT: Robuste Hörbuch-Button-Logik
+function manageAudiobookButtons() {
+    console.log('🎧 [Audiobook] Managing audiobook buttons...');
+    
+    const bookCards = document.querySelectorAll('.book-card');
+    let audiobookButtonsShown = 0;
+    let audiobookButtonsHidden = 0;
+    
+    bookCards.forEach((card, index) => {
+        const hasAudiobook = card.getAttribute('data-has-audiobook') === 'true';
+        const audiobookButton = card.querySelector('.book-link.audiobook');
+        
+        if (audiobookButton) {
+            if (hasAudiobook) {
+                // Hörbuch-Button anzeigen für Bücher mit hasAudiobook=true
+                audiobookButton.style.display = 'inline-flex';
+                audiobookButton.style.visibility = 'visible';
+                audiobookButton.style.opacity = '1';
+                audiobookButton.style.position = 'relative';
+                audiobookButton.style.zIndex = '5';
+                audiobookButton.style.pointerEvents = 'auto';
+                audiobookButton.style.width = '100%';
+                audiobookButton.style.minHeight = '44px';
+                audiobookButton.style.padding = '10px 16px';
+                audiobookButton.style.margin = '4px 0';
+                audiobookButton.style.background = '#ff6b35';
+                audiobookButton.style.color = 'white';
+                audiobookButton.style.border = 'none';
+                audiobookButton.style.borderRadius = '8px';
+                audiobookButton.style.fontSize = '14px';
+                audiobookButton.style.fontWeight = 'bold';
+                audiobookButton.style.textAlign = 'center';
+                audiobookButton.style.textDecoration = 'none';
+                audiobookButton.style.cursor = 'pointer';
+                audiobookButton.style.transition = 'all 0.2s ease';
+                audiobookButton.style.justifyContent = 'center';
+                audiobookButton.style.alignItems = 'center';
+                audiobookButton.style.boxShadow = '0 2px 4px rgba(255, 107, 53, 0.3)';
+                
+                audiobookButtonsShown++;
+                console.log(`🎧 [Audiobook] Button shown for book ${index + 1} (hasAudiobook=true)`);
+            } else {
+                // Hörbuch-Button ausblenden für Bücher ohne Audiobook
+                audiobookButton.style.display = 'none';
+                audiobookButton.style.visibility = 'hidden';
+                audiobookButton.style.opacity = '0';
+                audiobookButton.style.position = 'absolute';
+                audiobookButton.style.zIndex = '-1';
+                audiobookButton.style.width = '0';
+                audiobookButton.style.height = '0';
+                audiobookButton.style.overflow = 'hidden';
+                audiobookButton.style.pointerEvents = 'none';
+                audiobookButton.style.fontSize = '0';
+                audiobookButton.style.lineHeight = '0';
+                audiobookButton.style.margin = '0';
+                audiobookButton.style.padding = '0';
+                audiobookButton.style.border = '0';
+                audiobookButton.style.clip = 'rect(0, 0, 0, 0)';
+                
+                audiobookButtonsHidden++;
+                console.log(`🎧 [Audiobook] Button hidden for book ${index + 1} (hasAudiobook=false)`);
+            }
+        } else {
+            console.log(`🎧 [Audiobook] No audiobook button found for book ${index + 1}`);
+        }
+    });
+    
+    console.log(`🎧 [Audiobook] Management complete: ${audiobookButtonsShown} shown, ${audiobookButtonsHidden} hidden`);
+}
+
+// 🧹 MOBILE CLEANUP: Umfassende Bereinigung für mobile Geräte
+function mobileCleanup() {
+    if (window.innerWidth < 768) {
+        console.log('📱 [Mobile Cleanup] Starting comprehensive mobile cleanup...');
+        
+        // Tab-Buttons entfernen
+        const tabButtons = document.querySelectorAll('.tab-buttons, .book-info-tabs, .book-info-tab, .book-info-tab-button, .book-tab-button, [class*="tab-button"], [class*="info-tab"]');
+        tabButtons.forEach((button, index) => {
+            button.style.display = 'none';
+            button.style.visibility = 'hidden';
+            button.style.opacity = '0';
+            button.style.position = 'absolute';
+            button.style.zIndex = '-1';
+            button.style.width = '0';
+            button.style.height = '0';
+            button.style.overflow = 'hidden';
+            button.style.pointerEvents = 'none';
+            button.style.fontSize = '0';
+            button.style.lineHeight = '0';
+            button.style.margin = '0';
+            button.style.padding = '0';
+            button.style.border = '0';
+            button.style.clip = 'rect(0, 0, 0, 0)';
+            console.log(`📱 [Mobile Cleanup] Tab button ${index + 1} removed`);
+        });
+        
+        // Zwischentexte entfernen
+        const bookCards = document.querySelectorAll('.book-card');
+        bookCards.forEach((card, cardIndex) => {
+            const unwantedElements = card.querySelectorAll('.book-content *:not(.book-title):not(.book-author):not(.book-description):not(.book-links):not(.mehr-button):not(.learn-more-button)');
+            unwantedElements.forEach((element, elementIndex) => {
+                if (element.tagName !== 'H1' && element.tagName !== 'H2' && element.tagName !== 'H3' && 
+                    element.tagName !== 'H4' && element.tagName !== 'H5' && element.tagName !== 'H6') {
+                    element.style.fontSize = '0';
+                    element.style.lineHeight = '0';
+                    element.style.margin = '0';
+                    element.style.padding = '0';
+                    element.style.height = '0';
+                    element.style.overflow = 'hidden';
+                    console.log(`📱 [Mobile Cleanup] Unwanted element removed from book ${cardIndex + 1}`);
+                }
+            });
+        });
+        
+        // Hörbuch-Buttons verwalten
+        manageAudiobookButtons();
+        
+        console.log('📱 [Mobile Cleanup] Mobile cleanup completed');
+    }
 }
 
 // Add loading animation
@@ -1325,6 +1436,9 @@ function cleanupAmazonWidgets() {
                             if (node.classList && node.classList.contains('book-card')) {
                                 setTimeout(() => {
                                     cleanupDataTitleAttributes();
+                                    if (window.innerWidth < 768) {
+                                        mobileCleanup();
+                                    }
                                 }, 100);
                             }
                             
@@ -1348,6 +1462,18 @@ function cleanupAmazonWidgets() {
             childList: true,
             subtree: true
         });
+        
+        // 📱 MOBILE: Sofortige Bereinigung nach dem Laden
+        if (window.innerWidth < 768) {
+            setTimeout(() => {
+                mobileCleanup();
+            }, 500);
+            
+            // Zusätzliche Bereinigung nach 2 Sekunden
+            setTimeout(() => {
+                mobileCleanup();
+            }, 2000);
+        }
         
         // Set initial language
         translatePage('de');

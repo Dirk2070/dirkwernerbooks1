@@ -3105,7 +3105,7 @@ html {
 .book-card .book-image h6,
 .book-card .book-image p,
 .book-card .book-image span,
-.book-card .book-image div:not(.book-cover-link) {
+.book-card .book-image div:not(.book-cover-link):not(.book-cover-image) {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
@@ -3731,6 +3731,312 @@ html {
     .book-card .book-image img,
     .book-card .book-cover-image {
         height: 200px !important; /* Noch kleinere Höhe für kleine mobile Geräte */
+    }
+}
+
+/* 🚨 MOBILE-LAYOUT-FIXES: Umfassende Behebung aller mobilen Probleme */
+
+/* 📱 MOBILE: Alle Text-Overlays über Buchcovern dauerhaft entfernen */
+@media screen and (max-width: 768px) {
+    /* 🚨 ULTIMATIVE TEXT-OVERLAY-ENTFERNUNG: Alle möglichen Text-Elemente */
+    .book-card .book-image *:not(.book-cover-link):not(.book-cover-image):not(img) {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        z-index: -1 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        clip: rect(0, 0, 0, 0) !important;
+    }
+    
+    /* 🚨 SPEZIFISCHE ELEMENT-AUSBLENDUNG: Alle H-Tags, P-Tags, Spans, etc. */
+    .book-card .book-image h1, .book-card .book-image h2, .book-card .book-image h3, 
+    .book-card .book-image h4, .book-card .book-image h5, .book-card .book-image h6,
+    .book-card .book-image p, .book-card .book-image span, 
+    .book-card .book-image div:not(.book-cover-link):not(.book-cover-image),
+    .book-card .book-image strong, .book-card .book-image em, 
+    .book-card .book-image b, .book-card .book-image i, .book-card .book-image figcaption,
+    .book-card .book-image [data-title], .book-card .book-image [data-asin],
+    .book-card .book-image [data-has-audiobook], .book-card .book-image [data-hint] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        z-index: -1 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        clip: rect(0, 0, 0, 0) !important;
+    }
+    
+    /* 🚨 TAB-BUTTONS KOMPLETT AUSBLENDEN: "Beschreibung", "Metadaten", "Weitere Ausgaben" */
+    .tab-buttons,
+    .book-info-tabs,
+    .book-info-tab,
+    .book-info-tab-button,
+    .book-tab-button,
+    [class*="tab-button"],
+    [class*="info-tab"] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        z-index: -1 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        clip: rect(0, 0, 0, 0) !important;
+    }
+    
+    /* 🚨 ZWISCHENTEXTE ENTFERNEN: Alle unerwünschten Text-Fragmente zwischen Buttons */
+    .book-card .book-content *:not(.book-title):not(.book-author):not(.book-description):not(.book-links):not(.mehr-button):not(.learn-more-button) {
+        font-size: 0 !important;
+        line-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+    }
+    
+    /* 🚨 SPEZIFISCHE ZWISCHENTEXTE: "erfahren", "Mehr", etc. */
+    .book-card .book-content span:not(.book-title):not(.book-author),
+    .book-card .book-content div:not(.book-title):not(.book-author):not(.book-description):not(.book-links),
+    .book-card .book-content p:not(.book-description) {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        z-index: -1 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        clip: rect(0, 0, 0, 0) !important;
+    }
+    
+    /* 📱 MOBILE: Sprachumschaltung reparieren - Touch-Events und Sichtbarkeit */
+    .mobile-lang-btn {
+        display: inline-flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        z-index: 10 !important;
+        pointer-events: auto !important;
+        min-height: 44px !important;
+        min-width: 44px !important;
+        padding: 8px 12px !important;
+        margin: 0 4px !important;
+        border: 2px solid #6a1b9a !important;
+        border-radius: 8px !important;
+        background: #6a1b9a !important;
+        color: white !important;
+        font-size: 14px !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        -webkit-touch-callout: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+    }
+    
+    .mobile-lang-btn.active {
+        background: #4a148c !important;
+        border-color: #4a148c !important;
+        box-shadow: 0 2px 8px rgba(106, 27, 154, 0.3) !important;
+    }
+    
+    .mobile-lang-btn:hover {
+        background: #4a148c !important;
+        border-color: #4a148c !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(106, 27, 154, 0.4) !important;
+    }
+    
+    /* 📱 MOBILE: Hörbuch-Buttons korrekt anzeigen - für alle Bücher mit hasAudiobook=true */
+    .book-card[data-has-audiobook="true"] .book-link.audiobook {
+        display: inline-flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        z-index: 5 !important;
+        pointer-events: auto !important;
+        width: 100% !important;
+        min-height: 44px !important;
+        padding: 10px 16px !important;
+        margin: 4px 0 !important;
+        background: #ff6b35 !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-size: 14px !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        justify-content: center !important;
+        align-items: center !important;
+        box-shadow: 0 2px 4px rgba(255, 107, 53, 0.3) !important;
+    }
+    
+    .book-card[data-has-audiobook="true"] .book-link.audiobook:hover {
+        background: #e55a2b !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 8px rgba(255, 107, 53, 0.4) !important;
+    }
+    
+    /* 📱 MOBILE: Hörbuch-Buttons für Bücher ohne Audiobook ausblenden */
+    .book-card[data-has-audiobook="false"] .book-link.audiobook,
+    .book-card:not([data-has-audiobook]) .book-link.audiobook {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        z-index: -1 !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        clip: rect(0, 0, 0, 0) !important;
+    }
+    
+    /* 📱 MOBILE: Button-Layout optimieren - Linear und responsiv */
+    .book-links {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        width: 100% !important;
+        margin-top: 12px !important;
+    }
+    
+    .book-links .book-link {
+        width: 100% !important;
+        min-height: 44px !important;
+        padding: 10px 16px !important;
+        margin: 0 !important;
+        font-size: 14px !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        border-radius: 8px !important;
+        transition: all 0.2s ease !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .book-links .book-link:hover {
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* 📱 MOBILE: "Mehr erfahren" Button korrekt stylen */
+    .mehr-button,
+    .learn-more-button {
+        display: block !important;
+        width: 100% !important;
+        min-height: 44px !important;
+        padding: 10px 16px !important;
+        margin: 8px 0 0 0 !important;
+        background: #6a1b9a !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-size: 14px !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 2px 4px rgba(106, 27, 154, 0.3) !important;
+    }
+    
+    .mehr-button:hover,
+    .learn-more-button:hover {
+        background: #4a148c !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 8px rgba(106, 27, 154, 0.4) !important;
+    }
+    
+    /* 📱 MOBILE: Buchcover-Bilder optimieren */
+    .book-card .book-image img {
+        width: 100% !important;
+        height: 250px !important;
+        object-fit: cover !important;
+        border-radius: 8px !important;
+        display: block !important;
+    }
+    
+    /* 📱 MOBILE: Buchbeschreibung linear anzeigen */
+    .book-description {
+        display: block !important;
+        max-height: none !important;
+        overflow: visible !important;
+        text-overflow: unset !important;
+        -webkit-line-clamp: unset !important;
+        -webkit-box-orient: unset !important;
+        margin-bottom: 12px !important;
+        line-height: 1.5 !important;
+        font-size: 14px !important;
+    }
+}
+
+/* 📱 KLEINE MOBILE GERÄTE: Zusätzliche Optimierungen */
+@media screen and (max-width: 480px) {
+    .book-card .book-image img {
+        height: 200px !important;
+    }
+    
+    .book-links .book-link {
+        font-size: 13px !important;
+        padding: 8px 12px !important;
+    }
+    
+    .mehr-button,
+    .learn-more-button {
+        font-size: 13px !important;
+        padding: 8px 12px !important;
+    }
+    
+    .mobile-lang-btn {
+        font-size: 12px !important;
+        padding: 6px 10px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
     }
 }
 

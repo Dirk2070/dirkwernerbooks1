@@ -115,6 +115,15 @@ body {
     font-weight: 600;
     font-size: 0.9rem;
     transition: all 0.3s ease;
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .lang-btn.active {
@@ -125,6 +134,10 @@ body {
 .lang-btn:hover {
     color: white;
     background: rgba(255, 255, 255, 0.15);
+}
+
+.lang-btn:active {
+    transform: scale(0.95);
 }
 
 /* 🎨 NAVIGATION: Hellgrauer Hintergrund wie in den Bildern */
@@ -209,6 +222,7 @@ body {
     background: rgba(52, 152, 219, 0.1);
 }
 
+/* 🎨 MOBILE SPRACHUMSCHALTUNG: Touch-optimiert */
 .mobile-language-toggle {
     display: flex;
     align-items: center;
@@ -216,6 +230,7 @@ body {
     border-radius: 6px;
     padding: 2px;
     border: 1px solid #bdc3c7;
+    min-height: 44px;
 }
 
 .mobile-lang-btn {
@@ -228,6 +243,16 @@ body {
     font-weight: 600;
     font-size: 0.85rem;
     transition: all 0.3s ease;
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    touch-action: manipulation;
 }
 
 .mobile-lang-btn.active {
@@ -239,10 +264,18 @@ body {
     background: rgba(52, 152, 219, 0.1);
 }
 
+.mobile-lang-btn:active {
+    transform: scale(0.95);
+}
+
 .mobile-lang-separator {
     color: #bdc3c7;
     font-weight: 400;
     margin: 0 2px;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 /* 🎨 HERO SECTION: Blaue Banner wie in den Bildern */
@@ -1038,10 +1071,43 @@ body {
         border-radius: 6px !important;
         font-weight: 600 !important;
         font-size: 0.9rem !important;
-        min-height: 36px !important;
+        min-height: 44px !important;
         min-width: 44px !important;
         touch-action: manipulation !important;
         -webkit-tap-highlight-color: transparent !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        position: relative !important;
+        z-index: 10 !important;
+        cursor: pointer !important;
+        background: transparent !important;
+        border: none !important;
+        color: #2c3e50 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .mobile-lang-btn:active {
+        transform: scale(0.95) !important;
+        background: rgba(52, 152, 219, 0.2) !important;
+    }
+    
+    .mobile-lang-btn.active {
+        background: #3498db !important;
+        color: white !important;
+    }
+    
+    .mobile-language-toggle {
+        display: flex !important;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.9) !important;
+        border-radius: 8px !important;
+        padding: 4px !important;
+        border: 1px solid #bdc3c7 !important;
+        min-height: 44px !important;
+        position: relative !important;
+        z-index: 10 !important;
     }
     
     /* 📱 MOBILE: Hörbuch-Buttons korrekt anzeigen - für alle Bücher mit hasAudiobook=true */

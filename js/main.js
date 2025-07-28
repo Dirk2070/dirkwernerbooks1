@@ -900,7 +900,7 @@ function initGenreFilter() {
 
 // 🌐 SPRACHUMSCHALTUNG: Vollständig funktionsfähig machen
 function initLanguageSwitching() {
-    console.log('🌐 [Language] Initializing language switching...');
+    console.log('🌐 [Language] Initializing language switching for all devices...');
     
     // Aktuelle Sprache ermitteln
     const urlParams = new URLSearchParams(window.location.search);
@@ -924,25 +924,39 @@ function initLanguageSwitching() {
     
     window.currentLanguage = preferredLang;
     
+    // Alle Sprachbuttons finden und initialisieren
+    const allLangButtons = document.querySelectorAll('.lang-btn, .mobile-lang-btn');
+    console.log(`🌐 [Language] Found ${allLangButtons.length} language buttons`);
+    
     // Aktive Button-Zustände setzen
-    document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(btn => {
+    allLangButtons.forEach((btn, index) => {
+        console.log(`🌐 [Language] Button ${index + 1}:`, btn.dataset.lang, 'Current active:', preferredLang);
+        
         if (btn.dataset.lang === preferredLang) {
             btn.classList.add('active');
+            console.log(`🌐 [Language] Button ${btn.dataset.lang} set to active`);
         } else {
             btn.classList.remove('active');
+            console.log(`🌐 [Language] Button ${btn.dataset.lang} set to inactive`);
         }
-    });
-    console.log('🌐 [Language] All language buttons initialized:', preferredLang);
-    
-    // Event-Listener für alle Sprachbuttons hinzufügen
-    document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(btn => {
+        
         // Alle bestehenden Event-Listener entfernen
         btn.removeEventListener('click', handleLanguageSwitch);
         btn.removeEventListener('touchend', handleLanguageSwitch);
+        btn.removeEventListener('touchstart', handleLanguageSwitch);
         
         // Neue Event-Listener hinzufügen
         btn.addEventListener('click', handleLanguageSwitch);
         btn.addEventListener('touchend', handleLanguageSwitch);
+        btn.addEventListener('touchstart', handleLanguageSwitch);
+        
+        // Zusätzliche Touch-Events für mobile Geräte
+        if (isMobile) {
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                console.log(`🌐 [Language] Touch start on ${btn.dataset.lang} button`);
+            });
+        }
         
         console.log(`🌐 [Language] Event listeners added for ${btn.dataset.lang} button`);
     });
@@ -950,16 +964,96 @@ function initLanguageSwitching() {
     // Initiale Übersetzung anwenden
     translatePage(preferredLang);
     
-    console.log('🌐 [Language] Language switching fully initialized');
+    // Zusätzliche Sicherheit: Buttons nach 1 Sekunde nochmal prüfen
+    setTimeout(() => {
+        const buttonsAfterDelay = document.querySelectorAll('.lang-btn, .mobile-lang-btn');
+        console.log(`🌐 [Language] After delay: Found ${buttonsAfterDelay.length} language buttons`);
+        
+        buttonsAfterDelay.forEach((btn, index) => {
+            if (!btn.hasEventListener) {
+                btn.addEventListener('click', handleLanguageSwitch);
+                btn.addEventListener('touchend', handleLanguageSwitch);
+                btn.hasEventListener = true;
+                console.log(`🌐 [Language] Added delayed event listeners to button ${index + 1}`);
+            }
+        });
+    }, 1000);
+    
+    console.log('🌐 [Language] Language switching fully initialized for all devices');
 }
 
-// 🌐 SPRACHWECHSEL-HANDLER: Einheitlich für alle Geräte
+// 🌐 SPRACHUMSCHALTUNG-REPAIR: Überprüfung und Reparatur der Sprachumschaltung
+function repairLanguageSwitching() {
+    console.log('🔧 [Language Repair] Checking and repairing language switching...');
+    
+    // Alle Sprachbuttons finden
+    const allLangButtons = document.querySelectorAll('.lang-btn, .mobile-lang-btn');
+    console.log(`🔧 [Language Repair] Found ${allLangButtons.length} language buttons`);
+    
+    if (allLangButtons.length === 0) {
+        console.warn('⚠️ [Language Repair] No language buttons found!');
+        return false;
+    }
+    
+    // Event-Listener für alle Buttons hinzufügen
+    allLangButtons.forEach((btn, index) => {
+        console.log(`🔧 [Language Repair] Processing button ${index + 1}:`, btn.dataset.lang);
+        
+        // Alle bestehenden Event-Listener entfernen
+        btn.removeEventListener('click', handleLanguageSwitch);
+        btn.removeEventListener('touchend', handleLanguageSwitch);
+        btn.removeEventListener('touchstart', handleLanguageSwitch);
+        
+        // Neue Event-Listener hinzufügen
+        btn.addEventListener('click', handleLanguageSwitch);
+        btn.addEventListener('touchend', handleLanguageSwitch);
+        btn.addEventListener('touchstart', handleLanguageSwitch);
+        
+        // Zusätzliche Touch-Events für mobile Geräte
+        if (window.innerWidth < 768) {
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                console.log(`🔧 [Language Repair] Touch start on ${btn.dataset.lang} button`);
+            });
+        }
+        
+        // Button als klickbar markieren
+        btn.style.cursor = 'pointer';
+        btn.style.pointerEvents = 'auto';
+        btn.style.userSelect = 'none';
+        btn.style.webkitUserSelect = 'none';
+        btn.style.mozUserSelect = 'none';
+        btn.style.msUserSelect = 'none';
+        
+        console.log(`🔧 [Language Repair] Button ${btn.dataset.lang} repaired`);
+    });
+    
+    // Aktive Sprache setzen
+    const currentLang = localStorage.getItem('lang') || 'de';
+    window.currentLanguage = currentLang;
+    
+    // Aktive Button-Zustände setzen
+    allLangButtons.forEach(btn => {
+        if (btn.dataset.lang === currentLang) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
+    console.log(`🔧 [Language Repair] Language switching repaired. Current language: ${currentLang}`);
+    return true;
+}
+
+// 🌐 SPRACHWECHSEL-HANDLER: Robuster für alle Geräte
 function handleLanguageSwitch(e) {
     e.preventDefault();
     e.stopPropagation();
     
     const lang = this.dataset.lang;
-    console.log(`🌐 [Language] Switching to: ${lang}`);
+    const isMobile = window.innerWidth < 768;
+    
+    console.log(`🌐 [Language] Switching to: ${lang} (Mobile: ${isMobile})`);
     
     // Aktive Button-Zustände aktualisieren
     document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(b => {
@@ -973,10 +1067,17 @@ function handleLanguageSwitch(e) {
     updateURLParameter('lang', lang);
     
     // Übersetzung anwenden
-    if (window.innerWidth < 768) {
+    if (isMobile) {
         // Mobile: Page reload für bessere Stabilität
         console.log('🌐 [Language] Mobile detected - reloading page');
-        location.reload();
+        
+        // Zusätzliche Sicherheit: Sprache vor Reload speichern
+        sessionStorage.setItem('pendingLanguage', lang);
+        
+        // Kurze Verzögerung für bessere UX
+        setTimeout(() => {
+            location.reload();
+        }, 100);
     } else {
         // Desktop: Sofortige Übersetzung ohne Reload
         console.log('🌐 [Language] Desktop detected - applying translation');
@@ -1664,6 +1765,16 @@ function cleanupAmazonWidgets() {
         setInterval(() => {
             ultimateTextOverlayCleanup();
         }, 10000);
+        
+        // 🔧 SPRACHUMSCHALTUNG-REPAIR: Nach dem Laden reparieren
+        setTimeout(() => {
+            repairLanguageSwitching();
+        }, 2000);
+        
+        // Zusätzliche Reparatur nach 5 Sekunden
+        setTimeout(() => {
+            repairLanguageSwitching();
+        }, 5000);
         
         // Set initial language
         translatePage('de');

@@ -2076,12 +2076,13 @@ async function loadAndDisplayBooks() {
             forceLoadBooks();
         }, 1000);
         
-        // Only initialize search and filter on overview page
-        const isOverviewPage = window.location.pathname === '/' || window.location.pathname === '/index.html';
-        if (isOverviewPage) {
-            initSearch();
-            initGenreFilter();
-        }
+        // 🚨 SOFORTIGE BUCHLADUNG: Direkter Aufruf als Fallback
+        console.log('🚨 [Emergency] Direct book loading as fallback...');
+        loadAndDisplayBooks();
+        
+        // Initialize search and filter on overview page
+        initSearch();
+        initGenreFilter();
         
         initLanguageSwitching();
         initAnimations();
@@ -2179,6 +2180,17 @@ async function loadAndDisplayBooks() {
                 forceLoadBooks();
             }
         }, 10000);
+        
+        // 🚨 GLOBALER FALLBACK: Nach 3 Sekunden prüfen, ob Bücher geladen wurden
+        setTimeout(() => {
+            console.log('🚨 [Global Fallback] Checking if books were loaded...');
+            if (!allBooks || allBooks.length === 0) {
+                console.log('🚨 [Global Fallback] No books loaded, forcing load...');
+                loadAndDisplayBooks();
+            } else {
+                console.log('🚨 [Global Fallback] Books loaded successfully:', allBooks.length);
+            }
+        }, 3000);
         
         // 🚨 ULTIMATE CLEANUP: Alle Text-Overlays und HTML-Attribute entfernen (aber Buchkarten schützen)
         setTimeout(() => {

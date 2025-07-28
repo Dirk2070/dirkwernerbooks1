@@ -1552,6 +1552,7 @@ function startContinuousCleanup() {
             console.log('🔄 [Continuous Cleanup] External content detected, running cleanup...');
             setTimeout(() => {
                 ultimateTextOverlayCleanup();
+                ensureBookCardsVisibility(); // Sofort nach Cleanup wieder sichtbar machen
             }, 100);
         }
     });
@@ -1897,6 +1898,112 @@ function cleanupAmazonWidgets() {
     return removedCount;
 }
 
+// 🚨 BUCHKARTEN SICHTBARKEIT GARANTIEREN: Sicherstellen, dass Buchkarten und deren Inhalte immer sichtbar sind
+function ensureBookCardsVisibility() {
+    console.log('🚨 [Visibility] Ensuring book cards and content are visible...');
+    
+    // Alle Buchkarten sichtbar machen
+    document.querySelectorAll('.book-card').forEach((card, index) => {
+        card.style.display = 'block';
+        card.style.visibility = 'visible';
+        card.style.opacity = '1';
+        card.style.position = 'static';
+        card.style.zIndex = 'auto';
+        card.style.width = 'auto';
+        card.style.height = 'auto';
+        card.style.overflow = 'visible';
+        card.style.pointerEvents = 'auto';
+        card.style.fontSize = 'inherit';
+        card.style.lineHeight = 'inherit';
+        card.style.margin = 'inherit';
+        card.style.padding = 'inherit';
+        card.style.border = 'inherit';
+        card.style.clip = 'auto';
+        
+        console.log(`🚨 [Visibility] Book card ${index + 1} made visible`);
+    });
+    
+    // Alle Buchkarten-Inhalte sichtbar machen
+    const bookCardElements = [
+        '.book-title', '.book-author', '.book-description', 
+        '.book-links', '.book-content', '.book-image', 
+        '.book-cover-link', '.book-cover-image', '.book-link', 
+        '.mehr-button', '.learn-more-button'
+    ];
+    
+    bookCardElements.forEach(selector => {
+        document.querySelectorAll(selector).forEach((element, index) => {
+            element.style.display = 'block';
+            element.style.visibility = 'visible';
+            element.style.opacity = '1';
+            element.style.position = 'static';
+            element.style.zIndex = 'auto';
+            element.style.width = 'auto';
+            element.style.height = 'auto';
+            element.style.overflow = 'visible';
+            element.style.pointerEvents = 'auto';
+            element.style.fontSize = 'inherit';
+            element.style.lineHeight = 'inherit';
+            element.style.margin = 'inherit';
+            element.style.padding = 'inherit';
+            element.style.border = 'inherit';
+            element.style.clip = 'auto';
+        });
+    });
+    
+    // Alle Buttons in Buchkarten sichtbar machen
+    document.querySelectorAll('.book-card .book-link').forEach((button, index) => {
+        button.style.display = 'inline-flex';
+        button.style.visibility = 'visible';
+        button.style.opacity = '1';
+        button.style.position = 'static';
+        button.style.zIndex = 'auto';
+        button.style.width = 'auto';
+        button.style.height = 'auto';
+        button.style.overflow = 'visible';
+        button.style.pointerEvents = 'auto';
+        button.style.fontSize = 'inherit';
+        button.style.lineHeight = 'inherit';
+        button.style.margin = 'inherit';
+        button.style.padding = 'inherit';
+        button.style.border = 'inherit';
+        button.style.clip = 'auto';
+        
+        console.log(`🚨 [Visibility] Button ${index + 1} in book card made visible`);
+    });
+    
+    console.log('🚨 [Visibility] Book cards visibility ensured');
+}
+
+// 🔄 BUCHKARTEN LADEN UND ANZEIGEN: Hauptfunktion für das Laden und Anzeigen von Büchern
+async function loadAndDisplayBooks() {
+    console.log('📚 [Load] Starting book loading and display process...');
+    
+    try {
+        // Bücher laden
+        await loadBooks();
+        
+        // Sicherstellen, dass Buchkarten sichtbar sind
+        setTimeout(() => {
+            ensureBookCardsVisibility();
+        }, 500);
+        
+        // Zusätzliche Sichtbarkeitsprüfung nach 1 Sekunde
+        setTimeout(() => {
+            ensureBookCardsVisibility();
+        }, 1000);
+        
+        // Zusätzliche Sichtbarkeitsprüfung nach 3 Sekunden
+        setTimeout(() => {
+            ensureBookCardsVisibility();
+        }, 3000);
+        
+        console.log('📚 [Load] Book loading and display process completed');
+    } catch (error) {
+        console.error('❌ [Load] Error in book loading and display process:', error);
+    }
+}
+
     // Initialize everything when DOM is loaded
     document.addEventListener('DOMContentLoaded', async function() {
         console.log('🚀 [Init] DOMContentLoaded event fired');
@@ -1958,7 +2065,7 @@ function cleanupAmazonWidgets() {
         if (allBooksContainer) showLoading('allBooks');
         
         // Initialize all functionality for main page
-        await loadBooks();
+        await loadAndDisplayBooks();
         initSmoothScrolling();
         
         // Only initialize search and filter on overview page
@@ -1998,9 +2105,10 @@ function cleanupAmazonWidgets() {
                 if (mutation.type === 'childList') {
                     mutation.addedNodes.forEach((node) => {
                         if (node.nodeType === 1) {
-                            // Neue Buchkarte hinzugefügt - sofort bereinigen
+                            // Neue Buchkarte hinzugefügt - sofort sichtbar machen und bereinigen
                             if (node.classList && node.classList.contains('book-card')) {
                                 setTimeout(() => {
+                                    ensureBookCardsVisibility(); // Sofort sichtbar machen
                                     cleanupDataTitleAttributes();
                                     if (window.innerWidth < 768) {
                                         mobileCleanup();
@@ -2041,20 +2149,34 @@ function cleanupAmazonWidgets() {
             }, 2000);
         }
         
-        // 🚨 ULTIMATE CLEANUP: Alle Text-Overlays und HTML-Attribute entfernen
+        // 🚨 BUCHKARTEN SICHTBARKEIT GARANTIEREN: Nach dem Laden der Bücher
         setTimeout(() => {
-            ultimateTextOverlayCleanup();
+            ensureBookCardsVisibility();
         }, 1000);
         
-        // Zusätzliche Ultimate Cleanup nach 3 Sekunden
+        // Zusätzliche Sichtbarkeitsprüfung nach 3 Sekunden
         setTimeout(() => {
-            ultimateTextOverlayCleanup();
+            ensureBookCardsVisibility();
+            checkBookCardsStatus(); // Status prüfen
         }, 3000);
         
-        // Wiederholte Ultimate Cleanup alle 10 Sekunden
+        // Wiederholte Sichtbarkeitsprüfung alle 10 Sekunden
         setInterval(() => {
-            ultimateTextOverlayCleanup();
+            ensureBookCardsVisibility();
+            checkBookCardsStatus(); // Status prüfen
         }, 10000);
+        
+        // 🚨 ULTIMATE CLEANUP: Alle Text-Overlays und HTML-Attribute entfernen (aber Buchkarten schützen)
+        setTimeout(() => {
+            ultimateTextOverlayCleanup();
+            ensureBookCardsVisibility(); // Sofort nach Cleanup wieder sichtbar machen
+        }, 1500);
+        
+        // Zusätzliche Ultimate Cleanup nach 4 Sekunden
+        setTimeout(() => {
+            ultimateTextOverlayCleanup();
+            ensureBookCardsVisibility(); // Sofort nach Cleanup wieder sichtbar machen
+        }, 4000);
         
         // 🔄 DAUERHAFTE ÜBERWACHUNG: Kontinuierliche Bereinigung externer Inhalte
         startContinuousCleanup();
@@ -2259,4 +2381,59 @@ function cleanupAmazonWidgets() {
             }
         });
     }, 3000);
+    
+    // 🔍 BUCHKARTEN STATUS PRÜFEN: Prüfen, ob Bücher geladen und sichtbar sind
+    function checkBookCardsStatus() {
+        console.log('🔍 [Status] Checking book cards status...');
+        
+        const featuredContainer = document.getElementById('featuredBooks');
+        const allBooksContainer = document.getElementById('allBooks');
+        
+        // Prüfen, ob Container existieren
+        console.log('🔍 [Status] Containers:', {
+            featuredContainer: !!featuredContainer,
+            allBooksContainer: !!allBooksContainer
+        });
+        
+        // Prüfen, ob Bücher geladen wurden
+        console.log('🔍 [Status] Books loaded:', {
+            allBooks: allBooks?.length || 0,
+            filteredBooks: filteredBooks?.length || 0
+        });
+        
+        // Prüfen, ob Buchkarten im DOM sind
+        const bookCards = document.querySelectorAll('.book-card');
+        console.log('🔍 [Status] Book cards in DOM:', bookCards.length);
+        
+        // Prüfen, ob Buchkarten sichtbar sind
+        let visibleCards = 0;
+        bookCards.forEach((card, index) => {
+            const isVisible = card.style.display !== 'none' && 
+                             card.style.visibility !== 'hidden' && 
+                             card.style.opacity !== '0';
+            if (isVisible) visibleCards++;
+            
+            console.log(`🔍 [Status] Book card ${index + 1}:`, {
+                display: card.style.display,
+                visibility: card.style.visibility,
+                opacity: card.style.opacity,
+                isVisible: isVisible
+            });
+        });
+        
+        console.log('🔍 [Status] Visible book cards:', visibleCards);
+        
+        // Falls keine Buchkarten sichtbar sind, aber Bücher geladen wurden, neu laden
+        if (visibleCards === 0 && allBooks && allBooks.length > 0) {
+            console.log('🔍 [Status] No visible book cards found, but books are loaded - reloading...');
+            loadAndDisplayBooks();
+        }
+        
+        return {
+            containersExist: !!(featuredContainer || allBooksContainer),
+            booksLoaded: !!(allBooks && allBooks.length > 0),
+            cardsInDOM: bookCards.length,
+            visibleCards: visibleCards
+        };
+    }
 });

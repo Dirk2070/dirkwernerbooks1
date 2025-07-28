@@ -111,12 +111,6 @@
                     </div>
                 </div>
                 <div class="header-right">
-                    <!-- 📱 MOBILE: Dropdown-Sprachumschalter für mobile Geräte -->
-                    <select id="language-switcher" class="language-dropdown">
-                        <option value="de">🇩🇪 Deutsch</option>
-                        <option value="en">🇺🇸 English</option>
-                    </select>
-                    
                     <!-- 🖥️ DESKTOP: Button-Sprachumschalter für Desktop -->
                     <div class="language-switch desktop-only">
                         <button class="lang-btn active" data-lang="de">DE</button>
@@ -130,10 +124,8 @@
     <!-- Navigation -->
     <nav class="nav">
         <div class="container">
-            <button class="mobile-nav-toggle" aria-label="Menü öffnen/schließen">
-                ☰
-            </button>
-            <ul class="nav-list">
+            <!-- 🖥️ DESKTOP: Standard-Navigation -->
+            <ul class="nav-list desktop-nav">
                 <li><a href="#home" data-de="Startseite" data-en="Home">Startseite</a></li>
                 <li><a href="#books" data-de="Bücher" data-en="Books">Bücher</a></li>
                 <li><a href="#author" data-de="Über mich" data-en="About">Über mich</a></li>
@@ -144,6 +136,19 @@
                     </a>
                 </li>
             </ul>
+            
+            <!-- 📱 MOBILE: Vereinfachte Navigation in einer Zeile -->
+            <div class="mobile-nav">
+                <a href="#home" class="mobile-nav-link" data-de="Startseite" data-en="Home">Startseite</a>
+                <a href="#books" class="mobile-nav-link" data-de="Bücher" data-en="Books">Bücher</a>
+                <a href="#author" class="mobile-nav-link" data-de="Über mich" data-en="About">Über mich</a>
+                <a href="#genres" class="mobile-nav-link" data-de="Genres" data-en="Genres">Genres</a>
+                <div class="mobile-language-toggle">
+                    <button class="mobile-lang-btn active" data-lang="de">DE</button>
+                    <span class="mobile-lang-separator">|</span>
+                    <button class="mobile-lang-btn" data-lang="en">EN</button>
+                </div>
+            </div>
         </div>
     </nav>
 

@@ -494,38 +494,7 @@ async function createBookCard(book) {
                     <a href="${detailPageUrl}" class="book-title-link" aria-label="Mehr über ${titleString} erfahren">${getLocalizedText(book.title, currentLang)}</a>
                 </h3>
                 <p class="book-author">${book.author}</p>
-                
-                <!-- 📱 MOBILE: Markdown-Akkordeon für mobile Geräte -->
-                <div class="book-info-tabs">
-                    <button class="book-info-tab active" data-tab="description" data-de="Beschreibung" data-en="Description">Beschreibung</button>
-                    <button class="book-info-tab" data-tab="meta" data-de="Metadaten" data-en="Metadata">Metadaten</button>
-                    <button class="book-info-tab" data-tab="formats" data-de="Weitere Ausgaben" data-en="Other Editions">Weitere Ausgaben</button>
-                </div>
-                
-                <div class="book-info-content active" data-content="description">
-                    <p class="book-description">${parseMarkdown(getLocalizedText(book.description, currentLang))}</p>
-                </div>
-                
-                <div class="book-info-content" data-content="meta">
-                    <div class="book-meta">
-                        <p><strong>ASIN:</strong> ${book.asin || 'N/A'}</p>
-                        <p><strong>Sprache:</strong> ${book.language || 'Deutsch'}</p>
-                        <p><strong>Format:</strong> ${getLocalizedText(book.bookFormat, currentLang) || 'E-Book'}</p>
-                        <p><strong>Hörbuch:</strong> ${hasAudiobook ? 'Verfügbar' : 'Nicht verfügbar'}</p>
-                    </div>
-                </div>
-                
-                <div class="book-info-content" data-content="formats">
-                    <div class="book-formats">
-                        <p><strong>Verfügbare Formate:</strong></p>
-                        <ul>
-                            <li>📱 E-Book (Kindle, Apple Books)</li>
-                            <li>📖 Taschenbuch (Amazon)</li>
-                            ${hasAudiobook ? '<li>🎧 Hörbuch (Apple Books)</li>' : ''}
-                        </ul>
-                    </div>
-                </div>
-                
+                <p class="book-description">${parseMarkdown(getLocalizedText(book.description, currentLang))}</p>
                 <div class="book-links">
                     <a href="${detailPageUrl}" class="book-link detail-link mehr-button" aria-label="Mehr über ${titleString} erfahren">
                         📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
@@ -963,125 +932,64 @@ function initLanguageSwitching() {
     window.currentLanguage = preferredLang;
     
     // Set initial active state
-    // Set active language button/select based on device
-    if (isMobile) {
-        // Mobile: Dropdown-Sprachumschalter
-        const languageSwitcher = document.getElementById('language-switcher');
-        if (languageSwitcher) {
-            languageSwitcher.value = preferredLang;
-            languageSwitcher.style.fontSize = '14px';
-            languageSwitcher.style.width = '100%';
-            console.log('📱 [Mobile] Language dropdown initialized:', preferredLang);
+    // Set active language button for all devices
+    document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(btn => {
+        if (btn.dataset.lang === preferredLang) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
         }
-    } else {
-        // Desktop: Button-Sprachumschalter
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            if (btn.dataset.lang === preferredLang) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-        console.log('🖥️ [Desktop] Language buttons initialized:', preferredLang);
-    }
+    });
+    console.log('🌐 [Language] All language buttons initialized:', preferredLang);
     
-    // Add event listeners for language switching
-    if (isMobile) {
-        // Mobile: Dropdown-Sprachumschalter
-        const languageSwitcher = document.getElementById('language-switcher');
-        if (languageSwitcher) {
-            languageSwitcher.addEventListener('change', function() {
-                const lang = this.value;
-                console.log(`🌐 [Mobile] Language switching to: ${lang}`);
-                
-                // Update session storage and URL parameter
-                sessionStorage.setItem('currentLang', lang);
-                window.currentLanguage = lang;
-                updateURLParameter('lang', lang);
-                
-                // Apply translation
-                translatePage(lang);
-                
-                // Force page reload for mobile (more reliable)
-                location.reload();
-            });
-        }
-    } else {
-        // Desktop: Button-Sprachumschalter
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            const handleLanguageSwitch = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const lang = this.dataset.lang;
-                
-                console.log(`🌐 [Desktop] Switching to: ${lang}`);
-                
-                // Update active state
-                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Update session storage and URL parameter (temporär)
-                sessionStorage.setItem('currentLang', lang);
-                window.currentLanguage = lang;
-                updateURLParameter('lang', lang);
-                
-                // Apply translation without persistent DOM changes
-                translatePage(lang);
-                
-                // Temporäre DOM-Updates (werden beim Reload zurückgesetzt)
-                setTimeout(() => {
-                    document.querySelectorAll('[data-de], [data-en]').forEach(element => {
-                        if (element.dataset[lang]) {
-                            element.textContent = element.dataset[lang];
-                        }
-                    });
-                    
-                    // Re-render book cards
-                    if (typeof displayFeaturedBooks === 'function') {
-                        displayFeaturedBooks();
-                    }
-                    if (typeof displayAllBooks === 'function') {
-                        displayAllBooks();
-                    }
-                }, 100);
-                
-                console.log(`🌐 [Language] Successfully switched to: ${lang} (temporary)`);
-            };
+    // Add event listeners for language switching (einheitlich für alle Geräte)
+    document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(btn => {
+        const handleLanguageSwitch = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             
-            btn.addEventListener('click', handleLanguageSwitch);
-            btn.addEventListener('touchend', handleLanguageSwitch);
-        });
-    }
+            const lang = this.dataset.lang;
+            
+            console.log(`🌐 [Language] Switching to: ${lang}`);
+            
+            // Update active state for all language buttons
+            document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Update session storage and URL parameter
+            sessionStorage.setItem('currentLang', lang);
+            window.currentLanguage = lang;
+            updateURLParameter('lang', lang);
+            
+            // Apply translation
+            translatePage(lang);
+            
+            // Temporäre DOM-Updates (werden beim Reload zurückgesetzt)
+            setTimeout(() => {
+                document.querySelectorAll('[data-de], [data-en]').forEach(element => {
+                    if (element.dataset[lang]) {
+                        element.textContent = element.dataset[lang];
+                    }
+                });
+                
+                // Re-render book cards
+                if (typeof displayFeaturedBooks === 'function') {
+                    displayFeaturedBooks();
+                }
+                if (typeof displayAllBooks === 'function') {
+                    displayAllBooks();
+                }
+            }, 100);
+            
+            console.log(`🌐 [Language] Successfully switched to: ${lang} (temporary)`);
+        };
+        
+        btn.addEventListener('click', handleLanguageSwitch);
+        btn.addEventListener('touchend', handleLanguageSwitch);
+    });
     
     // Apply initial translation
     translatePage(preferredLang);
-    
-    // 📱 MOBILE: Akkordeon-Funktionalität für mobile Geräte
-    initMobileAccordion();
-}
-
-// 📱 MOBILE: Akkordeon-Funktionalität für mobile Geräte
-function initMobileAccordion() {
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('book-info-tab')) {
-            const tab = e.target;
-            const bookCard = tab.closest('.book-card');
-            const tabName = tab.dataset.tab;
-            
-            // Update active tab
-            bookCard.querySelectorAll('.book-info-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            
-            // Update active content
-            bookCard.querySelectorAll('.book-info-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            bookCard.querySelector(`[data-content="${tabName}"]`).classList.add('active');
-            
-            console.log('📱 [Mobile] Tab switched to:', tabName);
-        }
-    });
 }
 
 // Add loading animation

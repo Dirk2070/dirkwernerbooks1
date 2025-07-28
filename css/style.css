@@ -2172,6 +2172,116 @@ html {
     overflow: hidden !important;
 }
 
+/* ADDITIONAL: Prevent any title overlays from appearing above book covers */
+.book-card::before,
+.book-card::after,
+.book-image::before,
+.book-image::after {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Ensure book covers are clean without any text overlays */
+.book-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.book-image img {
+    display: block !important;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
+}
+
+/* Remove any potential pseudo-elements that might add text */
+.book-card *::before,
+.book-card *::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* ENHANCED: Additional protection against title overlays */
+.book-card[data-title]::before,
+.book-card[data-title]::after,
+.book-card[data-asin]::before,
+.book-card[data-asin]::after,
+.book-card[data-genre]::before,
+.book-card[data-genre]::after {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
+/* ULTRA-COMPREHENSIVE: Final protection against any title overlays */
+.book-card::before,
+.book-card::after,
+.book-image::before,
+.book-image::after,
+.book-content::before,
+.book-content::after,
+.book-title::before,
+.book-title::after,
+.book-author::before,
+.book-author::after,
+.book-description::before,
+.book-description::after,
+.book-links::before,
+.book-links::after,
+.book-link::before,
+.book-link::after {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Ensure no data attributes create visible content */
+[data-title]::before,
+[data-title]::after,
+[data-asin]::before,
+[data-asin]::after,
+[data-genre]::before,
+[data-genre]::after,
+[data-format]::before,
+[data-format]::after,
+[data-has-detail-page]::before,
+[data-has-detail-page]::after {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
 /* ADDITIONAL: Remove any title overlays that might appear above book covers */
 .book-card::before,
 .book-card::after,

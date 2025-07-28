@@ -445,7 +445,7 @@ async function createBookCard(book) {
             ${schemaScript}
             <div class="book-image">
                 <a href="${detailPageUrl}" class="book-detail-link" aria-label="Mehr über ${titleString} erfahren">
-                    <img src="${cacheBustedCover}" alt="Buchcover: ${titleString}" loading="lazy">
+                    <img src="${cacheBustedCover}" alt="Buchcover" loading="lazy">
                 </a>
             </div>
             <div class="book-info">

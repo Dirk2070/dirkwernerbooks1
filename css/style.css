@@ -703,6 +703,29 @@ body {
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
+/* 📱 MOBILE: "Mehr erfahren"-Button als echten Button */
+.learn-more-button {
+    display: block;
+    background: #6a1b9a;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(106, 27, 154, 0.3);
+}
+
+.learn-more-button:hover {
+    background: #4a148c;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(106, 27, 154, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
 .detail-link:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
@@ -2909,19 +2932,8 @@ html {
     }
     
     .header-logo {
-        height: 2rem;
-    }
-    
-    .header-title {
-        font-size: 1.25rem;
-    }
-    
-    .header-subtitle {
-        font-size: 0.8rem;
-    }
-    
-    /* Make logo clickable on mobile */
-    .header-logo {
+        max-width: 90px;
+        height: auto;
         cursor: pointer;
         transition: all 0.2s ease;
         filter: none;
@@ -2933,6 +2945,29 @@ html {
         transform: scale(1.05);
         opacity: 1;
         filter: brightness(1.1) contrast(1.1);
+    }
+    
+    .header-title {
+        font-size: 1.25rem;
+    }
+    
+    .header-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    /* 📱 MOBILE: Logo-Backlink optimieren */
+    .header-brand a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+    
+    .header-brand a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: scale(1.05);
     }
 }
 

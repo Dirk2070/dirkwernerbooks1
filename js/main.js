@@ -914,10 +914,43 @@ function initLanguageSwitching() {
     
     // Add click event listeners
     document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
             const selectedLang = this.dataset.lang;
+            
+            // Update active state
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
             localStorage.setItem('preferredLang', selectedLang);
+            window.currentLanguage = selectedLang;
             translatePage(selectedLang);
+            
+            console.log('🌐 [Language] Switched to:', selectedLang);
+        });
+        
+        // 📱 MOBILE: Touch-Event-Handler für bessere mobile Unterstützung
+        btn.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            const lang = this.dataset.lang;
+            console.log('📱 [Mobile] Touch language switch to:', lang);
+        });
+        
+        btn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            const lang = this.dataset.lang;
+            
+            // Update active state
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            localStorage.setItem('preferredLang', lang);
+            window.currentLanguage = lang;
+            translatePage(lang);
+            
+            console.log('📱 [Mobile] Touch language switch completed:', lang);
         });
     });
     

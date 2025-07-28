@@ -444,33 +444,20 @@ async function createBookCard(book) {
         <div class="book-card fade-in" data-genre="${genre}" data-title="${titleString.toLowerCase()}" data-asin="${book.asin || ''}" data-has-audiobook="${hasAudiobook}" data-has-detail-page="${hasDetailPage}">
             ${schemaScript}
             <div class="book-image">
-                ${hasDetailPage ? 
-                    `<a href="${detailPageUrl}" class="book-detail-link" aria-label="Mehr über ${titleString} erfahren">
-                        <img src="${cacheBustedCover}" alt="Buchcover: ${titleString}" loading="lazy">
-                    </a>` :
-                    `<a href="${books2readUrl}" target="_blank" rel="noopener noreferrer" class="book-detail-link" aria-label="Mehr über ${titleString} erfahren" data-fallback="true">
-                        <img src="${cacheBustedCover}" alt="Buchcover: ${titleString}" loading="lazy">
-                    </a>`
-                }
+                <a href="${detailPageUrl}" class="book-detail-link" aria-label="Mehr über ${titleString} erfahren">
+                    <img src="${cacheBustedCover}" alt="Buchcover: ${titleString}" loading="lazy">
+                </a>
             </div>
             <div class="book-info">
                 <h3 class="book-title">
-                    ${hasDetailPage ? 
-                        `<a href="${detailPageUrl}" class="book-detail-link" aria-label="Mehr über ${getLocalizedText(book.title, currentLang)} erfahren">${getLocalizedText(book.title, currentLang)}</a>` :
-                        `<a href="${books2readUrl}" target="_blank" rel="noopener noreferrer" class="book-detail-link" aria-label="Mehr über ${getLocalizedText(book.title, currentLang)} erfahren" data-fallback="true">${getLocalizedText(book.title, currentLang)}</a>`
-                    }
+                    <a href="${detailPageUrl}" class="book-detail-link" aria-label="Mehr über ${getLocalizedText(book.title, currentLang)} erfahren">${getLocalizedText(book.title, currentLang)}</a>
                 </h3>
                 <p class="book-author">${book.author}</p>
                 <p class="book-description">${getLocalizedText(book.description, currentLang)}</p>
                 <div class="book-links">
-                    ${hasDetailPage ? 
-                        `<a href="${detailPageUrl}" class="book-link detail-link" aria-label="Mehr über ${titleString} erfahren">
-                            📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
-                        </a>` :
-                        `<a href="${books2readUrl}" target="_blank" rel="noopener noreferrer" class="book-link detail-link" aria-label="Mehr über ${titleString} erfahren" data-fallback="true">
-                            📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
-                        </a>`
-                    }
+                    <a href="${detailPageUrl}" class="book-link detail-link" aria-label="Mehr über ${titleString} erfahren">
+                        📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
+                    </a>
                     ${shopLinksHTML}
                     ${audiobookHTML}
                 </div>

@@ -228,11 +228,11 @@ class EmergencyRepair {
 // Global emergency repair instance
 window.emergencyRepair = new EmergencyRepair();
 
-// Auto-run emergency repair after page load
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        window.emergencyRepair.runEmergencyRepair();
-    }, 1000);
-});
+// Auto-run emergency repair after page load (DISABLED for debugging)
+// window.addEventListener('load', () => {
+//     setTimeout(() => {
+//         window.emergencyRepair.runEmergencyRepair();
+//     }, 1000);
+// });
 
 console.log('🚨 [Emergency] Emergency Repair Script loaded'); 

@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     
     <!-- SEO Meta Tags -->
     <title>Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition) von Dirk Werner - Ein praktischer Ratgeber für den Umgang mit Eifersucht in Be...</title>
@@ -31,24 +34,99 @@
             "@type": "Person",
             "name": "Dirk Werner"
         },
-        "bookFormat": "[object Object]",
+        "bookFormat": "E-Book",
         "inLanguage": "de",
-        "description": "[object Object]",
+        "description": "Ein praktischer Ratgeber für den Umgang mit Eifersucht in Beziehungen. Hilft dabei, innere Stärke zu bewahren und gesunde Grenzen zu setzen.",
         "image": "https://m.media-amazon.com/images/I/7120r0YodfL.jpg",
-        "offers": {
-            "@type": "Offer",
-            "url": "https://www.amazon.de/dp/B0CW1G3XR6",
-            "priceCurrency": "EUR"
-        },
-        "isbn": "B0CW1G3XR6"
+        "offers": [
+            {
+                "@type": "Offer",
+                "url": "https://www.amazon.de/dp/B0CW1G3XR6",
+                "priceCurrency": "EUR",
+                "bookFormat": "E-Book",
+                "identifier": "B0CW1G3XR6"
+            },
+            {
+                "@type": "Offer",
+                "url": "https://www.amazon.de/Umgang-mit-Eifers%C3%BCchtigen-bewahrst-innere/dp/B0DWR2FKT4/ref=tmm_pap_swatch_0",
+                "priceCurrency": "EUR",
+                "bookFormat": "Paperback",
+                "identifier": "B0DWR2FKT4"
+            }
+        ]
     }
     </script>
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://dirkwernerbooks.com/buecher/umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke-german-edition">
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logo.png">
+    <link rel="apple-touch-icon" href="/assets/logo.png">
+    
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX', {
+            page_title: 'Umgang mit Eifersüchtigen - Dirk Werner Books',
+            page_location: 'https://dirkwernerbooks.com/buecher/umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke-german-edition.html',
+            custom_map: {
+                'custom_parameter_1': 'book_category',
+                'custom_parameter_2': 'book_format',
+                'custom_parameter_3': 'author_name'
+            }
+        });
+        
+        // Track book page view with enhanced e-commerce data
+        gtag('event', 'view_item', {
+            item_id: 'B0DWR2FKT4',
+            item_name: 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke',
+            item_category: 'Beziehungsratgeber',
+            item_variant: 'Taschenbuch',
+            currency: 'EUR',
+            value: 0,
+            item_brand: 'Dirk Werner',
+            item_category2: 'Selbsthilfe'
+        });
+        
+        // Track purchase intent events
+        function trackPurchaseIntent(linkType, format) {
+            gtag('event', 'begin_checkout', {
+                item_id: 'B0DWR2FKT4',
+                item_name: 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke',
+                item_category: 'Beziehungsratgeber',
+                item_variant: format,
+                currency: 'EUR',
+                value: 0,
+                link_type: linkType
+            });
+        }
+        
+        function trackLanguageSwitch(language) {
+            gtag('event', 'language_change', {
+                language: language,
+                page_location: window.location.href,
+                item_id: 'B0DWR2FKT4'
+            });
+        }
+        
+        function trackRatingView() {
+            gtag('event', 'view_rating', {
+                item_id: 'B0DWR2FKT4',
+                item_name: 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke',
+                rating_value: 4.8,
+                rating_source: 'Amazon.de'
+            });
+        }
+    </script>
+    
     <!-- Styles -->
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css?v=1.6">
     
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
@@ -90,14 +168,14 @@
                         </a>
                         <div class="header-text">
                             <h1 class="header-title">Dirk Werner – Psychologe & Autor</h1>
-                            <p class="header-subtitle">Bücher über Psychologie, Beziehungen & mehr</p>
+                            <p class="header-subtitle" data-translate="page-subtitle">Bücher über Psychologie, Beziehungen & mehr</p>
                         </div>
                     </div>
                 </div>
                 <div class="header-right">
                     <div class="language-switch">
-                        <button class="lang-btn active" onclick="switchLanguage('de')">DE</button>
-                        <button class="lang-btn" onclick="switchLanguage('en')">EN</button>
+                        <button class="lang-btn active" onclick="updateLanguage('de'); trackLanguageSwitch('de')">DE</button>
+                        <button class="lang-btn" onclick="updateLanguage('en'); trackLanguageSwitch('en')">EN</button>
                     </div>
                 </div>
             </div>
@@ -108,10 +186,10 @@
     <nav class="nav">
         <div class="container">
             <ul class="nav-list">
-                <li><a href="/">Startseite</a></li>
-                <li><a href="/#books">Bücher</a></li>
-                <li><a href="/#about">Über mich</a></li>
-                <li><a href="/#genres">Genres</a></li>
+                <li><a href="/" data-translate="home">Startseite</a></li>
+                <li><a href="/#books" data-translate="books">Bücher</a></li>
+                <li><a href="/#about" data-translate="about">Über mich</a></li>
+                <li><a href="/#genres" data-translate="genres">Genres</a></li>
             </ul>
         </div>
     </nav>
@@ -141,7 +219,7 @@
                         
                         <!-- Back to Overview Button -->
                         <div class="back-to-overview">
-                            <a href="/#books" class="btn-back">
+                            <a href="/#books" class="btn-back" data-translate="back-to-overview">
                                 ← Zurück zur Übersicht
                             </a>
                         </div>
@@ -150,49 +228,88 @@
                     <!-- Book Info Column -->
                     <div class="book-detail-info">
                         <div class="book-detail-header">
-                            <h1 class="book-detail-title">Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)</h1>
-                            <p class="book-detail-author">von Dirk Werner</p>
+                            <h1 class="book-detail-title" data-translate="page-title">Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)</h1>
+                            <p class="book-detail-author" data-translate="book-author">von Dirk Werner</p>
+                            
+                            <!-- Amazon Rating Section -->
+                            <div class="amazon-rating">
+                                <div class="rating-stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star half">★</span>
+                                </div>
+                                <div class="rating-text">
+                                    <span class="rating-score">4.8</span>
+                                    <span class="rating-label" data-translate="rating-label">von 5 Sternen</span>
+                                    <span class="rating-source">auf Amazon.de</span>
+                                </div>
+                                <div class="rating-link">
+                                    <a href="https://www.amazon.de/Umgang-mit-Eifers%C3%BCchtigen-bewahrst-innere/dp/B0DWR2FKT4/ref=tmm_pap_swatch_0" target="_blank" rel="noopener noreferrer" class="amazon-review-link" onclick="trackRatingView()">
+                                        <span data-translate="view-reviews">Bewertungen ansehen</span> →
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="book-detail-description">
-                            <h2>Über dieses Buch</h2>
-                            <p>Ein praktischer Ratgeber für den Umgang mit Eifersucht in Beziehungen. Hilft dabei, innere Stärke zu bewahren und gesunde Grenzen zu setzen.</p>
+                            <h2 data-translate="book-description-title">Über dieses Buch</h2>
+                            <p data-translate="book-description">Ein praktischer Ratgeber für den Umgang mit Eifersucht in Beziehungen. Hilft dabei, innere Stärke zu bewahren und gesunde Grenzen zu setzen.</p>
                         </div>
                         
                         <div class="book-detail-meta">
                             <div class="meta-grid">
                                 <div class="meta-item">
-                                    <span class="meta-label">Sprache:</span>
-                                    <span class="meta-value">Deutsch</span>
+                                    <span class="meta-label" data-translate="language-label">Sprache:</span>
+                                    <span class="meta-value" data-translate="language-value">Deutsch</span>
                                 </div>
                                 <div class="meta-item">
-                                    <span class="meta-label">Format:</span>
-                                    <span class="meta-value">E-Book</span>
+                                    <span class="meta-label" data-translate="ebook-format">E-Book Format:</span>
+                                    <span class="meta-value" data-translate="ebook-value">E-Book</span>
                                 </div>
                                 <div class="meta-item">
-                                    <span class="meta-label">ASIN:</span>
+                                    <span class="meta-label" data-translate="ebook-asin">E-Book ASIN:</span>
                                     <span class="meta-value">B0CW1G3XR6</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label" data-translate="paperback-format">Taschenbuch Format:</span>
+                                    <span class="meta-value" data-translate="paperback-value">Taschenbuch</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label" data-translate="paperback-asin">Taschenbuch ASIN:</span>
+                                    <span class="meta-value">B0DWR2FKT4</span>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="book-detail-actions">
-                            <h3>Jetzt kaufen</h3>
+                            <h3 data-translate="buy-now">Jetzt kaufen</h3>
                             <div class="action-buttons">
-                                <a href="https://www.amazon.de/dp/B0CW1G3XR6" class="action-btn amazon-de" target="_blank" rel="noopener noreferrer" aria-label="Buch 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)' bei Amazon Deutschland kaufen">
-                                    📚 Bei Amazon DE kaufen
+                                <h4 data-translate="ebook-version">E-Book Version</h4>
+                                <a href="https://www.amazon.de/dp/B0CW1G3XR6" class="action-btn amazon-de" target="_blank" rel="noopener noreferrer" aria-label="E-Book 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)' bei Amazon Deutschland kaufen" onclick="trackPurchaseIntent('amazon_de_ebook', 'E-Book')">
+                                    📚 E-Book bei Amazon DE
                                 </a>
                                 
-                                <a href="https://www.amazon.com/dp/B0CW1G3XR6" class="action-btn amazon-com" target="_blank" rel="noopener noreferrer" aria-label="Buch 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)' bei Amazon USA kaufen">
-                                    🛒 Bei Amazon US kaufen
+                                <a href="https://www.amazon.com/dp/B0CW1G3XR6" class="action-btn amazon-com" target="_blank" rel="noopener noreferrer" aria-label="E-Book 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)' bei Amazon USA kaufen" onclick="trackPurchaseIntent('amazon_us_ebook', 'E-Book')">
+                                    🛒 E-Book bei Amazon US
                                 </a>
                                 
-                                <a href="https://books.apple.com/de/author/dirk-werner/id316714929" class="action-btn apple-books" target="_blank" rel="noopener noreferrer" aria-label="Buch 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)' bei Apple Books kaufen">
-                                    📱 Bei Apple Books kaufen
+                                <a href="https://books.apple.com/de/author/dirk-werner/id316714929" class="action-btn apple-books" target="_blank" rel="noopener noreferrer" aria-label="E-Book 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)' bei Apple Books kaufen" onclick="trackPurchaseIntent('apple_books_ebook', 'E-Book')">
+                                    📱 E-Book bei Apple Books
                                 </a>
                                 
-                                <a href="https://books2read.com/Dirk-Werner-Author" class="action-btn books2read" target="_blank" rel="noopener noreferrer" aria-label="Buch 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)' bei Books2Read ansehen">
-                                    🌍 Bei Books2Read ansehen
+                                <h4 data-translate="paperback-version">Taschenbuch Version</h4>
+                                <a href="https://www.amazon.de/Umgang-mit-Eifers%C3%BCchtigen-bewahrst-innere/dp/B0DWR2FKT4/ref=tmm_pap_swatch_0" class="action-btn amazon-de" target="_blank" rel="noopener noreferrer" aria-label="Taschenbuch 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)' bei Amazon Deutschland kaufen" onclick="trackPurchaseIntent('amazon_de_paperback', 'Taschenbuch')">
+                                    📖 Taschenbuch bei Amazon DE
+                                </a>
+                                
+                                <a href="https://www.amazon.com/Umgang-mit-Eifers%C3%BCchtigen-bewahrst-innere/dp/B0DWR2FKT4" class="action-btn amazon-com" target="_blank" rel="noopener noreferrer" aria-label="Taschenbuch 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)' bei Amazon USA kaufen" onclick="trackPurchaseIntent('amazon_us_paperback', 'Taschenbuch')">
+                                    🛒 Taschenbuch bei Amazon US
+                                </a>
+                                
+                                <a href="https://books2read.com/b/mKkwZV" class="action-btn books2read" target="_blank" rel="noopener noreferrer" aria-label="Taschenbuch 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)' bei Books2Read ansehen" onclick="trackPurchaseIntent('books2read_paperback', 'Taschenbuch')">
+                                    🌍 Taschenbuch bei Books2Read
                                 </a>
                             </div>
                             
@@ -203,7 +320,7 @@
             
             <!-- Related Books Section -->
             <div class="related-books">
-                <h2>Weitere Bücher von Dirk Werner</h2>
+                <h2 data-translate="related-books">Weitere Bücher von Dirk Werner</h2>
                 <div class="books-grid" id="relatedBooks">
                     <!-- Related books will be loaded via JavaScript -->
                 </div>
@@ -221,22 +338,320 @@
                     </a>
                 </div>
                 <div class="footer-section">
-                    <h3>Rechtliches</h3>
+                    <h3 data-translate="legal">Rechtliches</h3>
                     <div class="footer-links">
-                        <a href="/impressum.html">Impressum</a>
-                        <a href="/datenschutz.html">Datenschutz</a>
+                        <a href="/impressum.html" data-translate="imprint">Impressum</a>
+                        <a href="/datenschutz.html" data-translate="privacy">Datenschutz</a>
                     </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Dirk Werner. Alle Rechte vorbehalten.</p>
+                <p data-translate="copyright">&copy; 2025 Dirk Werner. Alle Rechte vorbehalten.</p>
             </div>
         </div>
     </footer>
 
+    <!-- Additional CSS for Amazon Rating -->
+    <style>
+
+        
+
+        
+        /* Enhanced action buttons */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .action-buttons h4 {
+            color: #333;
+            margin: 0 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .action-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            margin: 5px 0;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .action-btn.amazon-de {
+            background: linear-gradient(135deg, #ff9900 0%, #ff8800 100%);
+            color: white;
+        }
+        
+        .action-btn.amazon-de:hover {
+            background: linear-gradient(135deg, #ff8800 0%, #ff7700 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 153, 0, 0.3);
+        }
+        
+        .action-btn.amazon-com {
+            background: linear-gradient(135deg, #232f3e 0%, #1a2532 100%);
+            color: white;
+        }
+        
+        .action-btn.amazon-com:hover {
+            background: linear-gradient(135deg, #1a2532 0%, #111827 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(35, 47, 62, 0.3);
+        }
+        
+        .action-btn.apple-books {
+            background: linear-gradient(135deg, #007aff 0%, #0056cc 100%);
+            color: white;
+        }
+        
+        .action-btn.apple-books:hover {
+            background: linear-gradient(135deg, #0056cc 0%, #004499 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 122, 255, 0.3);
+        }
+        
+        .action-btn.books2read {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+        
+        .action-btn.books2read:hover {
+            background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+        }
+        
+        /* Enhanced book detail layout */
+        .book-detail-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .book-detail-cover {
+            text-align: center;
+        }
+        
+        .book-detail-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .book-detail-image:hover {
+            transform: scale(1.02);
+        }
+        
+        .book-detail-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .book-detail-title {
+            font-size: 2.2em;
+            line-height: 1.2;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .book-detail-author {
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        
+        .book-detail-description {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .book-detail-description h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .book-detail-description p {
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .meta-item {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .meta-label {
+            font-weight: 600;
+            color: #495057;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .meta-value {
+            color: #6c757d;
+            font-family: 'Courier New', monospace;
+        }
+        
+        @media (max-width: 768px) {
+            .book-detail-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .book-detail-title {
+                font-size: 1.8em;
+            }
+            
+            .meta-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    
     <!-- Scripts -->
-    <script src="/js/main.js"></script>
+    <script src="/js/main.js?v=1.1"></script>
     <script>
+        // Language switching functionality for detailed book pages
+        let currentLanguage = 'de';
+        
+        // Translations for this page
+        const translations = {
+            de: {
+                'page-title': 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke (German Edition)',
+                'page-subtitle': 'Bücher über Psychologie, Beziehungen & mehr',
+                'book-author': 'von Dirk Werner',
+                'book-description-title': 'Über dieses Buch',
+                'book-description': 'Ein praktischer Ratgeber für den Umgang mit Eifersucht in Beziehungen. Hilft dabei, innere Stärke zu bewahren und gesunde Grenzen zu setzen.',
+                'language-label': 'Sprache:',
+                'language-value': 'Deutsch',
+                'ebook-format': 'E-Book Format:',
+                'ebook-value': 'E-Book',
+                'ebook-asin': 'E-Book ASIN:',
+                'paperback-format': 'Taschenbuch Format:',
+                'paperback-value': 'Taschenbuch',
+                'paperback-asin': 'Taschenbuch ASIN:',
+                'buy-now': 'Jetzt kaufen',
+                'ebook-version': 'E-Book Version',
+                'paperback-version': 'Taschenbuch Version',
+                'back-to-overview': '← Zurück zur Übersicht',
+                'related-books': 'Weitere Bücher von Dirk Werner',
+                'home': 'Startseite',
+                'books': 'Bücher',
+                'about': 'Über mich',
+                'genres': 'Genres',
+                'legal': 'Rechtliches',
+                'imprint': 'Impressum',
+                'privacy': 'Datenschutz',
+                'copyright': '© 2025 Dirk Werner. Alle Rechte vorbehalten.',
+                'rating-label': 'von 5 Sternen',
+                'view-reviews': 'Bewertungen ansehen'
+            },
+            en: {
+                'page-title': 'Dealing with Jealous People: How to Stay Strong (German Edition)',
+                'page-subtitle': 'Books on Psychology, Relationships & more',
+                'book-author': 'by Dirk Werner',
+                'book-description-title': 'About this book',
+                'book-description': 'A practical guide for dealing with jealousy in relationships. Helps maintain inner strength and set healthy boundaries.',
+                'language-label': 'Language:',
+                'language-value': 'German',
+                'ebook-format': 'E-Book Format:',
+                'ebook-value': 'E-Book',
+                'ebook-asin': 'E-Book ASIN:',
+                'paperback-format': 'Paperback Format:',
+                'paperback-value': 'Paperback',
+                'paperback-asin': 'Paperback ASIN:',
+                'buy-now': 'Buy Now',
+                'ebook-version': 'E-Book Version',
+                'paperback-version': 'Paperback Version',
+                'back-to-overview': '← Back to Overview',
+                'related-books': 'More Books by Dirk Werner',
+                'home': 'Home',
+                'books': 'Books',
+                'about': 'About',
+                'genres': 'Genres',
+                'legal': 'Legal',
+                'imprint': 'Imprint',
+                'privacy': 'Privacy Policy',
+                'copyright': '© 2025 Dirk Werner. All rights reserved.',
+                'rating-label': 'out of 5 stars',
+                'view-reviews': 'View reviews'
+            }
+        };
+
+        // Function to update language
+        function updateLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language buttons
+            const langButtons = document.querySelectorAll('.lang-btn');
+            langButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === lang.toUpperCase()) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Update page elements
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            console.log(`🌍 Language switched to: ${lang.toUpperCase()}`);
+        }
+
+        // Create book card HTML
+        async function createBookCard(book) {
+            const title = book.title?.de || book.title?.en || book.title || 'Unknown Title';
+            const author = book.author || 'Unknown Author';
+            const description = book.description?.de || book.description?.en || book.description || '';
+            const imageUrl = book.image?.link || book.image || '';
+            const asin = book.asin || '';
+            
+            return `
+                <div class="book-card" data-asin="${asin}">
+                    <div class="book-image">
+                        <img src="${imageUrl}" alt="Cover: ${title}" loading="lazy" class="book-cover-image">
+                    </div>
+                    <div class="book-content">
+                        <h3 class="book-title">${title}</h3>
+                        <p class="book-author">${author}</p>
+                        <p class="book-description">${description}</p>
+                        <div class="book-links">
+                            ${book.links?.amazon_de ? `<a href="${book.links.amazon_de}" class="book-link amazon-de" target="_blank" rel="noopener noreferrer">📚 Amazon DE</a>` : ''}
+                            ${book.links?.amazon_us ? `<a href="${book.links.amazon_us}" class="book-link amazon-us" target="_blank" rel="noopener noreferrer">🛒 Amazon US</a>` : ''}
+                            ${book.links?.apple_books ? `<a href="${book.links.apple_books}" class="book-link apple-books" target="_blank" rel="noopener noreferrer">📱 Apple Books</a>` : ''}
+                            ${book.links?.books2read ? `<a href="${book.links.books2read}" class="book-link books2read" target="_blank" rel="noopener noreferrer">🌍 Books2Read</a>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
         // Load related books
         async function loadRelatedBooks() {
             try {

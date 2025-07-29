@@ -7,2856 +7,364 @@ let filteredBooks = [];
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 const isDesktop = !isMobile;
 
-console.log('📱 [Platform] Detected:', isMobile ? 'Mobile' : 'Desktop', 'UserAgent:', navigator.userAgent);
+console.log('📱 [Platform] Detected:', isMobile ? 'Mobile' : 'Desktop');
 
-// Markdown Parser für mobile Formatierung
-function parseMarkdown(text) {
-    if (typeof marked !== 'undefined') {
-        try {
-            return marked.parse(text);
-        } catch (error) {
-            console.warn('⚠️ [Markdown] Parsing failed, returning original text:', error);
-            return text;
-        }
+// 📊 GA4 Tracking Functions
+function trackGA4Event(eventName, parameters = {}) {
+    if (typeof gtag !== 'undefined') {
+        gtag('event', eventName, parameters);
+        console.log('📊 [GA4] Event tracked:', eventName, parameters);
     }
-    return text;
 }
 
-// URL-Parameter-Update-Funktion für temporäre Sprachverwaltung
-function updateURLParameter(key, value) {
-    const url = new URL(window.location);
-    url.searchParams.set(key, value);
-    window.history.replaceState({}, '', url);
-}
-
-// Ensure translations are available globally
-if (typeof window.translations === 'undefined') {
-    window.translations = {
-        de: {
-            // Navigation
-            'Startseite': 'Startseite',
-            'Bücher': 'Bücher',
-            'Über mich': 'Über mich',
-            'Genres': 'Genres',
-            
-            // Buttons and links
-            'Auf Amazon DE ansehen': 'Auf Amazon DE ansehen',
-            'Auf Amazon US ansehen': 'Auf Amazon US ansehen',
-            'Bei Apple Books': 'Bei Apple Books',
-            'Bei Books2Read': 'Bei Books2Read',
-            'Hörbuch': 'Hörbuch',
-            'Hörbuch bei Apple Books': 'Hörbuch bei Apple Books',
-            'Mehr erfahren': 'Mehr erfahren',
-            
-            // Placeholders
-            'Suche nach Titel...': 'Suche nach Titel...',
-            'Alle Genres': 'Alle Genres',
-            'Psychologie': 'Psychologie',
-            'Krimi': 'Krimi',
-            'Beziehungen': 'Beziehungen',
-            'Belletristik': 'Belletristik',
-            
-            // Sections
-            'Bestseller-Highlights': 'Bestseller-Highlights',
-            'Alle Bücher': 'Alle Bücher',
-            'Über den Autor': 'Über den Autor',
-            'Meine Genres': 'Meine Genres',
-            
-            // Book detail page specific
-            'Weitere Bücher von Dirk Werner': 'Weitere Bücher von Dirk Werner',
-            'Sprache:': 'Sprache:',
-            'Deutsch': 'Deutsch',
-            'Format:': 'Format:',
-            'E-Book & Taschenbuch': 'E-Book & Taschenbuch',
-            'Jetzt kaufen': 'Jetzt kaufen',
-            'Bei Books2Read kaufen': 'Bei Books2Read kaufen',
-            'E-Book Amazon.de': 'E-Book Amazon.de',
-            'Taschenbuch Amazon.de': 'Taschenbuch Amazon.de',
-            'Apple Books': 'Apple Books'
-        },
-        en: {
-            // Navigation
-            'Startseite': 'Home',
-            'Bücher': 'Books',
-            'Über mich': 'About',
-            'Genres': 'Genres',
-            
-            // Buttons and links
-            'Auf Amazon DE ansehen': 'View on Amazon DE',
-            'Auf Amazon US ansehen': 'View on Amazon US',
-            'Bei Apple Books': 'On Apple Books',
-            'Bei Books2Read': 'On Books2Read',
-            'Hörbuch': 'Audiobook',
-            'Hörbuch bei Apple Books': 'Experience the Audiobook on Apple',
-            'Mehr erfahren': 'Learn More',
-            
-            // Placeholders
-            'Suche nach Titel...': 'Search by title...',
-            'Alle Genres': 'All Genres',
-            'Psychologie': 'Psychology',
-            'Krimi': 'Crime',
-            'Beziehungen': 'Relationships',
-            'Belletristik': 'Fiction',
-            
-            // Sections
-            'Bestseller-Highlights': 'Bestseller Highlights',
-            'Alle Bücher': 'All Books',
-            'Über den Autor': 'About the Author',
-            'Meine Genres': 'My Genres',
-            
-            // Book detail page specific
-            'Weitere Bücher von Dirk Werner': 'More Books by Dirk Werner',
-            'Sprache:': 'Language:',
-            'Deutsch': 'German',
-            'Format:': 'Format:',
-            'E-Book & Taschenbuch': 'E-Book & Paperback',
-            'Jetzt kaufen': 'Buy Now',
-            'Bei Books2Read kaufen': 'Buy on Books2Read',
-            'E-Book Amazon.de': 'E-Book Amazon.de',
-            'Taschenbuch Amazon.de': 'Paperback Amazon.de',
-            'Apple Books': 'Apple Books'
-        }
-    };
-}
-
-// Genre classification based on title keywords
-function classifyGenre(title) {
-    // Handle multilingual title objects
-    const titleString = typeof title === 'string' ? title : getLocalizedText(title, window.currentLanguage || 'de');
-    const titleLower = titleString.toLowerCase();
+function trackBookInteraction(book, interactionType, linkType = null) {
+    const title = book.title?.de || book.title?.en || book.title || 'Unknown Title';
+    const category = book.category || 'General';
+    const format = book.bookFormat?.de || book.bookFormat?.en || 'Unknown';
     
-    if (titleLower.includes('seelmann') || titleLower.includes('trance') || titleLower.includes('echo') || 
-        titleLower.includes('legacy') || titleLower.includes('vermächtnis') || titleLower.includes('tödlich')) {
-        return 'crime';
-    }
-    
-    if (titleLower.includes('beziehung') || titleLower.includes('relationship') || titleLower.includes('herz') || 
-        titleLower.includes('heart') || titleLower.includes('liebe') || titleLower.includes('love') || 
-        titleLower.includes('paar') || titleLower.includes('souverän') || titleLower.includes('tests')) {
-        return 'relationships';
-    }
-    
-    if (titleLower.includes('psycho') || titleLower.includes('intelligenz') || titleLower.includes('intelligence') || 
-        titleLower.includes('selbst') || titleLower.includes('self') || titleLower.includes('suizid') || 
-        titleLower.includes('suicide') || titleLower.includes('therapie') || titleLower.includes('therapy') ||
-        titleLower.includes('dankbarkeit') || titleLower.includes('gratitude') || titleLower.includes('battle') ||
-        titleLower.includes('gemeinsam') || titleLower.includes('empathie') || titleLower.includes('cult') ||
-        titleLower.includes('leadership') || titleLower.includes('emotionale')) {
-        return 'psychology';
-    }
-    
-    if (titleLower.includes('american') || titleLower.includes('shadows') || titleLower.includes('nanogenesis') || 
-        titleLower.includes('lyra') || titleLower.includes('awakening') || titleLower.includes('matrix') || 
-        titleLower.includes('enlightened') || titleLower.includes('seminar') || titleLower.includes('kosmische')) {
-        return 'fiction';
-    }
-    
-    return 'psychology'; // Default to psychology
-}
-
-// Generate Schema.org Book markup
-function generateBookSchema(book) {
-    const schema = {
-        "@context": "https://schema.org",
-        "@type": "Book",
-        "name": getLocalizedText(book.title, window.currentLanguage || 'de'),
-        "author": {
-            "@type": "Person",
-            "name": book.author || "Dirk Werner"
-        },
-        "bookFormat": book.bookFormat || "EBook",
-        "inLanguage": book.language || "de",
-        "description": getLocalizedText(book.description, window.currentLanguage || 'de') || "",
-        "offers": {
-            "@type": "Offer",
-            "url": book.links?.amazon_de || book.link,
-            "priceCurrency": "EUR"
-        }
-    };
-    
-    if (book.asin) {
-        schema.isbn = book.asin;
-    }
-    
-    return schema;
-}
-
-// Generate purchase links
-function generatePurchaseLinks(book) {
-    const links = [];
-    const currentLang = window.currentLanguage || 'de';
-    
-    // Amazon DE
-    if (book.links && book.links.amazon_de) {
-        links.push({
-            url: book.links.amazon_de,
-            text: `📚 ${window.translations[currentLang]['Auf Amazon DE ansehen']}`,
-            class: 'amazon-de'
-        });
-    } else if (book.link) {
-        links.push({
-            url: book.link,
-            text: `📚 ${window.translations[currentLang]['Auf Amazon DE ansehen']}`,
-            class: 'amazon-de'
-        });
-    }
-    
-    // Amazon US
-    if (book.links && book.links.amazon_us) {
-        links.push({
-            url: book.links.amazon_us,
-            text: `🛒 ${window.translations[currentLang]['Auf Amazon US ansehen']}`,
-            class: 'amazon-com'
-        });
-    } else if (book.link) {
-        // Ersetze amazon.de durch amazon.com für US-Link
-        const usLink = book.link.replace('amazon.de', 'amazon.com');
-        links.push({
-            url: usLink,
-            text: `🛒 ${window.translations[currentLang]['Auf Amazon US ansehen']}`,
-            class: 'amazon-com'
-        });
-    }
-    
-    // Apple Books - nur anzeigen wenn explizit vorhanden
-    if (book.links && book.links.apple_books) {
-        // Spezifischer Apple Books Link vorhanden
-        links.push({
-            url: book.links.apple_books,
-            text: `📱 ${window.translations[currentLang]['Bei Apple Books']}`,
-            class: 'apple-books'
-        });
-    }
-    
-    // Books2Read - immer hinzufügen
-    if (book.links && book.links.books2read) {
-        links.push({
-            url: book.links.books2read,
-            text: `🌍 ${window.translations[currentLang]['Bei Books2Read']}`,
-            class: 'books2read'
-        });
-    } else {
-        links.push({
-            url: 'https://books2read.com/Dirk-Werner-Author',
-            text: `🌍 ${window.translations[currentLang]['Bei Books2Read']}`,
-            class: 'books2read'
-        });
-    }
-    
-    return links;
-}
-
-// Helper function to get localized text from multilingual objects
-function getLocalizedText(textObj, lang) {
-    if (typeof textObj === 'string') {
-        return textObj; // Fallback for old format
-    }
-    if (textObj && typeof textObj === 'object') {
-        return textObj[lang] || textObj['de'] || textObj['en'] || 'No description available';
-    }
-    return 'No description available';
-}
-
-// Funktion für IP-basierte geolokationsbasierte Apple Books-Links
-async function setAudiobookLinksByCountry() {
-  const fallback = "https://books.apple.com/de/author/dirk-werner/id316714929?see-all=audio-books";
-  const linksByCountry = {
-    US: "https://books.apple.com/us/author/dirk-werner/id316714929?see-all=audio-books",
-    GB: "https://books.apple.com/gb/author/dirk-werner/id316714929?see-all=audio-books",
-    DE: fallback
-  };
-
-  let link = fallback;
-  
-  // 🚨 CORS-SICHERHEIT: Verwende Browser-Sprache statt IP-Geolocation
-  const userLang = navigator.language || navigator.userLanguage || 'de';
-  if (userLang.startsWith('en')) {
-    link = linksByCountry['US'];
-    console.log('🎧 [Audiobook] Using US link based on browser language:', userLang);
-  } else if (userLang.startsWith('de')) {
-    link = linksByCountry['DE'];
-    console.log('🎧 [Audiobook] Using DE link based on browser language:', userLang);
-  } else {
-    console.log('🎧 [Audiobook] Using fallback link for language:', userLang);
-  }
-
-  // 🚨 CORS-PROBLEM BEHOBEN: ipapi.co-Abfrage deaktiviert
-  // try {
-  //   const res = await fetch("https://ipapi.co/json/");
-  //   if (!res.ok) {
-  //     throw new Error(`HTTP error! status: ${res.status}`);
-  //   }
-  //   const data = await res.json();
-  //   const countryCode = (data.country_code || "").toUpperCase();
-  //   if (linksByCountry[countryCode]) {
-  //     link = linksByCountry[countryCode];
-  //   }
-  // } catch (e) {
-  //   console.warn("Geolocation failed (CORS or network error). Using fallback link:", e.message);
-  //   // Fallback: Verwende Browser-Sprache statt IP-Geolocation
-  //   const userLang = navigator.language || navigator.userLanguage || 'de';
-  //   if (userLang.startsWith('en')) {
-  //     link = linksByCountry['US'];
-  //   } else if (userLang.startsWith('de')) {
-  //     link = linksByCountry['DE'];
-  //   }
-  // }
-
-  // Alle Buttons auf der Seite setzen
-  document.querySelectorAll('.btn-audiobook-link').forEach(btn => {
-    btn.setAttribute('href', link);
-    // Ensure button is visible if it has audiobook data
-    const bookCard = btn.closest('.book-card');
-    if (bookCard && bookCard.dataset.hasAudiobook === 'true') {
-      btn.style.display = 'inline-flex';
-      btn.style.visibility = 'visible';
-      console.log('🎧 [Audiobook] Button visible for:', bookCard.dataset.title);
-    } else {
-      btn.style.display = 'none';
-      console.log('🎧 [Audiobook] Button hidden for:', bookCard?.dataset.title || 'unknown');
-    }
-  });
-
-  // Auch Hero-Button setzen
-  const heroBtn = document.querySelector('.btn-audiobook-hero');
-  if (heroBtn) {
-    heroBtn.setAttribute('href', link);
-    // Zusätzlich: Event Listener entfernen und neu hinzufügen
-    heroBtn.removeEventListener('click', heroBtn._audiobookClickHandler);
-    heroBtn._audiobookClickHandler = function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      window.open(link, '_blank', 'noopener,noreferrer');
-    };
-    heroBtn.addEventListener('click', heroBtn._audiobookClickHandler);
-    console.log('🎧 [Hero] Hero button updated with link:', link);
-  } else {
-    console.log('🎧 [Hero] Hero button not found in DOM - likely on book detail page');
-  }
-  
-  // Update audiobook buttons in related books
-  const relatedBooksContainer = document.getElementById('relatedBooks');
-  if (relatedBooksContainer) {
-    relatedBooksContainer.querySelectorAll('.btn-audiobook-link').forEach(btn => {
-      btn.setAttribute('href', link);
-      const bookCard = btn.closest('.book-card');
-      if (bookCard && bookCard.dataset.hasAudiobook === 'true') {
-        btn.style.display = 'inline-flex';
-        btn.style.visibility = 'visible';
-        console.log('🎧 [Audiobook] Related button visible for:', bookCard.dataset.title);
-      } else {
-        btn.style.display = 'none';
-        console.log('🎧 [Audiobook] Related button hidden for:', bookCard?.dataset.title || 'unknown');
-      }
+    trackGA4Event(interactionType, {
+        item_id: book.asin || title,
+        item_name: title,
+        item_category: category,
+        item_variant: format,
+        currency: 'EUR',
+        value: 0,
+        link_type: linkType,
+        author: book.author || 'Dirk Werner'
     });
-  }
-  
-  // Force visibility of all audiobook buttons that should be visible
-  document.querySelectorAll('.book-card[data-has-audiobook="true"] .book-link.audiobook').forEach(btn => {
-    btn.style.display = 'inline-flex';
-    btn.style.visibility = 'visible';
-    btn.setAttribute('href', link);
-    const bookCard = btn.closest('.book-card');
-    console.log('🎧 [Audiobook] Force visible for:', bookCard?.dataset.title || 'unknown');
-  });
-  
-  console.log('🎧 [Audiobook] Updated audiobook links for country, link:', link);
-  
-  return link;
 }
 
-// Generate aria-label for accessibility
-function getAriaLabel(linkClass, bookTitle) {
-    const labels = {
-        'amazon-de': `Buch "${bookTitle}" bei Amazon Deutschland ansehen`,
-        'amazon-com': `Buch "${bookTitle}" bei Amazon USA ansehen`,
-        'apple-books': `Buch "${bookTitle}" bei Apple Books ansehen`,
-        'books2read': `Buch "${bookTitle}" bei Books2Read ansehen`
-    };
-    return labels[linkClass] || `Buch "${bookTitle}" ansehen`;
-}
-
-// Create book card HTML
-async function createBookCard(book) {
-    const genre = classifyGenre(book.title);
-    const links = generatePurchaseLinks(book);
-    const currentLang = window.currentLanguage || 'de';
-    
-    // Cache-Busting für Cover-Bilder
-    const coverUrl = book.image?.link || '';
-    const cacheBustedCover = coverUrl ? `${coverUrl}${coverUrl.includes('?') ? '&' : '?'}nocache=${Date.now()}` : '';
-    
-    // Wait for whitelist to be loaded
-    if (!window.appleAudiobookList && typeof window.waitForAudiobookList === 'function') {
-        await window.waitForAudiobookList();
-    }
-    
-    // Shop-Links (Amazon DE, Amazon US, Apple Books, Books2Read)
-    const shopLinks = links.filter(link => link.class !== 'audiobook');
-    const shopLinksHTML = shopLinks.map(link => {
-        const ariaLabel = getAriaLabel(link.class, getLocalizedText(book.title, currentLang));
-        return `<a href="${link.url}" target="_blank" class="book-link ${link.class}" aria-label="${ariaLabel}">${link.text}</a>`;
-    }).join('');
-    
-    // Hörbuch-Button - NUR durch JavaScript nach Whitelist-Check
-    let audiobookHTML = '';
-    
-    // Try multiple identification methods: JSON field first, then ISBN, then title
-    const titleString = getLocalizedText(book.title, currentLang);
-    const hasAudiobook = (
-        (book.hasAudiobook === true) ||
-        (book.asin && typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(book.asin)) ||
-        (typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(titleString))
-    );
-    
-    console.log('🎧 [Audiobook] Checking book:', titleString, 'ASIN:', book.asin, 'JSON hasAudiobook:', book.hasAudiobook, 'Final result:', hasAudiobook, 'Whitelist loaded:', !!window.appleAudiobookList);
-    
-    if (hasAudiobook) {
-        const ariaLabel = `Hörbuch "${titleString}" bei Apple Books anhören`;
-        audiobookHTML = `<a class="book-link audiobook btn-audiobook-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="${ariaLabel}" data-audiobook-allowed="true" data-lang="${currentLang}">🎧 ${window.translations[currentLang]['Hörbuch bei Apple Books']}</a>`;
-        console.log('🎧 [Audiobook] ADDING audiobook button for:', titleString);
-    } else {
-        console.log('🎧 [Audiobook] NO audiobook button for:', titleString);
-        // NO HTML for audiobook button - completely prevent rendering
-    }
-    
-    // Generate Schema.org markup
-    const schema = generateBookSchema(book);
-    const schemaScript = `<script type="application/ld+json">${JSON.stringify(schema)}</script>`;
-    
-    // Generate slug for book detail page - ALL books should have detail pages
-    let slug;
-    let hasDetailPage = true; // Default to true for all books
-    
-    // Generate slug from title (same logic as generate-book-pages.js)
-    slug = titleString
-        .toLowerCase()
-        // Replace German umlauts
-        .replace(/ä/g, 'ae')
-        .replace(/ö/g, 'oe')
-        .replace(/ü/g, 'ue')
-        .replace(/ß/g, 'ss')
-        // Remove special characters and parentheses
-        .replace(/[^\w\s-]/g, '')
-        // Replace spaces with hyphens
-        .replace(/\s+/g, '-')
-        // Remove multiple consecutive hyphens
-        .replace(/-+/g, '-')
-        // Remove leading and trailing hyphens
-        .replace(/^-+|-+$/g, '');
-    
-    console.log('🔗 [Link] Generated slug for book:', titleString, '→', slug);
-    
-    // Log decision for debugging
-    if (window.linkDebugger) {
-        window.linkDebugger.logLinkDecision(
-            titleString, 
-            hasDetailPage, 
-            `/buecher/${slug}`, 
-            'Detail page available for all books'
-        );
-    }
-    
-    console.log('🔗 [Link] Final decision for', titleString, ':', {
-        hasDetailPage,
-        detailLink: `/buecher/${slug}`,
-        userAgent: navigator.userAgent,
-        isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+function trackLanguageSwitch(language) {
+    trackGA4Event('language_change', {
+        language: language,
+        page_location: window.location.href,
+        page_title: document.title
     });
-    
-    // Ensure we have valid URLs
-    const detailPageUrl = hasDetailPage ? `/buecher/${slug}` : null;
-    const books2readUrl = 'https://books2read.com/Dirk-Werner-Author';
-    
-    // Validate URLs before creating HTML
-    if (hasDetailPage && (!slug || slug.length === 0)) {
-        console.warn('⚠️ [Link] Invalid slug detected, falling back to Books2Read:', titleString);
-        hasDetailPage = false;
-    }
-    
-    // All books should have detail pages - no special cases needed
-    console.log('🔧 [Link] All books have detail pages:', titleString);
-    
-    // CRITICAL FIX: Only set data-fallback="true" for books WITHOUT detail pages
-    const shouldUseFallback = !hasDetailPage;
-    console.log('🔧 [Link] Book:', titleString, 'hasDetailPage:', hasDetailPage, 'shouldUseFallback:', shouldUseFallback);
-    
-    // 🎯 SAUBERES DATA-TITLE: Umfassende Bereinigung von HTML und Sonderzeichen
-    const cleanTitleString = titleString
-        .replace(/<[^>]*>/g, '') // HTML-Tags entfernen
-        .replace(/&[a-zA-Z0-9#]+;/g, '') // HTML-Entities entfernen
-        .replace(/"/g, '') // Anführungszeichen entfernen
-        .replace(/'/g, '') // Einfache Anführungszeichen entfernen
-        .replace(/style="[^"]*"/g, '') // Style-Attribute entfernen
-        .replace(/class="[^"]*"/g, '') // Class-Attribute entfernen
-        .replace(/href="[^"]*"/g, '') // Href-Attribute entfernen
-        .replace(/data-[^=]*="[^"]*"/g, '') // Data-Attribute entfernen
-        .replace(/\s+/g, ' ') // Mehrfache Leerzeichen vereinfachen
-        .trim();
-    
-    return `
-        <div class="book-card fade-in" data-genre="${genre}" data-title="${cleanTitleString.toLowerCase()}" data-asin="${book.asin || ''}" data-has-audiobook="${hasAudiobook}" data-has-detail-page="${hasDetailPage}">
-            ${schemaScript}
-            <!-- 🎯 SAUBERES BUCHCOVER: Nur das Bild, keine Titel-Overlays -->
-            <div class="book-image">
-                <a href="${detailPageUrl}" class="book-cover-link" aria-label="Mehr über ${titleString} erfahren">
-                    <img src="${cacheBustedCover}" alt="Buchcover" loading="lazy" class="book-cover-image" title="">
-                </a>
-            </div>
-            <!-- 📚 BUCH-INFO: Titel und Beschreibung NUR unterhalb des Covers -->
-            <div class="book-info">
-                <h3 class="book-title">
-                    <a href="${detailPageUrl}" class="book-title-link" aria-label="Mehr über ${titleString} erfahren">${getLocalizedText(book.title, currentLang)}</a>
-                </h3>
-                <p class="book-author">${book.author}</p>
-                <p class="book-description">${parseMarkdown(getLocalizedText(book.description, currentLang))}</p>
-                <div class="book-links">
-                    <a href="${detailPageUrl}" class="book-link detail-link mehr-button" aria-label="Mehr über ${titleString} erfahren">
-                        📖 ${window.translations[currentLang]['Mehr erfahren'] || 'Mehr erfahren'}
-                    </a>
-                    ${shopLinksHTML}
-                    ${audiobookHTML}
-                </div>
-            </div>
-        </div>
-    `;
 }
 
-// Load and display books
-async function loadBooks() {
-    console.log('📚 [Books] Starting loadBooks() function...');
-    
-    // STRICT URL-based book detail page detection
-    const currentPath = window.location.pathname;
-    const isBookDetailPage = currentPath.startsWith('/buecher/') && currentPath !== '/buecher/';
-    const isOverviewPage = currentPath === '/' || currentPath === '/index.html';
-    
-    console.log('📚 [Books] Page detection:', {
-        currentPath,
-        isBookDetailPage,
-        isOverviewPage
+function trackSearch(searchTerm, resultsCount) {
+    trackGA4Event('search', {
+        search_term: searchTerm,
+        results_count: resultsCount,
+        page_location: window.location.href
     });
-    
-    // Check for page elements
-    const featuredContainer = document.getElementById('featuredBooks');
+}
+
+function trackGenreFilter(genre) {
+    trackGA4Event('filter', {
+        filter_type: 'genre',
+        filter_value: genre,
+        page_location: window.location.href
+    });
+}
+
+// 🎯 EINFACHE BUCHANZEIGE: Wie in der funktionierenden Test-Seite
+function displayAllBooksSimple() {
     const allBooksContainer = document.getElementById('allBooks');
-    const bookDetailContainer = document.querySelector('.book-detail');
+    const featuredBooksContainer = document.getElementById('featuredBooks');
     
-    console.log('📚 [Books] Container detection:', {
-        featuredContainer: !!featuredContainer,
-        allBooksContainer: !!allBooksContainer,
-        bookDetailContainer: !!bookDetailContainer
-    });
-    
-    // Load books if we have containers and we're not on a detail page
-    if ((featuredContainer || allBooksContainer) && !bookDetailContainer) {
-        console.log('📚 [Books] Proceeding with book loading...');
+    if (allBooksContainer && filteredBooks && filteredBooks.length > 0) {
+        console.log('🎯 [SimpleDisplay] Displaying books with simple logic...');
+        
+        const booksHTML = filteredBooks.map(book => {
+            const title = book.title?.de || book.title?.en || book.title || 'Unbekannter Titel';
+            const author = book.author || 'Dirk Werner';
+            const description = book.description?.de || book.description?.en || book.description || 'Keine Beschreibung verfügbar';
+            const image = book.image?.link || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+            
+            // Track book view
+            trackBookInteraction(book, 'view_item');
+            
+            return `
+                <div class="book-card" data-asin="${book.asin || ''}">
+                    <div class="book-image">
+                        <img src="${image}" alt="Cover: ${title}" loading="lazy">
+                    </div>
+                    <div class="book-content">
+                        <h3 class="book-title">${title}</h3>
+                        <p class="book-author">von ${author}</p>
+                        <p class="book-description">${description}</p>
+                        <div class="book-links">
+                            ${book.links?.amazon_de ? `<a href="${book.links.amazon_de}" target="_blank" class="book-link amazon-de" onclick="trackBookInteraction(${JSON.stringify(book)}, 'select_item', 'amazon_de')">📚 Bei Amazon DE kaufen</a>` : ''}
+                            ${book.links?.amazon_us ? `<a href="${book.links.amazon_us}" target="_blank" class="book-link amazon-us" onclick="trackBookInteraction(${JSON.stringify(book)}, 'select_item', 'amazon_us')">🛒 Bei Amazon US kaufen</a>` : ''}
+                            ${book.links?.apple_books ? `<a href="${book.links.apple_books}" target="_blank" class="book-link apple-books" onclick="trackBookInteraction(${JSON.stringify(book)}, 'select_item', 'apple_books')">📱 Bei Apple Books kaufen</a>` : ''}
+                            ${book.links?.books2read ? `<a href="${book.links.books2read}" target="_blank" class="book-link books2read" onclick="trackBookInteraction(${JSON.stringify(book)}, 'select_item', 'books2read')">🌍 Bei Books2Read ansehen</a>` : ''}
+                            ${book.detailedPage ? `<a href="${book.detailedPage}" class="book-link detailed-page" onclick="trackBookInteraction(${JSON.stringify(book)}, 'view_item_list', 'detailed_page')">📖 Mehr erfahren</a>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        allBooksContainer.innerHTML = booksHTML;
+        
+        // Featured Books (erste 3 Bücher)
+        if (featuredBooksContainer) {
+            const featuredHTML = filteredBooks.slice(0, 3).map(book => {
+                const title = book.title?.de || book.title?.en || book.title || 'Unbekannter Titel';
+                const author = book.author || 'Dirk Werner';
+                const description = book.description?.de || book.description?.en || book.description || 'Keine Beschreibung verfügbar';
+                const image = book.image?.link || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+                
+                return `
+                    <div class="book-card" data-asin="${book.asin || ''}">
+                        <div class="book-image">
+                            <img src="${image}" alt="Cover: ${title}" loading="lazy">
+                        </div>
+                        <div class="book-content">
+                            <h3 class="book-title">${title}</h3>
+                            <p class="book-author">von ${author}</p>
+                            <p class="book-description">${description}</p>
+                            <div class="book-links">
+                                ${book.links?.amazon_de ? `<a href="${book.links.amazon_de}" target="_blank" class="book-link amazon-de" onclick="trackBookInteraction(${JSON.stringify(book)}, 'select_item', 'amazon_de')">📚 Bei Amazon DE kaufen</a>` : ''}
+                                ${book.links?.amazon_us ? `<a href="${book.links.amazon_us}" target="_blank" class="book-link amazon-us" onclick="trackBookInteraction(${JSON.stringify(book)}, 'select_item', 'amazon_us')">🛒 Bei Amazon US kaufen</a>` : ''}
+                                ${book.links?.apple_books ? `<a href="${book.links.apple_books}" target="_blank" class="book-link apple-books" onclick="trackBookInteraction(${JSON.stringify(book)}, 'select_item', 'apple_books')">📱 Bei Apple Books kaufen</a>` : ''}
+                                ${book.links?.books2read ? `<a href="${book.links.books2read}" target="_blank" class="book-link books2read" onclick="trackBookInteraction(${JSON.stringify(book)}, 'select_item', 'books2read')">🌍 Bei Books2Read ansehen</a>` : ''}
+                                ${book.detailedPage ? `<a href="${book.detailedPage}" class="book-link detailed-page" onclick="trackBookInteraction(${JSON.stringify(book)}, 'view_item_list', 'detailed_page')">📖 Mehr erfahren</a>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            featuredBooksContainer.innerHTML = featuredHTML;
+        }
+        
+        console.log('🎯 [SimpleDisplay] Books displayed successfully!');
+    }
+}
+
+// 🚨 SOFORTIGE BUCHLADUNG: Fallback für Hauptseite
+async function forceLoadBooksOnMainPage() {
+    const allBooksContainer = document.getElementById('allBooks');
+    if (allBooksContainer && (window.location.pathname === '/' || window.location.pathname === '/index.html')) {
+        console.log('🚨 [ForceLoad] Main page detected, forcing book load...');
+        
+        // Zeige Loading-Animation
+        allBooksContainer.innerHTML = '<div style="text-align: center; padding: 40px; font-size: 18px;">🔄 Bücher werden geladen...</div>';
         
         try {
-            console.log('📚 [Books] Fetching books.json...');
+            // Direkt books.json laden
             const response = await fetch('books.json');
+            const data = await response.json();
             
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            console.log('🚨 [ForceLoad] Books loaded:', data.length);
+            allBooks = data;
+            filteredBooks = [...data];
             
-            // Check content type to ensure it's JSON
-            const contentType = response.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-                throw new TypeError('books.json is not valid JSON - received HTML instead');
-            }
-            
-            const text = await response.text();
-            console.log('📚 [Books] Response text length:', text.length);
-            
-            // Additional check for HTML content
-            if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
-                throw new TypeError('Server returned HTML instead of JSON - likely 404 page');
-            }
-            
-            // Try to parse JSON
-            let parsedData;
-            try {
-                parsedData = JSON.parse(text);
-                console.log('📚 [Books] JSON parsed successfully, books count:', parsedData.length);
-            } catch (parseError) {
-                throw new TypeError(`Invalid JSON format: ${parseError.message}`);
-            }
-            
-            allBooks = parsedData;
-            // Filterfunktion: hasAudiobook verwenden (falls nicht gesetzt, dann false)
-            allBooks = allBooks.map(book => {
-                book.hasAudiobook = book.hasAudiobook === true;
-                return book;
-            });
-            filteredBooks = [...allBooks];
-            
-            console.log('📚 [Books] Books loaded successfully:', {
-                allBooksCount: allBooks.length,
-                filteredBooksCount: filteredBooks.length,
-                firstBook: allBooks[0]?.title?.de || 'No title'
+            // Track page view with book count
+            trackGA4Event('page_view', {
+                page_title: 'Dirk Werner Books - Homepage',
+                page_location: window.location.href,
+                book_count: data.length,
+                total_books: data.length
             });
             
-            // Display books
-            if (featuredContainer) {
-                console.log('📚 [Books] Displaying featured books...');
-                await displayFeaturedBooks();
-            }
-            
-            if (allBooksContainer) {
-                console.log('📚 [Books] Displaying all books...');
-                await displayAllBooks();
-            }
-            
-            console.log('📚 [Books] Book loading and display completed successfully');
+            // Sofort anzeigen mit einfacher Logik
+            displayAllBooksSimple();
             
         } catch (error) {
-            console.error('❌ [Books] Fehler beim Laden der Bücher:', error);
-            
-            // Show user-friendly error message
-            const errorMessage = `
-                <div class="error-message">
-                    <p>⚠️ Bücher konnten nicht geladen werden. Bitte versuchen Sie es später erneut.</p>
-                    <p><small>Technischer Fehler: ${error.message}</small></p>
+            console.error('🚨 [ForceLoad] Error loading books:', error);
+            allBooksContainer.innerHTML = `
+                <div style="color: red; padding: 20px; background: #ffe6e6; border-radius: 4px;">
+                    <h3>❌ Fehler beim Laden der Bücher</h3>
+                    <p>${error.message}</p>
+                    <button onclick="forceLoadBooksOnMainPage()">Erneut versuchen</button>
                 </div>
             `;
             
-            if (featuredContainer) {
-                featuredContainer.innerHTML = errorMessage;
-            }
-            if (allBooksContainer) {
-                allBooksContainer.innerHTML = errorMessage;
-            }
-        }
-    } else {
-        console.log('📚 [Books] Skipping book loading:', {
-            hasContainers: !!(featuredContainer || allBooksContainer),
-            isDetailPage: !!bookDetailContainer,
-            reason: bookDetailContainer ? 'Book detail page' : 'No book containers found'
-        });
-    }
-}
-
-// Remove duplicate books based on base title (without format suffix)
-function removeDuplicateBooks(books) {
-    const bookMap = new Map(); // Map to store the best version of each book
-    
-    books.forEach(book => {
-        // Extract base title by removing format suffixes
-        let baseTitle = getLocalizedText(book.title, window.currentLanguage || 'de');
-        
-        // Remove common format suffixes
-        const formatSuffixes = [
-            ' (Taschenbuch)',
-            ' (Paperback)',
-            ' (E-Book)',
-            ' (Kindle)',
-            ' (English Edition)',
-            ' (German Edition)'
-        ];
-        
-        formatSuffixes.forEach(suffix => {
-            if (baseTitle.endsWith(suffix)) {
-                baseTitle = baseTitle.slice(0, -suffix.length);
-            }
-        });
-        
-        // Special case: "Umgang mit Eifersüchtigen" - always prefer the E-Book version
-        if (baseTitle.includes('Umgang mit Eifersüchtigen')) {
-            baseTitle = 'Umgang mit Eifersüchtigen: So bewahrst du deine innere Stärke';
-        }
-        
-        // If we haven't seen this base title before, add the book
-        if (!bookMap.has(baseTitle)) {
-            bookMap.set(baseTitle, book);
-        } else {
-            // If we already have a book with this base title, keep the one with more links
-            const existingBook = bookMap.get(baseTitle);
-            const existingLinksCount = existingBook.links ? Object.keys(existingBook.links).length : 0;
-            const newLinksCount = book.links ? Object.keys(book.links).length : 0;
-            
-            // Special priority for E-Book over Paperback
-            const existingIsEbook = existingBook.bookFormat === 'EBook' || !existingBook.bookFormat;
-            const newIsEbook = book.bookFormat === 'EBook' || !book.bookFormat;
-            
-            if (newIsEbook && !existingIsEbook) {
-                console.log(`📚 [Duplicate] Replacing "${getLocalizedText(existingBook.title, window.currentLanguage || 'de')}" with "${getLocalizedText(book.title, window.currentLanguage || 'de')}" (E-Book preferred)`);
-                bookMap.set(baseTitle, book);
-            } else if (existingIsEbook && !newIsEbook) {
-                console.log(`📚 [Duplicate] Skipping "${getLocalizedText(book.title, window.currentLanguage || 'de')}" (E-Book preferred)`);
-            } else if (newLinksCount > existingLinksCount) {
-                console.log(`📚 [Duplicate] Replacing "${getLocalizedText(existingBook.title, window.currentLanguage || 'de')}" with "${getLocalizedText(book.title, window.currentLanguage || 'de')}" (more links: ${newLinksCount} vs ${existingLinksCount})`);
-                bookMap.set(baseTitle, book);
-            } else {
-                console.log(`📚 [Duplicate] Skipping "${getLocalizedText(book.title, window.currentLanguage || 'de')}" (fewer links: ${newLinksCount} vs ${existingLinksCount})`);
-            }
-        }
-    });
-    
-    return Array.from(bookMap.values());
-}
-
-// Display featured books (first 6)
-async function displayFeaturedBooks() {
-    const featuredContainer = document.getElementById('featuredBooks');
-    if (featuredContainer && allBooks) {
-        console.log('📚 [Featured] Displaying featured books...');
-        // Remove duplicates before displaying
-        const uniqueBooks = removeDuplicateBooks(allBooks);
-        const featuredBooks = uniqueBooks.slice(0, 6);
-        const bookCards = await Promise.all(featuredBooks.map(book => createBookCard(book)));
-        featuredContainer.innerHTML = bookCards.join('');
-        console.log('📚 [Featured] Featured books displayed:', featuredBooks.length);
-    } else {
-        console.log('📚 [Featured] Skipping featured books display:', {
-            hasContainer: !!featuredContainer,
-            hasBooks: !!allBooks
-        });
-    }
-}
-
-// Display all books
-async function displayAllBooks() {
-    const allBooksContainer = document.getElementById('allBooks');
-    if (allBooksContainer && filteredBooks) {
-        console.log('📚 [AllBooks] Displaying all books...');
-        console.log('📚 [AllBooks] Container found:', !!allBooksContainer);
-        console.log('📚 [AllBooks] Filtered books count:', filteredBooks.length);
-        
-        // Remove duplicates before displaying
-        const uniqueBooks = removeDuplicateBooks(filteredBooks);
-        console.log('📚 [AllBooks] Unique books count:', uniqueBooks.length);
-        
-        const bookCards = await Promise.all(uniqueBooks.map(book => createBookCard(book)));
-        console.log('📚 [AllBooks] Book cards created:', bookCards.length);
-        
-        allBooksContainer.innerHTML = bookCards.join('');
-        console.log('📚 [AllBooks] HTML inserted into container');
-        
-        console.log('📚 [AllBooks] All books displayed:', uniqueBooks.length);
-        
-        // Add fade-in animation
-        setTimeout(() => {
-            const cards = document.querySelectorAll('.book-card');
-            console.log('📚 [AllBooks] Found book cards in DOM:', cards.length);
-            cards.forEach((card, index) => {
-                setTimeout(() => {
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 100);
+            // Track error
+            trackGA4Event('exception', {
+                description: 'Error loading books',
+                fatal: false
             });
-        }, 100);
-    } else {
-        console.log('📚 [AllBooks] Skipping all books display:', {
-            hasContainer: !!allBooksContainer,
-            hasFilteredBooks: !!filteredBooks,
-            containerId: allBooksContainer?.id || 'not found'
-        });
+        }
     }
 }
 
-// Filter books by genre
-function filterByGenre(genre) {
-    if (genre === 'all') {
-        filteredBooks = [...allBooks];
-    } else {
-        filteredBooks = allBooks.filter(book => classifyGenre(book.title) === genre);
-    }
-    
-    displayAllBooks();
-}
-
-// Search books by title
-function searchBooks(query) {
-    const searchTerm = query.toLowerCase();
-    
-    if (searchTerm === '') {
-        filteredBooks = [...allBooks];
-    } else {
-        filteredBooks = allBooks.filter(book => {
-            const titleString = getLocalizedText(book.title, window.currentLanguage || 'de');
-            return titleString.toLowerCase().includes(searchTerm);
-        });
-    }
-    
-    displayAllBooks();
-}
-
-// Universal translation function
+// Einfache Sprachumschaltung
 function translatePage(lang) {
-    // Ensure translations object exists
-    if (!window.translations) {
-        console.warn('⚠️ [Translate] Translations object not found, initializing basic translations');
-        window.translations = {
-            de: {
-                'Auf Amazon DE ansehen': 'Auf Amazon DE ansehen',
-                'Bei Apple Books': 'Bei Apple Books',
-                'Bei Books2Read': 'Bei Books2Read',
-                'Hörbuch bei Apple Books': 'Hörbuch bei Apple Books'
-            },
-            en: {
-                'Auf Amazon DE ansehen': 'View on Amazon DE',
-                'Bei Apple Books': 'On Apple Books',
-                'Bei Books2Read': 'On Books2Read',
-                'Hörbuch bei Apple Books': '🎧 Listen to Audiobook on Apple Books Now'
-            }
-        };
-    }
-    
-    const translations = window.translations[lang];
-    if (!translations) {
-        console.warn(`⚠️ [Translate] No translations found for language: ${lang}`);
-        return;
-    }
-    
     window.currentLanguage = lang;
     
-    // Update active language button
-    document.querySelectorAll('.lang-btn').forEach(btn => {
+    // Track language switch
+    trackLanguageSwitch(lang);
+    
+    // Sprachbuttons aktualisieren
+    document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(btn => {
         btn.classList.remove('active');
         if (btn.dataset.lang === lang) {
             btn.classList.add('active');
         }
     });
     
-    // Update all translatable elements with data-de/data-en
-    document.querySelectorAll('[data-de]').forEach(element => {
-        if (element.tagName === 'INPUT') {
-            element.placeholder = element.dataset[lang + 'Placeholder'] || element.dataset[lang];
+    // Übersetzbare Elemente aktualisieren
+    document.querySelectorAll('[data-de][data-en]').forEach(element => {
+        if (lang === 'de' && element.dataset.de) {
+            element.textContent = element.dataset.de;
+        } else if (lang === 'en' && element.dataset.en) {
+            element.textContent = element.dataset.en;
+        }
+    });
+    
+    // Placeholder für Suchfeld
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        if (lang === 'de') {
+            searchInput.placeholder = searchInput.dataset.dePlaceholder || 'Suche nach Titel...';
         } else {
-            element.textContent = element.dataset[lang];
-        }
-    });
-    
-    // Update elements with data-label-* attributes
-    document.querySelectorAll('[data-label-de]').forEach(element => {
-        const labelKey = `label-${lang}`;
-        if (element.dataset[labelKey]) {
-            element.textContent = element.dataset[labelKey];
-        }
-    });
-    
-    // Update document title and meta description
-    const title = document.querySelector('title');
-    const metaDesc = document.querySelector('meta[name="description"]');
-    
-    if (title && title.dataset[lang]) {
-        title.textContent = title.dataset[lang];
-    }
-    
-    if (metaDesc && metaDesc.dataset[lang]) {
-        metaDesc.setAttribute('content', metaDesc.dataset[lang]);
-    }
-    
-    // Update HTML lang attribute
-    document.documentElement.lang = lang;
-    
-    // Reload books to update button texts (only if elements exist)
-    const featuredContainer = document.getElementById('featuredBooks');
-    const allBooksContainer = document.getElementById('allBooks');
-    
-    if (featuredContainer || allBooksContainer) {
-        try {
-            displayFeaturedBooks();
-            displayAllBooks();
-        } catch (error) {
-            console.log('Error updating book display:', error);
+            searchInput.placeholder = searchInput.dataset.enPlaceholder || 'Search by title...';
         }
     }
-    
-    // Update related books on detail page if they exist
-    const relatedBooksContainer = document.getElementById('relatedBooks');
-    if (relatedBooksContainer && typeof window.loadRelatedBooks === 'function') {
-        try {
-            window.loadRelatedBooks();
-        } catch (error) {
-            console.log('Error updating related books:', error);
-        }
-    }
-    
-    // Update audiobook links after language switch
-    setAudiobookLinksByCountry();
-    
-    // Force re-render of any dynamic content
-    const event = new CustomEvent('languageChanged', { detail: { language: lang } });
-    document.dispatchEvent(event);
-    
-    console.log('🌐 [Translation] Page translated to:', lang);
 }
 
-// Smooth scrolling for navigation links
-function initSmoothScrolling() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const href = this.getAttribute('href');
-            // Nur für interne Links (die mit # beginnen)
-            if (href && href.startsWith('#')) {
-                const target = document.querySelector(href);
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+// Enhanced search and filter functions with GA4 tracking
+function performSearch(searchTerm) {
+    if (!searchTerm.trim()) {
+        filteredBooks = [...allBooks];
+    } else {
+        filteredBooks = allBooks.filter(book => {
+            const title = book.title?.de || book.title?.en || book.title || '';
+            const description = book.description?.de || book.description?.en || book.description || '';
+            const author = book.author || '';
+            
+            return title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                   description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                   author.toLowerCase().includes(searchTerm.toLowerCase());
+        });
+    }
+    
+    // Track search
+    trackSearch(searchTerm, filteredBooks.length);
+    
+    displayAllBooksSimple();
+}
+
+function filterByGenre(genre) {
+    if (genre === 'all') {
+        filteredBooks = [...allBooks];
+    } else {
+        filteredBooks = allBooks.filter(book => {
+            // Genre detection logic
+            const title = book.title?.de || book.title?.en || book.title || '';
+            const description = book.description?.de || book.description?.en || book.description || '';
+            
+            if (genre === 'krimi') {
+                return title.toLowerCase().includes('dr. seelmann') || 
+                       title.toLowerCase().includes('trance') || 
+                       title.toLowerCase().includes('echo') || 
+                       title.toLowerCase().includes('vermaechtnis');
+            } else if (genre === 'beziehungen') {
+                return title.toLowerCase().includes('beziehung') || 
+                       title.toLowerCase().includes('eifersucht') || 
+                       title.toLowerCase().includes('herzschmerz') || 
+                       title.toLowerCase().includes('herzklopfen') || 
+                       title.toLowerCase().includes('seminar');
+            } else if (genre === 'selbsthilfe') {
+                return title.toLowerCase().includes('selbst') || 
+                       title.toLowerCase().includes('psychotainment') || 
+                       title.toLowerCase().includes('dankbarkeit') || 
+                       title.toLowerCase().includes('suizidpraevention') || 
+                       title.toLowerCase().includes('emotionale');
+            } else if (genre === 'belletristik') {
+                return title.toLowerCase().includes('schlüssel') || 
+                       title.toLowerCase().includes('simulation') || 
+                       title.toLowerCase().includes('nanogenese') || 
+                       title.toLowerCase().includes('american');
             }
+            return false;
+        });
+    }
+    
+    // Track genre filter
+    trackGenreFilter(genre);
+    
+    displayAllBooksSimple();
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 [Main] DOM loaded, initializing...');
+    
+    // Track page view
+    trackGA4Event('page_view', {
+        page_title: document.title,
+        page_location: window.location.href
+    });
+    
+    // Sprachumschaltung
+    document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            translatePage(lang);
         });
     });
-}
-
-// Initialize search functionality
-function initSearch() {
+    
+    // Search functionality
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         let searchTimeout;
-        
         searchInput.addEventListener('input', function() {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
-                searchBooks(this.value);
+                performSearch(this.value);
             }, 300);
         });
-    } else {
-        console.log('🔍 [Search] Search input not found - likely on book detail page');
     }
-}
-
-// Initialize genre filter
-function initGenreFilter() {
-    const genreFilter = document.getElementById('genreFilter');
-    if (genreFilter) {
-        genreFilter.addEventListener('change', function() {
+    
+    // Genre filter functionality
+    const genreSelect = document.getElementById('genreSelect');
+    if (genreSelect) {
+        genreSelect.addEventListener('change', function() {
             filterByGenre(this.value);
         });
-    } else {
-        console.log('🎭 [Filter] Genre filter not found - likely on book detail page');
-    }
-}
-
-// 🌐 SPRACHUMSCHALTUNG: Vollständig funktionsfähig machen
-function initLanguageSwitching() {
-    console.log('🌐 [Language] Initializing language switching for all devices...');
-    
-    // Aktuelle Sprache ermitteln
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlLang = urlParams.get('lang');
-    const localStorageLang = localStorage.getItem('lang');
-    const isMobile = window.innerWidth < 768;
-    
-    let preferredLang = 'de'; // default
-    
-    if (urlLang && (urlLang === 'de' || urlLang === 'en')) {
-        preferredLang = urlLang;
-        localStorage.setItem('lang', preferredLang);
-        updateURLParameter('lang', preferredLang);
-        console.log(`🌐 [Language] Language set from URL parameter:`, preferredLang);
-    } else if (localStorageLang) {
-        preferredLang = localStorageLang;
-        console.log(`🌐 [Language] Language set from localStorage:`, preferredLang);
-    } else {
-        console.log(`🌐 [Language] Using default language:`, preferredLang);
     }
     
-    window.currentLanguage = preferredLang;
-    
-    // Alle Sprachbuttons finden und initialisieren
-    const allLangButtons = document.querySelectorAll('.lang-btn, .mobile-lang-btn');
-    console.log(`🌐 [Language] Found ${allLangButtons.length} language buttons`);
-    
-    // Aktive Button-Zustände setzen
-    allLangButtons.forEach((btn, index) => {
-        console.log(`🌐 [Language] Button ${index + 1}:`, btn.dataset.lang, 'Current active:', preferredLang);
-        
-        if (btn.dataset.lang === preferredLang) {
-            btn.classList.add('active');
-            console.log(`🌐 [Language] Button ${btn.dataset.lang} set to active`);
-        } else {
-            btn.classList.remove('active');
-            console.log(`🌐 [Language] Button ${btn.dataset.lang} set to inactive`);
-        }
-        
-        // Alle bestehenden Event-Listener entfernen
-        btn.removeEventListener('click', handleLanguageSwitch);
-        btn.removeEventListener('touchend', handleLanguageSwitch);
-        btn.removeEventListener('touchstart', handleLanguageSwitch);
-        
-        // Neue Event-Listener hinzufügen
-        btn.addEventListener('click', handleLanguageSwitch);
-        btn.addEventListener('touchend', handleLanguageSwitch);
-        btn.addEventListener('touchstart', handleLanguageSwitch);
-        
-        // Zusätzliche Touch-Events für mobile Geräte
-        if (isMobile) {
-            btn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                console.log(`🌐 [Language] Touch start on ${btn.dataset.lang} button`);
-            });
-        }
-        
-        console.log(`🌐 [Language] Event listeners added for ${btn.dataset.lang} button`);
-    });
-    
-    // Initiale Übersetzung anwenden
-    translatePage(preferredLang);
-    
-    // Zusätzliche Sicherheit: Buttons nach 1 Sekunde nochmal prüfen
-    setTimeout(() => {
-        const buttonsAfterDelay = document.querySelectorAll('.lang-btn, .mobile-lang-btn');
-        console.log(`🌐 [Language] After delay: Found ${buttonsAfterDelay.length} language buttons`);
-        
-        buttonsAfterDelay.forEach((btn, index) => {
-            if (!btn.hasEventListener) {
-                btn.addEventListener('click', handleLanguageSwitch);
-                btn.addEventListener('touchend', handleLanguageSwitch);
-                btn.hasEventListener = true;
-                console.log(`🌐 [Language] Added delayed event listeners to button ${index + 1}`);
-            }
-        });
-    }, 1000);
-    
-    console.log('🌐 [Language] Language switching fully initialized for all devices');
-}
-
-// 🌐 SPRACHUMSCHALTUNG-REPAIR: Überprüfung und Reparatur der Sprachumschaltung
-function repairLanguageSwitching() {
-    console.log('🔧 [Language Repair] Checking and repairing language switching...');
-    
-    // Alle Sprachbuttons finden
-    const allLangButtons = document.querySelectorAll('.lang-btn, .mobile-lang-btn');
-    console.log(`🔧 [Language Repair] Found ${allLangButtons.length} language buttons`);
-    
-    if (allLangButtons.length === 0) {
-        console.warn('⚠️ [Language Repair] No language buttons found!');
-        return false;
-    }
-    
-    // Event-Listener für alle Buttons hinzufügen
-    allLangButtons.forEach((btn, index) => {
-        console.log(`🔧 [Language Repair] Processing button ${index + 1}:`, btn.dataset.lang);
-        
-        // Alle bestehenden Event-Listener entfernen
-        btn.removeEventListener('click', handleLanguageSwitch);
-        btn.removeEventListener('touchend', handleLanguageSwitch);
-        btn.removeEventListener('touchstart', handleLanguageSwitch);
-        
-        // Neue Event-Listener hinzufügen
-        btn.addEventListener('click', handleLanguageSwitch);
-        btn.addEventListener('touchend', handleLanguageSwitch);
-        btn.addEventListener('touchstart', handleLanguageSwitch);
-        
-        // Zusätzliche Touch-Events für mobile Geräte
-        if (window.innerWidth < 768) {
-            btn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                console.log(`🔧 [Language Repair] Touch start on ${btn.dataset.lang} button`);
-            });
-        }
-        
-        // Button als klickbar markieren
-        btn.style.cursor = 'pointer';
-        btn.style.pointerEvents = 'auto';
-        btn.style.userSelect = 'none';
-        btn.style.webkitUserSelect = 'none';
-        btn.style.mozUserSelect = 'none';
-        btn.style.msUserSelect = 'none';
-        
-        console.log(`🔧 [Language Repair] Button ${btn.dataset.lang} repaired`);
-    });
-    
-    // Aktive Sprache setzen
-    const currentLang = localStorage.getItem('lang') || 'de';
-    window.currentLanguage = currentLang;
-    
-    // Aktive Button-Zustände setzen
-    allLangButtons.forEach(btn => {
-        if (btn.dataset.lang === currentLang) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-    });
-    
-    console.log(`🔧 [Language Repair] Language switching repaired. Current language: ${currentLang}`);
-    return true;
-}
-
-// 🌐 SPRACHWECHSEL-HANDLER: Robuster für alle Geräte
-function handleLanguageSwitch(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const lang = this.dataset.lang;
-    const isMobile = window.innerWidth < 768;
-    
-    console.log(`🌐 [Language] Switching to: ${lang} (Mobile: ${isMobile})`);
-    
-    // Aktive Button-Zustände aktualisieren
-    document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(b => {
-        b.classList.remove('active');
-    });
-    this.classList.add('active');
-    
-    // Sprache speichern
-    localStorage.setItem('lang', lang);
-    window.currentLanguage = lang;
-    updateURLParameter('lang', lang);
-    
-    // Übersetzung anwenden
-    if (isMobile) {
-        // Mobile: Page reload für bessere Stabilität
-        console.log('🌐 [Language] Mobile detected - reloading page');
-        
-        // Zusätzliche Sicherheit: Sprache vor Reload speichern
-        sessionStorage.setItem('pendingLanguage', lang);
-        
-        // Kurze Verzögerung für bessere UX
-        setTimeout(() => {
-            location.reload();
-        }, 100);
-    } else {
-        // Desktop: Sofortige Übersetzung ohne Reload
-        console.log('🌐 [Language] Desktop detected - applying translation');
-        translatePage(lang);
-        
-        // DOM-Updates nach der Übersetzung
-        setTimeout(() => {
-            updateAllTranslatableElements(lang);
-            if (typeof displayFeaturedBooks === 'function') { 
-                displayFeaturedBooks(); 
-            }
-            if (typeof displayAllBooks === 'function') { 
-                displayAllBooks(); 
-            }
-            
-            // 🚨 AUTOMATISCHE BEREINIGUNG NACH SPRACHUMSCHALTUNG
-            console.log('🚨 [Language] Running cleanup after language switch...');
-            ultimateTextOverlayCleanup();
-            blockExternalContent();
-            
-            // Zusätzliche Bereinigung nach 1 Sekunde
-            setTimeout(() => {
-                ultimateTextOverlayCleanup();
-            }, 1000);
-            
-            // Zusätzliche Bereinigung nach 3 Sekunden
-            setTimeout(() => {
-                ultimateTextOverlayCleanup();
-            }, 3000);
-        }, 100);
-    }
-    
-    console.log(`🌐 [Language] Successfully switched to: ${lang}`);
-}
-
-// 🌐 ALLE ÜBERSETZBAREN ELEMENTE AKTUALISIEREN
-function updateAllTranslatableElements(lang) {
-    console.log(`🌐 [Translation] Updating all translatable elements to ${lang}`);
-    
-    // data-de und data-en Attribute verarbeiten
-    document.querySelectorAll('[data-de], [data-en]').forEach(element => {
-        if (element.dataset[lang]) {
-            const newText = element.dataset[lang];
-            
-            // Verschiedene Element-Typen behandeln
-            if (element.tagName === 'INPUT' && element.type === 'placeholder') {
-                element.placeholder = newText;
-            } else if (element.tagName === 'META') {
-                element.setAttribute('content', newText);
-            } else {
-                element.textContent = newText;
-            }
-            
-            console.log(`🌐 [Translation] Updated element: ${element.tagName} -> ${newText}`);
-        }
-    });
-    
-    // HTML lang Attribut aktualisieren
-    document.documentElement.lang = lang;
-    
-    // Title-Tag aktualisieren
-    const titleElement = document.querySelector('title');
-    if (titleElement && titleElement.dataset[lang]) {
-        titleElement.textContent = titleElement.dataset[lang];
-    }
-    
-    // Meta description aktualisieren
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription && metaDescription.dataset[lang]) {
-        metaDescription.setAttribute('content', metaDescription.dataset[lang]);
-    }
-    
-    console.log(`🌐 [Translation] All elements updated to ${lang}`);
-}
-
-// 🌐 ERWEITERTE ÜBERSETZUNGSFUNKTION
-function translatePage(lang) {
-    console.log(`🌐 [Translation] Translating page to ${lang}`);
-    
-    // Basis-Übersetzungen anwenden
-    updateAllTranslatableElements(lang);
-    
-    // Spezielle Übersetzungen für dynamische Inhalte
-    if (typeof window.translations !== 'undefined' && window.translations[lang]) {
-        const translations = window.translations[lang];
-        
-        // Navigation übersetzen
-        Object.keys(translations).forEach(key => {
-            const elements = document.querySelectorAll(`[data-translate="${key}"]`);
-            elements.forEach(element => {
-                element.textContent = translations[key];
-            });
-        });
-    }
-    
-    // Buchkarten neu rendern falls vorhanden
-    if (typeof displayFeaturedBooks === 'function') {
-        displayFeaturedBooks();
-    }
-    if (typeof displayAllBooks === 'function') {
-        displayAllBooks();
-    }
-    
-    console.log(`🌐 [Translation] Page translation to ${lang} completed`);
-}
-
-// 🎧 AUDIOBOOK BUTTON MANAGEMENT: Robuste Hörbuch-Button-Logik
-function manageAudiobookButtons() {
-    console.log('🎧 [Audiobook] Managing audiobook buttons...');
-    
-    const bookCards = document.querySelectorAll('.book-card');
-    let audiobookButtonsShown = 0;
-    let audiobookButtonsHidden = 0;
-    
-    bookCards.forEach((card, index) => {
-        const hasAudiobook = card.getAttribute('data-has-audiobook') === 'true';
-        const audiobookButton = card.querySelector('.book-link.audiobook');
-        
-        if (audiobookButton) {
-            if (hasAudiobook) {
-                // Hörbuch-Button anzeigen für Bücher mit hasAudiobook=true
-                audiobookButton.style.display = 'inline-flex';
-                audiobookButton.style.visibility = 'visible';
-                audiobookButton.style.opacity = '1';
-                audiobookButton.style.position = 'relative';
-                audiobookButton.style.zIndex = '5';
-                audiobookButton.style.pointerEvents = 'auto';
-                audiobookButton.style.width = '100%';
-                audiobookButton.style.minHeight = '44px';
-                audiobookButton.style.padding = '10px 16px';
-                audiobookButton.style.margin = '4px 0';
-                audiobookButton.style.background = '#ff6b35';
-                audiobookButton.style.color = 'white';
-                audiobookButton.style.border = 'none';
-                audiobookButton.style.borderRadius = '8px';
-                audiobookButton.style.fontSize = '14px';
-                audiobookButton.style.fontWeight = 'bold';
-                audiobookButton.style.textAlign = 'center';
-                audiobookButton.style.textDecoration = 'none';
-                audiobookButton.style.cursor = 'pointer';
-                audiobookButton.style.transition = 'all 0.2s ease';
-                audiobookButton.style.justifyContent = 'center';
-                audiobookButton.style.alignItems = 'center';
-                audiobookButton.style.boxShadow = '0 2px 4px rgba(255, 107, 53, 0.3)';
+    // Smooth Scrolling für Navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
                 
-                audiobookButtonsShown++;
-                console.log(`🎧 [Audiobook] Button shown for book ${index + 1} (hasAudiobook=true)`);
-            } else {
-                // Hörbuch-Button ausblenden für Bücher ohne Audiobook
-                audiobookButton.style.display = 'none';
-                audiobookButton.style.visibility = 'hidden';
-                audiobookButton.style.opacity = '0';
-                audiobookButton.style.position = 'absolute';
-                audiobookButton.style.zIndex = '-1';
-                audiobookButton.style.width = '0';
-                audiobookButton.style.height = '0';
-                audiobookButton.style.overflow = 'hidden';
-                audiobookButton.style.pointerEvents = 'none';
-                audiobookButton.style.fontSize = '0';
-                audiobookButton.style.lineHeight = '0';
-                audiobookButton.style.margin = '0';
-                audiobookButton.style.padding = '0';
-                audiobookButton.style.border = '0';
-                audiobookButton.style.clip = 'rect(0, 0, 0, 0)';
-                
-                audiobookButtonsHidden++;
-                console.log(`🎧 [Audiobook] Button hidden for book ${index + 1} (hasAudiobook=false)`);
-            }
-        } else {
-            console.log(`🎧 [Audiobook] No audiobook button found for book ${index + 1}`);
-        }
-    });
-    
-    console.log(`🎧 [Audiobook] Management complete: ${audiobookButtonsShown} shown, ${audiobookButtonsHidden} hidden`);
-}
-
-// 🚨 ULTIMATIVE TEXT-OVERLAY-BEREINIGUNG: Alle Fehler aus den Bildern beheben
-function ultimateTextOverlayCleanup() {
-    console.log('🚨 [Cleanup] Starting ultimate text overlay cleanup...');
-    
-    // 1. NUR Text-Elemente über Buchcovern entfernen (nicht die Buchkarten selbst)
-    document.querySelectorAll('.book-card .book-image').forEach(imageContainer => {
-        const allowedElements = Array.from(imageContainer.querySelectorAll('.book-cover-link, .book-cover-image, img'));
-        imageContainer.querySelectorAll('*').forEach(element => {
-            if (!allowedElements.includes(element)) {
-                element.style.display = 'none';
-                element.style.visibility = 'hidden';
-                element.style.opacity = '0';
-                element.style.position = 'absolute';
-                element.style.zIndex = '-1';
-                element.style.width = '0';
-                element.style.height = '0';
-                element.style.overflow = 'hidden';
-                element.style.pointerEvents = 'none';
-                element.style.fontSize = '0';
-                element.style.lineHeight = '0';
-                element.style.margin = '0';
-                element.style.padding = '0';
-                element.style.border = '0';
-                element.style.clip = 'rect(0,0,0,0)';
-            }
-        });
-    });
-    
-    // 2. HTML-Attribute aus der Anzeige entfernen (aber Buchkarten intakt lassen)
-    document.querySelectorAll('.book-card').forEach(card => {
-        // data-* Attribute sind nur für JavaScript, nicht für die Anzeige
-        const dataAttributes = ['data-asin', 'data-has-audiobook', 'data-has-detail-page', 'data-title'];
-        dataAttributes.forEach(attr => {
-            if (card.hasAttribute(attr)) {
-                // Attribute bleibt für JavaScript, aber wird nicht angezeigt
-                card.style.setProperty(`--${attr}`, 'none');
-            }
-        });
-    });
-    
-    // 3. Broken HTML-Tags entfernen ("erfahren">") - aber nur außerhalb der Buchkarten
-    document.querySelectorAll('*').forEach(element => {
-        if (element.textContent && element.textContent.includes('erfahren">')) {
-            // Nur entfernen, wenn es nicht in einer Buchkarte ist
-            if (!element.closest('.book-card')) {
-                element.style.display = 'none';
-                element.style.visibility = 'hidden';
-                element.style.opacity = '0';
-                element.style.fontSize = '0';
-                element.style.lineHeight = '0';
-                element.style.height = '0';
-                element.style.width = '0';
-                element.style.overflow = 'hidden';
-            }
-        }
-    });
-    
-    // 4. Redundante Titel entfernen - aber nur die, die über den Covern sind
-    document.querySelectorAll('.book-card').forEach(card => {
-        const titles = card.querySelectorAll('.book-title');
-        if (titles.length > 1) {
-            // Nur den ersten Titel behalten
-            for (let i = 1; i < titles.length; i++) {
-                titles[i].style.display = 'none';
-                titles[i].style.visibility = 'hidden';
-                titles[i].style.opacity = '0';
-            }
-        }
-    });
-    
-    // 5. Style-Attribute aus der Anzeige entfernen - aber nur außerhalb der Buchkarten
-    document.querySelectorAll('*[style*="opacity"], *[style*="transform"]').forEach(element => {
-        if (element.textContent && element.textContent.includes('data-')) {
-            // Nur entfernen, wenn es nicht in einer Buchkarte ist
-            if (!element.closest('.book-card')) {
-                element.style.display = 'none';
-                element.style.visibility = 'hidden';
-                element.style.opacity = '0';
-            }
-        }
-    });
-    
-    // 6. EXTERNE INHALTE VON AMAZON/APPLE ENTFERNEN - aber nur die Widgets, nicht die Links
-    // Amazon Widgets und Overlays
-    document.querySelectorAll('.amzn-product-block, .amazon-product-block, [class*="amzn"], [class*="amazon"], [id*="amzn"], [id*="amazon"]').forEach(element => {
-        if (element.textContent && (element.textContent.includes('data-') || element.textContent.includes('ASIN') || element.textContent.includes('amazon'))) {
-            // Nur entfernen, wenn es nicht ein Link in einer Buchkarte ist
-            if (!element.closest('.book-card .book-links')) {
-                element.style.display = 'none';
-                element.style.visibility = 'hidden';
-                element.style.opacity = '0';
-                element.style.position = 'absolute';
-                element.style.zIndex = '-1';
-                element.style.width = '0';
-                element.style.height = '0';
-                element.style.overflow = 'hidden';
-                element.style.pointerEvents = 'none';
-                element.style.fontSize = '0';
-                element.style.lineHeight = '0';
-                element.style.margin = '0';
-                element.style.padding = '0';
-                element.style.border = '0';
-                element.style.clip = 'rect(0,0,0,0)';
-            }
-        }
-    });
-    
-    // Apple Books Widgets und Overlays
-    document.querySelectorAll('.apple-books-widget, [class*="apple"], [id*="apple"], [class*="books"], [id*="books"]').forEach(element => {
-        if (element.textContent && (element.textContent.includes('data-') || element.textContent.includes('apple') || element.textContent.includes('books'))) {
-            // Nur entfernen, wenn es nicht ein Link in einer Buchkarte ist
-            if (!element.closest('.book-card .book-links')) {
-                element.style.display = 'none';
-                element.style.visibility = 'hidden';
-                element.style.opacity = '0';
-                element.style.position = 'absolute';
-                element.style.zIndex = '-1';
-                element.style.width = '0';
-                element.style.height = '0';
-                element.style.overflow = 'hidden';
-                element.style.pointerEvents = 'none';
-                element.style.fontSize = '0';
-                element.style.lineHeight = '0';
-                element.style.margin = '0';
-                element.style.padding = '0';
-                element.style.border = '0';
-                element.style.clip = 'rect(0,0,0,0)';
-            }
-        }
-    });
-    
-    // 7. ALLE MÖGLICHEN EXTERNE WIDGETS UND OVERLAYS - aber nur außerhalb der Buchkarten
-    const externalSelectors = [
-        '[class*="widget"]', '[id*="widget"]',
-        '[class*="overlay"]', '[id*="overlay"]',
-        '[class*="embed"]', '[id*="embed"]',
-        '[class*="iframe"]', '[id*="iframe"]',
-        '[class*="script"]', '[id*="script"]',
-        '[class*="external"]', '[id*="external"]',
-        '[class*="third-party"]', '[id*="third-party"]',
-        '[class*="api"]', '[id*="api"]',
-        '[class*="sdk"]', '[id*="sdk"]',
-        '[class*="plugin"]', '[id*="plugin"]',
-        '[class*="addon"]', '[id*="addon"]'
-    ];
-    
-    externalSelectors.forEach(selector => {
-        document.querySelectorAll(selector).forEach(element => {
-            if (element.textContent && (
-                element.textContent.includes('data-') || 
-                element.textContent.includes('ASIN') || 
-                element.textContent.includes('amazon') ||
-                element.textContent.includes('apple') ||
-                element.textContent.includes('books') ||
-                element.textContent.includes('widget') ||
-                element.textContent.includes('overlay')
-            )) {
-                // Nur entfernen, wenn es nicht in einer Buchkarte ist
-                if (!element.closest('.book-card')) {
-                    element.style.display = 'none';
-                    element.style.visibility = 'hidden';
-                    element.style.opacity = '0';
-                    element.style.position = 'absolute';
-                    element.style.zIndex = '-1';
-                    element.style.width = '0';
-                    element.style.height = '0';
-                    element.style.overflow = 'hidden';
-                    element.style.pointerEvents = 'none';
-                    element.style.fontSize = '0';
-                    element.style.lineHeight = '0';
-                    element.style.margin = '0';
-                    element.style.padding = '0';
-                    element.style.border = '0';
-                    element.style.clip = 'rect(0,0,0,0)';
-                }
-            }
-        });
-    });
-    
-    // 8. DYNAMISCH NACHGELADENE ELEMENTE ENTFERNEN - aber nur die unerwünschten
-    document.querySelectorAll('*').forEach(element => {
-        const text = element.textContent || '';
-        if (text && (
-            text.includes('data-asin=') ||
-            text.includes('data-has-audiobook=') ||
-            text.includes('data-has-detail-page=') ||
-            text.includes('data-title=') ||
-            text.includes('erfahren">') ||
-            text.includes('ASIN') ||
-            text.includes('amazon') ||
-            text.includes('apple') ||
-            text.includes('books') ||
-            text.includes('widget') ||
-            text.includes('overlay')
-        )) {
-            // Nur entfernen, wenn es nicht ein erlaubtes Element ist
-            const isAllowed = element.closest('.book-title') || 
-                             element.closest('.book-author') || 
-                             element.closest('.book-description') ||
-                             element.closest('.book-links') ||
-                             element.closest('.book-content') ||
-                             element.closest('.book-card') ||
-                             element.closest('.book-image') ||
-                             element.closest('.book-cover-link') ||
-                             element.closest('.book-cover-image') ||
-                             element.closest('.book-link') ||
-                             element.closest('.mehr-button') ||
-                             element.closest('.learn-more-button');
-            
-            if (!isAllowed) {
-                element.style.display = 'none';
-                element.style.visibility = 'hidden';
-                element.style.opacity = '0';
-                element.style.position = 'absolute';
-                element.style.zIndex = '-1';
-                element.style.width = '0';
-                element.style.height = '0';
-                element.style.overflow = 'hidden';
-                element.style.pointerEvents = 'none';
-                element.style.fontSize = '0';
-                element.style.lineHeight = '0';
-                element.style.margin = '0';
-                element.style.padding = '0';
-                element.style.border = '0';
-                element.style.clip = 'rect(0,0,0,0)';
-            }
-        }
-    });
-    
-    console.log('🚨 [Cleanup] Ultimate text overlay cleanup completed');
-}
-
-// 🔄 DAUERHAFTE ÜBERWACHUNG: Kontinuierliche Bereinigung externer Inhalte
-function startContinuousCleanup() {
-    console.log('🔄 [Continuous Cleanup] Starting continuous monitoring...');
-    
-    // MutationObserver für neue DOM-Elemente
-    const observer = new MutationObserver((mutations) => {
-        let cleanupNeeded = false;
-        
-        mutations.forEach((mutation) => {
-            if (mutation.type === 'childList') {
-                mutation.addedNodes.forEach((node) => {
-                    if (node.nodeType === 1) { // Element node
-                        // Prüfen auf externe Inhalte
-                        if (node.textContent && (
-                            node.textContent.includes('data-asin=') ||
-                            node.textContent.includes('data-has-audiobook=') ||
-                            node.textContent.includes('data-has-detail-page=') ||
-                            node.textContent.includes('data-title=') ||
-                            node.textContent.includes('erfahren">') ||
-                            node.textContent.includes('ASIN') ||
-                            node.textContent.includes('amazon') ||
-                            node.textContent.includes('apple') ||
-                            node.textContent.includes('books') ||
-                            node.textContent.includes('widget') ||
-                            node.textContent.includes('overlay')
-                        )) {
-                            cleanupNeeded = true;
-                        }
-                        
-                        // Prüfen auf externe Klassen/IDs
-                        if (node.className && (
-                            node.className.includes('amzn') ||
-                            node.className.includes('amazon') ||
-                            node.className.includes('apple') ||
-                            node.className.includes('books') ||
-                            node.className.includes('widget') ||
-                            node.className.includes('overlay') ||
-                            node.className.includes('embed') ||
-                            node.className.includes('external') ||
-                            node.className.includes('third-party')
-                        )) {
-                            cleanupNeeded = true;
-                        }
-                        
-                        if (node.id && (
-                            node.id.includes('amzn') ||
-                            node.id.includes('amazon') ||
-                            node.id.includes('apple') ||
-                            node.id.includes('books') ||
-                            node.id.includes('widget') ||
-                            node.id.includes('overlay') ||
-                            node.id.includes('embed') ||
-                            node.id.includes('external') ||
-                            node.id.includes('third-party')
-                        )) {
-                            cleanupNeeded = true;
-                        }
-                    }
+                // Track navigation clicks
+                trackGA4Event('navigation_click', {
+                    link_text: this.textContent,
+                    link_href: this.getAttribute('href'),
+                    page_location: window.location.href
                 });
             }
         });
-        
-        if (cleanupNeeded) {
-            console.log('🔄 [Continuous Cleanup] External content detected, running cleanup...');
-            setTimeout(() => {
-                ultimateTextOverlayCleanup();
-                ensureBookCardsVisibility(); // Sofort nach Cleanup wieder sichtbar machen
-            }, 100);
-        }
     });
     
-    // Beobachte das gesamte Dokument
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ['class', 'id', 'style']
-    });
-    
-    // Zusätzliche regelmäßige Bereinigung
-    setInterval(() => {
-        ultimateTextOverlayCleanup();
-    }, 5000); // Alle 5 Sekunden
-    
-    console.log('🔄 [Continuous Cleanup] Continuous monitoring started');
-    return observer;
-}
-
-// 🚫 EXTERNE INHALTE BLOCKIEREN: Verhindert das Laden externer Widgets
-function blockExternalContent() {
-    console.log('🚫 [Block External] Blocking external content loading...');
-    
-    // Amazon Widgets blockieren
-    const amazonScripts = document.querySelectorAll('script[src*="amazon"], script[src*="amzn"]');
-    amazonScripts.forEach(script => {
-        script.remove();
-        console.log('🚫 [Block External] Removed Amazon script:', script.src);
-    });
-    
-    // Apple Widgets blockieren
-    const appleScripts = document.querySelectorAll('script[src*="apple"], script[src*="books"]');
-    appleScripts.forEach(script => {
-        script.remove();
-        console.log('🚫 [Block External] Removed Apple script:', script.src);
-    });
-    
-    // Externe iframes blockieren
-    const externalIframes = document.querySelectorAll('iframe[src*="amazon"], iframe[src*="apple"], iframe[src*="books"]');
-    externalIframes.forEach(iframe => {
-        iframe.remove();
-        console.log('🚫 [Block External] Removed external iframe:', iframe.src);
-    });
-    
-    // Externe Styles blockieren
-    const externalStyles = document.querySelectorAll('link[href*="amazon"], link[href*="apple"], link[href*="books"]');
-    externalStyles.forEach(style => {
-        style.remove();
-        console.log('🚫 [Block External] Removed external style:', style.href);
-    });
-    
-    console.log('🚫 [Block External] External content blocking completed');
-}
-
-// 🧹 MOBILE CLEANUP: Umfassende Bereinigung für mobile Geräte
-function mobileCleanup() {
-    if (window.innerWidth < 768) {
-        console.log('📱 [Mobile Cleanup] Starting comprehensive mobile cleanup...');
-        
-        // Tab-Buttons entfernen
-        const tabButtons = document.querySelectorAll('.tab-buttons, .book-info-tabs, .book-info-tab, .book-info-tab-button, .book-tab-button, [class*="tab-button"], [class*="info-tab"]');
-        tabButtons.forEach((button, index) => {
-            button.style.display = 'none';
-            button.style.visibility = 'hidden';
-            button.style.opacity = '0';
-            button.style.position = 'absolute';
-            button.style.zIndex = '-1';
-            button.style.width = '0';
-            button.style.height = '0';
-            button.style.overflow = 'hidden';
-            button.style.pointerEvents = 'none';
-            button.style.fontSize = '0';
-            button.style.lineHeight = '0';
-            button.style.margin = '0';
-            button.style.padding = '0';
-            button.style.border = '0';
-            button.style.clip = 'rect(0, 0, 0, 0)';
-            console.log(`📱 [Mobile Cleanup] Tab button ${index + 1} removed`);
-        });
-        
-        // Zwischentexte entfernen
-        const bookCards = document.querySelectorAll('.book-card');
-        bookCards.forEach((card, cardIndex) => {
-            const unwantedElements = card.querySelectorAll('.book-content *:not(.book-title):not(.book-author):not(.book-description):not(.book-links):not(.mehr-button):not(.learn-more-button)');
-            unwantedElements.forEach((element, elementIndex) => {
-                if (element.tagName !== 'H1' && element.tagName !== 'H2' && element.tagName !== 'H3' && 
-                    element.tagName !== 'H4' && element.tagName !== 'H5' && element.tagName !== 'H6') {
-                    element.style.fontSize = '0';
-                    element.style.lineHeight = '0';
-                    element.style.margin = '0';
-                    element.style.padding = '0';
-                    element.style.height = '0';
-                    element.style.overflow = 'hidden';
-                    console.log(`📱 [Mobile Cleanup] Unwanted element removed from book ${cardIndex + 1}`);
-                }
+    // Track external link clicks
+    document.querySelectorAll('a[href^="http"]').forEach(link => {
+        link.addEventListener('click', function() {
+            trackGA4Event('external_link_click', {
+                link_url: this.href,
+                link_text: this.textContent,
+                page_location: window.location.href
             });
         });
-        
-        // Hörbuch-Buttons verwalten
-        manageAudiobookButtons();
-        
-        // Ultimate cleanup aufrufen
-        ultimateTextOverlayCleanup();
-        
-        console.log('📱 [Mobile Cleanup] Mobile cleanup completed');
-    }
-}
-
-// Add loading animation
-function showLoading(containerId) {
-    const container = document.getElementById(containerId);
-    if (container) {
-        container.innerHTML = '<div class="loading"></div>';
-    }
-}
-
-// Initialize intersection observer for animations
-function initAnimations() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in');
-            }
-        });
-    }, {
-        threshold: 0.1
     });
     
-    // Observe sections for animation
-    document.querySelectorAll('section').forEach(section => {
-        observer.observe(section);
-    });
-}
-
-// Handle responsive navigation
-function initResponsiveNav() {
-    // Mobile navigation toggle
-    const mobileToggle = document.querySelector('.mobile-nav-toggle');
-    const navList = document.querySelector('.nav-list');
-    
-    if (mobileToggle && navList) {
-        mobileToggle.addEventListener('click', function() {
-            navList.classList.toggle('active');
-            
-            // Update aria-label for accessibility
-            const isOpen = navList.classList.contains('active');
-            mobileToggle.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
-            mobileToggle.textContent = isOpen ? '✕' : '☰';
-        });
-        
-        // Close mobile menu when clicking on a link
-        const navLinks = navList.querySelectorAll('a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                navList.classList.remove('active');
-                mobileToggle.setAttribute('aria-label', 'Menü öffnen');
-                mobileToggle.textContent = '☰';
-            });
-        });
-        
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!navList.contains(event.target) && !mobileToggle.contains(event.target)) {
-                navList.classList.remove('active');
-                mobileToggle.setAttribute('aria-label', 'Menü öffnen');
-                mobileToggle.textContent = '☰';
-            }
-        });
+    // Sofortige Buchladung für Hauptseite
+    if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+        console.log('🚀 [Main] Main page detected, loading books immediately...');
+        forceLoadBooksOnMainPage();
     }
-    
-    // Add mobile menu functionality if needed
-    const nav = document.querySelector('.nav');
-    if (nav) {
-        let lastScrollY = window.scrollY;
-        
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > lastScrollY && window.scrollY > 100) {
-                nav.style.transform = 'translateY(-100%)';
-            } else {
-                nav.style.transform = 'translateY(0)';
-            }
-            lastScrollY = window.scrollY;
-        });
-    } else {
-        console.log('📱 [Nav] Navigation not found - likely on book detail page');
-    }
-}
-
-// 🎯 MOBILE-TEST: Überprüfung der Titel-Overlays auf mobilen Geräten
-function testMobileTitleOverlays() {
-    console.log('📱 [Mobile Test] Überprüfung der Titel-Overlays auf mobilen Geräten...');
-    
-    const isMobile = window.innerWidth <= 768;
-    const isSmallMobile = window.innerWidth <= 480;
-    
-    console.log('📱 [Mobile Test] Geräte-Erkennung:', {
-        windowWidth: window.innerWidth,
-        isMobile: isMobile,
-        isSmallMobile: isSmallMobile
-    });
-    
-    // Überprüfe alle Buchkarten auf Titel-Overlays
-    const bookCards = document.querySelectorAll('.book-card');
-    let overlayIssues = 0;
-    
-    bookCards.forEach((card, index) => {
-        const bookImage = card.querySelector('.book-image');
-        if (bookImage) {
-            // Suche nach möglichen Titel-Overlays
-            const titleOverlays = bookImage.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div:not(.book-cover-link), strong, em, b, i, .overlay, .title-overlay, .overlay-title, .title-container, .overlay-container');
-            
-            if (titleOverlays.length > 0) {
-                overlayIssues++;
-                console.warn(`⚠️ [Mobile Test] Buchkarte ${index + 1}: ${titleOverlays.length} Titel-Overlays gefunden!`);
-                titleOverlays.forEach(overlay => {
-                    console.warn(`   - Overlay: ${overlay.tagName}${overlay.className ? '.' + overlay.className : ''}`);
-                });
-            } else {
-                console.log(`✅ [Mobile Test] Buchkarte ${index + 1}: Keine Titel-Overlays gefunden`);
-            }
-        }
-    });
-    
-    if (overlayIssues === 0) {
-        console.log('✅ [Mobile Test] Alle Buchkarten sind sauber - keine Titel-Overlays gefunden!');
-    } else {
-        console.error(`❌ [Mobile Test] ${overlayIssues} Buchkarten haben noch Titel-Overlays!`);
-    }
-    
-    // Überprüfe CSS-Regeln
-    const styleSheets = Array.from(document.styleSheets);
-    let mobileRulesFound = 0;
-    
-    styleSheets.forEach(sheet => {
-        try {
-            const rules = Array.from(sheet.cssRules || sheet.rules);
-            rules.forEach(rule => {
-                if (rule.media && (rule.media.mediaText.includes('max-width: 768px') || rule.media.mediaText.includes('max-width: 480px'))) {
-                    mobileRulesFound++;
-                    console.log(`📱 [Mobile Test] Mobile CSS-Regel gefunden: ${rule.media.mediaText}`);
-                }
-            });
-        } catch (e) {
-            // Cross-origin stylesheets können nicht gelesen werden
-        }
-    });
-    
-    console.log(`📱 [Mobile Test] ${mobileRulesFound} mobile CSS-Regeln gefunden`);
-    
-    return overlayIssues === 0;
-}
-
-// 🚨 NOTFALL-FUNKTION: data-title Attribute bereinigen
-function cleanupDataTitleAttributes() {
-    console.log('🧹 [Cleanup] Umfassende Bereinigung der data-title Attribute...');
-    
-    const bookCards = document.querySelectorAll('.book-card[data-title]');
-    let cleanedCount = 0;
-    
-    bookCards.forEach((card, index) => {
-        const dataTitle = card.getAttribute('data-title');
-        if (dataTitle) {
-            // Umfassende Bereinigung von HTML und Sonderzeichen
-            const cleanTitle = dataTitle
-                .replace(/<[^>]*>/g, '') // HTML-Tags entfernen
-                .replace(/&[a-zA-Z0-9#]+;/g, '') // HTML-Entities entfernen
-                .replace(/"/g, '') // Anführungszeichen entfernen
-                .replace(/'/g, '') // Einfache Anführungszeichen entfernen
-                .replace(/style="[^"]*"/g, '') // Style-Attribute entfernen
-                .replace(/class="[^"]*"/g, '') // Class-Attribute entfernen
-                .replace(/href="[^"]*"/g, '') // Href-Attribute entfernen
-                .replace(/data-[^=]*="[^"]*"/g, '') // Data-Attribute entfernen
-                .replace(/\s+/g, ' ') // Mehrfache Leerzeichen vereinfachen
-                .trim();
-            
-            // Nur setzen wenn sich etwas geändert hat
-            if (cleanTitle !== dataTitle) {
-                card.setAttribute('data-title', cleanTitle);
-                cleanedCount++;
-                console.log(`🧹 [Cleanup] Buchkarte ${index + 1}: data-title bereinigt`);
-                console.log(`   Vorher: "${dataTitle}"`);
-                console.log(`   Nachher: "${cleanTitle}"`);
-            }
-        }
-    });
-    
-    console.log(`🧹 [Cleanup] ${cleanedCount} data-title Attribute bereinigt`);
-    return cleanedCount;
-}
-
-// 🚨 AMAZON-WIDGET CLEANUP: Amazon-spezifische Overlays entfernen
-function cleanupAmazonWidgets() {
-    console.log('🧹 [Amazon Cleanup] Entfernung von Amazon-Widget Overlays...');
-    
-    let removedCount = 0;
-    
-    // Amazon-spezifische Overlay-Klassen entfernen
-    const amazonOverlays = document.querySelectorAll(`
-        .amzn-product-block-text,
-        .amazon-product-block-text,
-        .amazon-widget-text,
-        .amazon-overlay-text,
-        [class*="amzn-product-block-text"],
-        [class*="amazon-product-block-text"],
-        [class*="amazon-widget-text"],
-        [class*="amazon-overlay-text"]
-    `);
-    
-    amazonOverlays.forEach((overlay, index) => {
-        overlay.remove();
-        removedCount++;
-        console.log(`🧹 [Amazon Cleanup] Overlay ${index + 1} entfernt: ${overlay.className}`);
-    });
-    
-    // Amazon Carousel IDs bereinigen
-    const amazonCarousels = document.querySelectorAll('[id*="amzn-assoc-carousel"]');
-    amazonCarousels.forEach((carousel, index) => {
-        const textElements = carousel.querySelectorAll('.amzn-product-block-text');
-        textElements.forEach((text, textIndex) => {
-            text.remove();
-            removedCount++;
-            console.log(`🧹 [Amazon Cleanup] Carousel ${index + 1}, Text ${textIndex + 1} entfernt`);
-        });
-    });
-    
-    // Alle möglichen Amazon-Overlays mit Wildcard-Selektoren
-    const allAmazonElements = document.querySelectorAll('[class*="amzn"], [class*="amazon"]');
-    allAmazonElements.forEach((element, index) => {
-        if (element.className.includes('text') || element.className.includes('overlay')) {
-            element.style.display = 'none';
-            element.style.visibility = 'hidden';
-            element.style.opacity = '0';
-            element.style.position = 'absolute';
-            element.style.zIndex = '-1';
-            removedCount++;
-            console.log(`🧹 [Amazon Cleanup] Amazon-Element ${index + 1} ausgeblendet: ${element.className}`);
-        }
-    });
-    
-    console.log(`🧹 [Amazon Cleanup] ${removedCount} Amazon-Overlays entfernt/ausgeblendet`);
-    return removedCount;
-}
-
-// 🚨 BUCHKARTEN SICHTBARKEIT GARANTIEREN: Sicherstellen, dass Buchkarten und deren Inhalte immer sichtbar sind
-function ensureBookCardsVisibility() {
-    console.log('🚨 [Visibility] Ensuring book cards and content are visible...');
-    
-    // Alle Buchkarten sichtbar machen
-    document.querySelectorAll('.book-card').forEach((card, index) => {
-        card.style.display = 'block';
-        card.style.visibility = 'visible';
-        card.style.opacity = '1';
-        card.style.position = 'static';
-        card.style.zIndex = 'auto';
-        card.style.width = 'auto';
-        card.style.height = 'auto';
-        card.style.overflow = 'visible';
-        card.style.pointerEvents = 'auto';
-        card.style.fontSize = 'inherit';
-        card.style.lineHeight = 'inherit';
-        card.style.margin = 'inherit';
-        card.style.padding = 'inherit';
-        card.style.border = 'inherit';
-        card.style.clip = 'auto';
-        
-        console.log(`🚨 [Visibility] Book card ${index + 1} made visible`);
-    });
-    
-    // Alle Buchkarten-Inhalte sichtbar machen
-    const bookCardElements = [
-        '.book-title', '.book-author', '.book-description', 
-        '.book-links', '.book-content', '.book-image', 
-        '.book-cover-link', '.book-cover-image', '.book-link', 
-        '.mehr-button', '.learn-more-button'
-    ];
-    
-    bookCardElements.forEach(selector => {
-        document.querySelectorAll(selector).forEach((element, index) => {
-            element.style.display = 'block';
-            element.style.visibility = 'visible';
-            element.style.opacity = '1';
-            element.style.position = 'static';
-            element.style.zIndex = 'auto';
-            element.style.width = 'auto';
-            element.style.height = 'auto';
-            element.style.overflow = 'visible';
-            element.style.pointerEvents = 'auto';
-            element.style.fontSize = 'inherit';
-            element.style.lineHeight = 'inherit';
-            element.style.margin = 'inherit';
-            element.style.padding = 'inherit';
-            element.style.border = 'inherit';
-            element.style.clip = 'auto';
-        });
-    });
-    
-    // Alle Buttons in Buchkarten sichtbar machen
-    document.querySelectorAll('.book-card .book-link').forEach((button, index) => {
-        button.style.display = 'inline-flex';
-        button.style.visibility = 'visible';
-        button.style.opacity = '1';
-        button.style.position = 'static';
-        button.style.zIndex = 'auto';
-        button.style.width = 'auto';
-        button.style.height = 'auto';
-        button.style.overflow = 'visible';
-        button.style.pointerEvents = 'auto';
-        button.style.fontSize = 'inherit';
-        button.style.lineHeight = 'inherit';
-        button.style.margin = 'inherit';
-        button.style.padding = 'inherit';
-        button.style.border = 'inherit';
-        button.style.clip = 'auto';
-        
-        console.log(`🚨 [Visibility] Button ${index + 1} in book card made visible`);
-    });
-    
-    console.log('🚨 [Visibility] Book cards visibility ensured');
-}
-
-// 🔄 BUCHKARTEN LADEN UND ANZEIGEN: Hauptfunktion für das Laden und Anzeigen von Büchern
-async function loadAndDisplayBooks() {
-    console.log('📚 [Load] Starting book loading and display process...');
-    
-    try {
-        // Bücher laden
-        await loadBooks();
-        
-        // Sicherstellen, dass Buchkarten sichtbar sind
-        setTimeout(() => {
-            ensureBookCardsVisibility();
-        }, 500);
-        
-        // Zusätzliche Sichtbarkeitsprüfung nach 1 Sekunde
-        setTimeout(() => {
-            ensureBookCardsVisibility();
-        }, 1000);
-        
-        // Zusätzliche Sichtbarkeitsprüfung nach 3 Sekunden
-        setTimeout(() => {
-            ensureBookCardsVisibility();
-        }, 3000);
-        
-        console.log('📚 [Load] Book loading and display process completed');
-    } catch (error) {
-        console.error('❌ [Load] Error in book loading and display process:', error);
-    }
-}
-
-    // Initialize everything when DOM is loaded
-    document.addEventListener('DOMContentLoaded', async function() {
-        console.log('🚀 [Init] DOMContentLoaded event fired');
-        
-        // 🌐 SPRACHUMSCHALTUNG SOFORT INITIALISIEREN
-        console.log('🌐 [Language] Initializing language switching on DOM load');
-        initLanguageSwitching();
-        
-        // WAIT FOR WHITELIST TO LOAD
-        if (!window.appleAudiobookList) {
-            console.log('⏳ [Init] Waiting for whitelist to load...');
-            await new Promise(resolve => {
-                const checkInterval = setInterval(() => {
-                    if (window.appleAudiobookList) {
-                        clearInterval(checkInterval);
-                        console.log('✅ [Init] Whitelist loaded successfully');
-                        resolve();
-                    }
-                }, 100);
-                
-                // Timeout after 5 seconds
-                setTimeout(() => {
-                    clearInterval(checkInterval);
-                    console.warn('⚠️ [Init] Whitelist loading timeout - using fallback');
-                    resolve();
-                }, 5000);
-            });
-        }
-        
-        // STRICT URL-based book detail page detection
-        const currentPath = window.location.pathname;
-        const isBookDetailPage = currentPath.startsWith('/buecher/') && currentPath !== '/buecher/';
-        const isOverviewPage = currentPath === '/' || currentPath === '/index.html';
-    
-    // Check for page elements
-    const featuredContainer = document.getElementById('featuredBooks');
-    const allBooksContainer = document.getElementById('allBooks');
-    const bookDetailContainer = document.querySelector('.book-detail');
-    
-    // Set initial language
-    window.currentLanguage = window.currentLanguage || 'de';
-    
-    console.log('🔍 [Init] Page type detection:', {
-        isBookDetailPage,
-        isOverviewPage,
-        currentPath,
-        hasBookDetail: !!bookDetailContainer,
-        hasFeaturedBooks: !!featuredContainer,
-        hasAllBooks: !!allBooksContainer,
-        scriptSrc: document.currentScript?.src || 'unknown'
-    });
-    
-    // Load books on overview page or if we have book containers
-    if (isOverviewPage && !isBookDetailPage) {
-        console.log('🏠 [Init] Initializing main page');
-        
-        // Show loading animation only if elements exist
-        if (featuredContainer) showLoading('featuredBooks');
-        if (allBooksContainer) showLoading('allBooks');
-        
-        // Initialize all functionality for main page
-        await loadAndDisplayBooks();
-        initSmoothScrolling();
-        
-        // Initialize hash navigation
-        initHashNavigation();
-        
-        // Force load books after a short delay to ensure everything is ready
-        setTimeout(() => {
-            forceLoadBooks();
-        }, 1000);
-        
-        // 🚨 SOFORTIGE BUCHLADUNG: Direkter Aufruf als Fallback
-        console.log('🚨 [Emergency] Direct book loading as fallback...');
-        loadAndDisplayBooks();
-        
-        // Initialize search and filter on overview page
-        initSearch();
-        initGenreFilter();
-        
-        initLanguageSwitching();
-        initAnimations();
-        initResponsiveNav();
-        
-        // 🎯 MOBILE-TEST: Überprüfung der Titel-Overlays
-        setTimeout(() => {
-            testMobileTitleOverlays();
-        }, 2000); // 2 Sekunden warten, bis alle Bücher geladen sind
-        
-        // 🚨 NOTFALL-CLEANUP: data-title Attribute bereinigen
-        setTimeout(() => {
-            cleanupDataTitleAttributes();
-        }, 1000); // 1 Sekunde nach dem Laden
-        
-        // 🚨 AMAZON-WIDGET CLEANUP: Amazon-Overlays entfernen
-        setTimeout(() => {
-            cleanupAmazonWidgets();
-        }, 1500); // 1.5 Sekunden nach dem Laden
-        
-        // 🚨 WIEDERHOLTE AMAZON-CLEANUP: Für dynamisch geladene Widgets
-        setInterval(() => {
-            cleanupAmazonWidgets();
-        }, 5000); // Alle 5 Sekunden prüfen
-        
-        // 🚨 SOFORTIGE BEREINIGUNG: Bei DOM-Änderungen
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.type === 'childList') {
-                    mutation.addedNodes.forEach((node) => {
-                        if (node.nodeType === 1) {
-                            // Neue Buchkarte hinzugefügt - sofort sichtbar machen und bereinigen
-                            if (node.classList && node.classList.contains('book-card')) {
-                                setTimeout(() => {
-                                    ensureBookCardsVisibility(); // Sofort sichtbar machen
-                                    cleanupDataTitleAttributes();
-                                    if (window.innerWidth < 768) {
-                                        mobileCleanup();
-                                    }
-                                }, 100);
-                            }
-                            
-                            // Amazon-Widget hinzugefügt - sofort bereinigen
-                            if (node.classList && (node.classList.contains('amzn-product-block') || 
-                                                  node.classList.contains('amazon-product-block') ||
-                                                  node.className.includes('amzn') ||
-                                                  node.className.includes('amazon'))) {
-                                setTimeout(() => {
-                                    cleanupAmazonWidgets();
-                                }, 100);
-                            }
-                        }
-                    });
-                }
-            });
-        });
-        
-        // Beobachte Änderungen im DOM
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-        
-        // 📱 MOBILE: Sofortige Bereinigung nach dem Laden
-        if (window.innerWidth < 768) {
-            setTimeout(() => {
-                mobileCleanup();
-            }, 500);
-            
-            // Zusätzliche Bereinigung nach 2 Sekunden
-            setTimeout(() => {
-                mobileCleanup();
-            }, 2000);
-        }
-        
-        // 🚨 BUCHKARTEN SICHTBARKEIT GARANTIEREN: Nach dem Laden der Bücher
-        setTimeout(() => {
-            ensureBookCardsVisibility();
-        }, 1000);
-        
-        // Zusätzliche Sichtbarkeitsprüfung nach 3 Sekunden
-        setTimeout(() => {
-            ensureBookCardsVisibility();
-            checkBookCardsStatus(); // Status prüfen
-        }, 3000);
-        
-        // Wiederholte Sichtbarkeitsprüfung alle 10 Sekunden
-        setInterval(() => {
-            ensureBookCardsVisibility();
-            checkBookCardsStatus(); // Status prüfen
-            
-            // Fallback: Falls keine Bücher geladen wurden, erneut versuchen
-            if (!allBooks || allBooks.length === 0) {
-                console.log('🔄 [Fallback] No books loaded, retrying...');
-                forceLoadBooks();
-            }
-        }, 10000);
-        
-        // 🚨 GLOBALER FALLBACK: Nach 3 Sekunden prüfen, ob Bücher geladen wurden
-        setTimeout(() => {
-            console.log('🚨 [Global Fallback] Checking if books were loaded...');
-            if (!allBooks || allBooks.length === 0) {
-                console.log('🚨 [Global Fallback] No books loaded, forcing load...');
-                loadAndDisplayBooks();
-            } else {
-                console.log('🚨 [Global Fallback] Books loaded successfully:', allBooks.length);
-            }
-        }, 3000);
-        
-        // 🚨 ULTIMATE CLEANUP: Alle Text-Overlays und HTML-Attribute entfernen (aber Buchkarten schützen)
-        setTimeout(() => {
-            ultimateTextOverlayCleanup();
-            ensureBookCardsVisibility(); // Sofort nach Cleanup wieder sichtbar machen
-        }, 1500);
-        
-        // Zusätzliche Ultimate Cleanup nach 4 Sekunden
-        setTimeout(() => {
-            ultimateTextOverlayCleanup();
-            ensureBookCardsVisibility(); // Sofort nach Cleanup wieder sichtbar machen
-        }, 4000);
-        
-        // 🔄 DAUERHAFTE ÜBERWACHUNG: Kontinuierliche Bereinigung externer Inhalte
-        startContinuousCleanup();
-        
-        // 🚫 EXTERNE INHALTE BLOCKIEREN: Verhindert das Laden externer Widgets
-        blockExternalContent();
-        
-        // 🔧 SPRACHUMSCHALTUNG-REPAIR: Nach dem Laden reparieren
-        setTimeout(() => {
-            repairLanguageSwitching();
-        }, 2000);
-        
-        // Zusätzliche Reparatur nach 5 Sekunden
-        setTimeout(() => {
-            repairLanguageSwitching();
-        }, 5000);
-        
-        // Set initial language
-        translatePage('de');
-        
-        // Set audiobook links by country (mit Verzögerung für Hero-Button)
-        setTimeout(async () => {
-            await setAudiobookLinksByCountry();
-        }, 100);
-        
-        // Zusätzliche Sicherheit: Hero-Button nach 500ms nochmal prüfen
-        setTimeout(async () => {
-            await setAudiobookLinksByCountry();
-        }, 500);
-        
-        // Final check after all content is loaded
-        setTimeout(async () => {
-            await setAudiobookLinksByCountry();
-            // Force re-render of audiobook buttons
-            document.querySelectorAll('.book-card[data-has-audiobook="true"] .book-link.audiobook').forEach(btn => {
-                btn.style.display = 'inline-flex';
-            });
-            
-            // Mobile-specific audiobook button enforcement
-            const isMobile = window.innerWidth <= 768;
-            if (isMobile) {
-                console.log('📱 [Main] Mobile detected - enforcing audiobook button visibility');
-                document.querySelectorAll('.book-link.audiobook').forEach(btn => {
-                    btn.style.display = 'inline-flex';
-                    btn.style.visibility = 'visible';
-                    btn.style.opacity = '1';
-                    btn.style.pointerEvents = 'auto';
-                    btn.style.width = '100%';
-                    btn.style.justifyContent = 'center';
-                    btn.style.minHeight = '44px';
-                });
-            }
-            
-                    // Use Audiobook Utility for button management (SAFE)
-        if (window.audiobookUtility && window.audiobookUtility.isInitialized) {
-            console.log('🔧 [Main] Using Audiobook Utility for SAFE button management');
-            window.audiobookUtility.processAudiobookButtonsSafe();
-            window.audiobookUtility.processDetailPageAudiobookButtons();
-        } else {
-            console.log('🔧 [Main] Audiobook Utility not ready, waiting...');
-            // Wait for utility to be ready with longer delay
-            setTimeout(() => {
-                if (window.audiobookUtility) {
-                    console.log('🔧 [Main] Audiobook Utility ready, processing buttons...');
-                    window.audiobookUtility.processAudiobookButtonsSafe();
-                    window.audiobookUtility.processDetailPageAudiobookButtons();
-                } else {
-                    console.log('🔧 [Main] Audiobook Utility still not ready, retrying...');
-                    // Retry after another 3 seconds
-                    setTimeout(() => {
-                        if (window.audiobookUtility) {
-                            window.audiobookUtility.processAudiobookButtonsSafe();
-                            window.audiobookUtility.processDetailPageAudiobookButtons();
-                        }
-                    }, 3000);
-                }
-            }, 3000);
-        }
-        }, 1000);
-    } else {
-        console.log('📚 [Init] Initializing book detail page - SKIPPING loadBooks()');
-        
-        // Initialize only necessary functionality for book detail page
-        initSmoothScrolling();
-        initAnimations();
-        initResponsiveNav();
-        initLanguageSwitching(); // Add language switching for detail pages
-        
-        // Set initial language for detail page
-        translatePage('de');
-        
-        // Set audiobook links by country for detail page
-        setTimeout(async () => {
-            await setAudiobookLinksByCountry();
-        }, 100);
-        
-        // Additional audiobook link update after related books load
-        setTimeout(async () => {
-            await setAudiobookLinksByCountry();
-            // Force re-render of audiobook buttons on detail page
-            document.querySelectorAll('.book-card[data-has-audiobook="true"] .book-link.audiobook').forEach(btn => {
-                btn.style.display = 'inline-flex';
-            });
-        }, 1000);
-    }
-    
-    console.log('✅ Dirk Werner Author Website initialized successfully!');
-    
-    // Validate and fix links after initialization
-    setTimeout(() => {
-        if (typeof validateAndFixLinks === 'function') {
-            validateAndFixLinks();
-        } else {
-            console.warn("🔧 [Main] validateAndFixLinks ist nicht definiert. Überspringe Link-Prüfung.");
-        }
-    }, 500);
-    
-    // Additional validation after content is fully loaded
-    setTimeout(() => {
-        if (typeof validateAndFixLinks === 'function') {
-            validateAndFixLinks();
-            console.log('🔧 [Main] Second link validation completed');
-        } else {
-            console.warn("🔧 [Main] validateAndFixLinks ist nicht definiert. Überspringe zweite Link-Prüfung.");
-        }
-    }, 2000);
-    
-    // WEB COMPONENT: Custom audiobook button element
-    if (!customElements.get('audiobook-button')) {
-        class AudiobookButton extends HTMLElement {
-            constructor() {
-                super();
-                this.attachShadow({ mode: 'open' });
-            }
-            
-            connectedCallback() {
-                const bookTitle = this.getAttribute('data-title');
-                const bookAsin = this.getAttribute('data-asin');
-                const currentLang = window.currentLanguage || 'de';
-                
-                // Check if audiobook is allowed
-                const hasAudiobook = (
-                    (this.getAttribute('data-has-audiobook') === 'true') ||
-                    (bookAsin && typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(bookAsin)) ||
-                    (bookTitle && typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(bookTitle))
-                );
-                
-                if (hasAudiobook) {
-                    const ariaLabel = `Hörbuch "${bookTitle}" bei Apple Books anhören`;
-                    const buttonText = window.translations?.[currentLang]?.['Hörbuch bei Apple Books'] || '🎧 Hörbuch bei Apple Books';
-                    
-                    this.shadowRoot.innerHTML = `
-                        <style>
-                            :host {
-                                display: inline-flex;
-                                align-items: center;
-                                justify-content: center;
-                                padding: 8px 16px;
-                                background: linear-gradient(135deg, #007AFF, #0056CC);
-                                color: white;
-                                text-decoration: none;
-                                border-radius: 8px;
-                                font-weight: 600;
-                                font-size: 14px;
-                                transition: all 0.3s ease;
-                                cursor: pointer;
-                                min-width: 130px;
-                                max-width: 200px;
-                            }
-                            :host:hover {
-                                transform: translateY(-2px);
-                                box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
-                            }
-                        </style>
-                        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="${ariaLabel}">
-                            ${buttonText}
-                        </a>
-                    `;
-                    
-                    console.log('🎭 [Web Component] Audiobook button created for:', bookTitle);
-                } else {
-                    console.log('🎭 [Web Component] No audiobook button for:', bookTitle);
-                    this.style.display = 'none';
-                }
-            }
-        }
-        
-        customElements.define('audiobook-button', AudiobookButton);
-        console.log('🎭 [Web Component] AudiobookButton component registered');
-    }
-    
-    // DEBUG PANEL: Show audiobook status for all books
-    setTimeout(() => {
-        console.log('🐞 [DEBUG PANEL] Audiobook Status Report:');
-        document.querySelectorAll('.book-card').forEach((card, index) => {
-            const bookTitle = card.querySelector('.book-title')?.textContent;
-            const audiobookButton = card.querySelector('.book-link.audiobook');
-            const hasAudiobookAttr = card.getAttribute('data-has-audiobook');
-            const audiobookAllowed = audiobookButton?.getAttribute('data-audiobook-allowed');
-            const bookAsin = card.getAttribute('data-asin');
-            
-            if (bookTitle) {
-                const shouldHaveAudiobook = (
-                    (hasAudiobookAttr === 'true') ||
-                    (bookAsin && typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(bookAsin)) ||
-                    (typeof window.isAppleAudiobook === 'function' && window.isAppleAudiobook(bookTitle))
-                );
-                
-                console.log(`🐞 [DEBUG PANEL] Book ${index + 1}: "${bookTitle}" - Audiobook: ${shouldHaveAudiobook ? 'YES' : 'NO'} (Attr: ${hasAudiobookAttr}, Button: ${audiobookButton ? 'Present' : 'Missing'}, Allowed: ${audiobookAllowed})`);
-            }
-        });
-    }, 3000);
-    
-    // 🔍 BUCHKARTEN STATUS PRÜFEN: Prüfen, ob Bücher geladen und sichtbar sind
-    function checkBookCardsStatus() {
-        console.log('🔍 [Status] Checking book cards status...');
-        
-        const featuredContainer = document.getElementById('featuredBooks');
-        const allBooksContainer = document.getElementById('allBooks');
-        
-        // Prüfen, ob Container existieren
-        console.log('🔍 [Status] Containers:', {
-            featuredContainer: !!featuredContainer,
-            allBooksContainer: !!allBooksContainer
-        });
-        
-        // Prüfen, ob Bücher geladen wurden
-        console.log('🔍 [Status] Books loaded:', {
-            allBooks: allBooks?.length || 0,
-            filteredBooks: filteredBooks?.length || 0
-        });
-        
-        // Prüfen, ob Buchkarten im DOM sind
-        const bookCards = document.querySelectorAll('.book-card');
-        console.log('🔍 [Status] Book cards in DOM:', bookCards.length);
-        
-        // Prüfen, ob Buchkarten sichtbar sind
-        let visibleCards = 0;
-        bookCards.forEach((card, index) => {
-            const isVisible = card.style.display !== 'none' && 
-                             card.style.visibility !== 'hidden' && 
-                             card.style.opacity !== '0';
-            if (isVisible) visibleCards++;
-            
-            console.log(`🔍 [Status] Book card ${index + 1}:`, {
-                display: card.style.display,
-                visibility: card.style.visibility,
-                opacity: card.style.opacity,
-                isVisible: isVisible
-            });
-        });
-        
-        console.log('🔍 [Status] Visible book cards:', visibleCards);
-        
-        // Falls keine Buchkarten sichtbar sind, aber Bücher geladen wurden, neu laden
-        if (visibleCards === 0 && allBooks && allBooks.length > 0) {
-            console.log('🔍 [Status] No visible book cards found, but books are loaded - reloading...');
-            loadAndDisplayBooks();
-        }
-        
-        return {
-            containersExist: !!(featuredContainer || allBooksContainer),
-            booksLoaded: !!(allBooks && allBooks.length > 0),
-            cardsInDOM: bookCards.length,
-            visibleCards: visibleCards
-        };
-    }
-
-    // 🔄 HASH-ÄNDERUNGEN ÜBERWACHEN: Bücher bei Navigation zu #books laden
-    function initHashNavigation() {
-        console.log('🔄 [Hash] Initializing hash navigation...');
-        
-        // Prüfen, ob wir bereits auf #books sind
-        if (window.location.hash === '#books') {
-            console.log('🔄 [Hash] Already on #books, loading books...');
-            loadAndDisplayBooks();
-        }
-        
-        // Hash-Änderungen überwachen
-        window.addEventListener('hashchange', (event) => {
-            console.log('🔄 [Hash] Hash changed:', window.location.hash);
-            
-            if (window.location.hash === '#books') {
-                console.log('🔄 [Hash] Navigating to #books, loading books...');
-                loadAndDisplayBooks();
-            }
-        });
-        
-        // Auch bei Popstate (Browser-Navigation) reagieren
-        window.addEventListener('popstate', (event) => {
-            console.log('🔄 [Hash] Popstate event, current hash:', window.location.hash);
-            
-            if (window.location.hash === '#books') {
-                console.log('🔄 [Hash] Popstate to #books, loading books...');
-                loadAndDisplayBooks();
-            }
-        });
-    }
-
-    // 🚀 FORCIERTE BUCHLADUNG: Bücher auch ohne Hash laden
-    function forceLoadBooks() {
-        console.log('🚀 [Force] Force loading books...');
-        
-        const allBooksContainer = document.getElementById('allBooks');
-        if (allBooksContainer) {
-            console.log('🚀 [Force] Found allBooks container, loading books...');
-            loadAndDisplayBooks();
-        } else {
-            console.log('🚀 [Force] No allBooks container found');
-        }
-    }
-
-    // 🔍 NOTFALL-DIAGNOSE-FUNKTION: Umfassende Sichtbarkeitsreparatur
-function diagnoseVisibilityIssues() {
-    console.log('🔍 Diagnose wird gestartet…');
-
-    // 1. Viewport-Reset
-    document.documentElement.style.overflow = 'auto';
-    document.body.style.overflow = 'auto';
-
-    // 2. Sichtbarkeitsreparatur
-    const allBooks = document.getElementById('allBooks');
-    if (allBooks) {
-        allBooks.style.display = 'block';
-        allBooks.style.visibility = 'visible';
-        allBooks.style.opacity = '1';
-        allBooks.style.minHeight = '400px';
-        allBooks.style.padding = '1rem';
-        allBooks.scrollIntoView({ behavior: 'smooth' });
-        console.log('✅ allBooks Container repariert');
-    }
-
-    // 3. Hero-Sektion entschärfen
-    const hero = document.querySelector('.hero');
-    if (hero) {
-        hero.style.maxHeight = '50vh';
-        hero.style.overflow = 'visible';
-        console.log('✅ Hero-Sektion entschärft');
-    }
-
-    // 4. Overlays entfernen
-    document.querySelectorAll('*').forEach(el => {
-        const style = window.getComputedStyle(el);
-        if (
-            parseInt(style.zIndex) > 1000 &&
-            style.backgroundColor.includes('255, 255, 255')
-        ) {
-            el.style.display = 'none';
-            console.log('❌ Overlay entfernt:', el);
-        }
-    });
-
-    // 5. Erste Buchkarte in den Fokus
-    const firstBook = document.querySelector('.book-card');
-    if (firstBook) {
-        firstBook.scrollIntoView({ behavior: 'smooth' });
-        firstBook.style.border = '2px solid red'; // Sichtbar machen
-        console.log('✅ Erste Buchkarte hervorgehoben');
-    }
-
-    // 6. Zusätzliche Container-Reparatur
-    const containers = ['#featuredBooks', '.books-grid', '.books-section'];
-    containers.forEach(selector => {
-        const container = document.querySelector(selector);
-        if (container) {
-            container.style.display = 'block';
-            container.style.visibility = 'visible';
-            container.style.opacity = '1';
-            container.style.minHeight = '200px';
-            container.style.padding = '1rem';
-            console.log('✅ Container repariert:', selector);
-        }
-    });
-
-    // 7. Sichtbarkeit für alle Vorfahren von #allBooks erzwingen
-    let current = document.getElementById('allBooks');
-    while (current && current !== document.body) {
-        current.style.display = 'block';
-        current.style.visibility = 'visible';
-        current.style.opacity = '1';
-        current.style.height = 'auto';
-        current = current.parentElement;
-        console.log('✅ Vorfahren-Container repariert:', current?.tagName);
-    }
-
-    console.log('✅ Diagnose abgeschlossen!');
-}
-
-    // 🚨 AUTOMATISCHE NOTFALL-DIAGNOSE: Nach 1.5 Sekunden ausführen
-    setTimeout(() => {
-        diagnoseVisibilityIssues();
-    }, 1500);
-    
-    // 🚨 ZUSÄTZLICHE DIAGNOSE: Nach 5 Sekunden für Fallback
-    setTimeout(() => {
-        diagnoseVisibilityIssues();
-    }, 5000);
-
-    // 🛡️ SICHTBARKEITS-WATCHDOG: Verhindert, dass body/html unsichtbar werden
-    function visibilityWatchdog() {
-        const html = document.documentElement;
-        const body = document.body;
-
-        function restoreVisibility() {
-            if (body) {
-                body.style.display = 'block';
-                body.style.visibility = 'visible';
-                body.style.opacity = '1';
-                body.style.overflow = 'auto';
-                body.style.position = 'static';
-                body.style.zIndex = 'auto';
-                body.style.width = 'auto';
-                body.style.height = 'auto';
-                body.style.pointerEvents = 'auto';
-                body.style.fontSize = 'inherit';
-                body.style.lineHeight = 'inherit';
-                body.style.margin = 'inherit';
-                body.style.padding = 'inherit';
-                body.style.border = 'inherit';
-                body.style.clip = 'auto';
-            }
-
-            if (html) {
-                html.style.display = 'block';
-                html.style.visibility = 'visible';
-                html.style.opacity = '1';
-                html.style.overflow = 'auto';
-                html.style.position = 'static';
-                html.style.zIndex = 'auto';
-                html.style.width = 'auto';
-                html.style.height = 'auto';
-            }
-
-            console.log("✅ [Watchdog] Sichtbarkeit wiederhergestellt");
-        }
-
-        // Diagnoseintervall: prüft alle 2 Sekunden
-        setInterval(() => {
-            try {
-                const bodyHidden = !body || 
-                    body.style.display === 'none' || 
-                    body.style.visibility === 'hidden' || 
-                    body.style.opacity === '0' ||
-                    body.style.position === 'absolute' ||
-                    body.style.zIndex === '-1';
-                    
-                const htmlHidden = !html || 
-                    html.style.display === 'none' || 
-                    html.style.visibility === 'hidden' ||
-                    html.style.opacity === '0';
-
-                if (bodyHidden || htmlHidden) {
-                    console.warn("🚨 [Watchdog] Unsichtbarer Seitenstatus erkannt – Korrektur wird ausgeführt");
-                    restoreVisibility();
-                }
-            } catch (e) {
-                console.error("❌ [Watchdog] Fehler bei Diagnose:", e);
-            }
-        }, 2000); // alle 2 Sekunden prüfen
-
-        // Sofortige Wiederherstellung beim Start
-        restoreVisibility();
-    }
-
-    // 🚨 SICHTBARKEITS-NOTENTRIEGELUNG: Sofortige Wiederherstellung
-    setTimeout(() => {
-        document.body.style.display = 'block';
-        document.body.style.visibility = 'visible';
-        document.body.style.opacity = '1';
-        document.body.style.overflow = 'auto';
-        document.documentElement.style.visibility = 'visible';
-        document.documentElement.style.display = 'block';
-        console.log('✅ Sichtbarkeits-Notentriegelung aktiviert');
-    }, 1000);
-
-    // Aktivieren des Watchdogs
-    visibilityWatchdog();
-    
-    // 🔍 BUCHLADUNG-DIAGNOSE: Nach 3 Sekunden ausführen
-    setTimeout(() => {
-        diagnoseBookLoading();
-    }, 3000);
-
-    // 🔍 BUCHLADUNG-DIAGNOSE: Prüft, ob Bücher korrekt geladen werden
-    function diagnoseBookLoading() {
-        console.log('🔍 [Diagnose] Starting book loading diagnosis...');
-        
-        // 1. Prüfe books.json
-        fetch('books.json')
-            .then(response => {
-                console.log('🔍 [Diagnose] books.json response:', {
-                    ok: response.ok,
-                    status: response.status,
-                    contentType: response.headers.get('content-type')
-                });
-                return response.text();
-            })
-            .then(text => {
-                console.log('🔍 [Diagnose] books.json content length:', text.length);
-                try {
-                    const data = JSON.parse(text);
-                    console.log('🔍 [Diagnose] books.json parsed successfully, books:', data.length);
-                } catch (e) {
-                    console.error('🔍 [Diagnose] books.json parse error:', e);
-                }
-            })
-            .catch(error => {
-                console.error('🔍 [Diagnose] books.json fetch error:', error);
-            });
-        
-        // 2. Prüfe Container
-        const allBooksContainer = document.getElementById('allBooks');
-        console.log('🔍 [Diagnose] allBooks container:', {
-            exists: !!allBooksContainer,
-            id: allBooksContainer?.id,
-            innerHTML: allBooksContainer?.innerHTML?.length || 0
-        });
-        
-        // 3. Prüfe Variablen
-        console.log('🔍 [Diagnose] Book variables:', {
-            allBooks: allBooks?.length || 0,
-            filteredBooks: filteredBooks?.length || 0
-        });
-        
-        // 4. Prüfe DOM
-        const bookCards = document.querySelectorAll('.book-card');
-        console.log('🔍 [Diagnose] Book cards in DOM:', bookCards.length);
-        
-        // 5. Prüfe CSS-Sichtbarkeit
-        if (allBooksContainer) {
-            const styles = window.getComputedStyle(allBooksContainer);
-            console.log('🔍 [Diagnose] allBooks container styles:', {
-                display: styles.display,
-                visibility: styles.visibility,
-                opacity: styles.opacity,
-                height: styles.height,
-                overflow: styles.overflow
-            });
-        }
-        
-        console.log('🔍 [Diagnose] Book loading diagnosis completed');
-    }
-
-    // 🚨 NOTFALL-REPARATUR: Automatische Buchladung falls fehlgeschlagen
-    function emergencyBookLoading() {
-        console.log('🚨 [Emergency] Starting emergency book loading...');
-        
-        // 1. Prüfe ob Bücher bereits geladen sind
-        if (allBooks && allBooks.length > 0) {
-            console.log('🚨 [Emergency] Books already loaded:', allBooks.length);
-            return;
-        }
-        
-        // 2. Prüfe Container
-        const allBooksContainer = document.getElementById('allBooks');
-        if (!allBooksContainer) {
-            console.error('🚨 [Emergency] No allBooks container found!');
-            return;
-        }
-        
-        // 3. Versuche books.json zu laden
-        fetch('books.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('🚨 [Emergency] Books loaded successfully:', data.length);
-                allBooks = data;
-                filteredBooks = [...data];
-                
-                // 4. Sofort anzeigen
-                displayAllBooks();
-            })
-            .catch(error => {
-                console.error('🚨 [Emergency] Failed to load books:', error);
-                
-                // 5. Fallback: Dummy-Buch anzeigen
-                const dummyBook = {
-                    asin: "DUMMY-001",
-                    title: { de: "Testbuch - Bücher werden geladen...", en: "Test Book - Loading..." },
-                    author: "Dirk Werner",
-                    description: { de: "Bücher werden geladen. Bitte warten...", en: "Books are loading. Please wait..." },
-                    image: { link: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkxvYWRpbmcuLi48L3RleHQ+PC9zdmc+" },
-                    link: "#",
-                    links: { amazon_de: "#", amazon_us: "#", apple_books: "#", books2read: "#" },
-                    language: "de",
-                    bookFormat: { de: "EBook", en: "EBook" },
-                    hasAudiobook: false
-                };
-                
-                allBooks = [dummyBook];
-                filteredBooks = [dummyBook];
-                displayAllBooks();
-                
-                // 6. Erneut versuchen nach 5 Sekunden
-                setTimeout(() => {
-                    console.log('🚨 [Emergency] Retrying book loading...');
-                    emergencyBookLoading();
-                }, 5000);
-            });
-    }
-
-    // 🔄 AUTOMATISCHE REPARATUR: Nach 5 Sekunden ausführen falls keine Bücher
-    setTimeout(() => {
-        if (!allBooks || allBooks.length === 0) {
-            console.log('🚨 [Auto-Repair] No books detected, starting emergency loading...');
-            emergencyBookLoading();
-        }
-    }, 5000);
 });
 
-// 🐛 DUMMY-FUNKTION: validateAndFixLinks für Kompatibilität
-function validateAndFixLinks() {
-    console.log('🔧 [Links] validateAndFixLinks aufgerufen - temporär deaktiviert');
-    // Temporär deaktiviert. Keine Aktion nötig.
-    // Diese Funktion diente ursprünglich zur Link-Validierung, ist aber nicht mehr notwendig.
-}
-
-// Parse markdown text to HTML
+// Globale Funktionen für externe Aufrufe
+window.forceLoadBooksOnMainPage = forceLoadBooksOnMainPage;
+window.displayAllBooksSimple = displayAllBooksSimple;
+window.translatePage = translatePage;
+window.trackBookInteraction = trackBookInteraction;
+window.trackLanguageSwitch = trackLanguageSwitch;
+window.trackSearch = trackSearch;
+window.trackGenreFilter = trackGenreFilter;
+window.performSearch = performSearch;
+window.filterByGenre = filterByGenre;

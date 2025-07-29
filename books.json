@@ -25,7 +25,8 @@
       "de": "Taschenbuch",
       "en": "Paperback"
     },
-    "hasAudiobook": false
+    "hasAudiobook": false,
+    "detailedPage": "/buecher/umgang-mit-eifersuechtigen-so-bewahrst-du-deine-innere-staerke-german-edition.html"
   },
   {
     "asin": "B0DNBSQXXL",
@@ -81,7 +82,8 @@
       "de": "EBook",
       "en": "EBook"
     },
-    "hasAudiobook": false
+    "hasAudiobook": false,
+    "detailedPage": "/buecher/psychotainment-wie-du-auf-jeder-party-glaenzt-101-psychologische-fakten-die-gespraeche-unvergesslich-machen-german-edition.html"
   },
   {
     "asin": "B0DV56DC5P",
@@ -109,7 +111,8 @@
       "en": "EBook",
       "de": "EBook"
     },
-    "hasAudiobook": true
+    "hasAudiobook": true,
+    "detailedPage": "/buecher/der-schluessel-der-erleuchteten-english-edition.html"
   },
   {
     "asin": "B0DT7F2VVS",
@@ -193,7 +196,8 @@
       "en": "EBook",
       "de": "EBook"
     },
-    "hasAudiobook": true
+    "hasAudiobook": true,
+    "detailedPage": "/buecher/das-vermaechtnis-der-logen-dr-seelmanns-3-fall-dr-seelmanns-mysterioese-faelle-english-edition.html"
   },
   {
     "asin": "B0DJNS7TVB",
@@ -306,6 +310,34 @@
       "en": "EBook"
     },
     "hasAudiobook": false
+  },
+  {
+    "asin": "B0DHV3LPL1",
+    "title": {
+      "de": "Fatal Trance: Dr. Seelmanns erster Fall (Dr. Seelmanns mysteriöse Fälle Buch 1)",
+      "en": "Fatal Trance: Dr. Seelmann's First Case (Dr. Seelmann's Mysterious Cases Book 1)"
+    },
+    "author": "Dirk Werner",
+    "description": {
+      "de": "Dr. Lukas Seelmann ist ein psychologischer Profiler mit außergewöhnlichen hypnotischen Fähigkeiten. Gemeinsam mit Hauptkommissarin Jana Wehring ermittelt er in einem hochkarätigen Mordfall, der sie in ein komplexes Netz von Geheimnissen aus Münchens okkulter Vergangenheit führt.",
+      "en": "Dr. Lukas Seelmann is a psychological profiler with extraordinary hypnotic gifts. Together with Chief Inspector Jana Wehring, he investigates a high-profile murder case that leads them into an intricate web of secrets from Munich's occult past."
+    },
+    "image": {
+      "link": "assets/B0DHV3LPL1.jpg"
+    },
+    "link": "https://www.amazon.de/dp/B0DHV3LPL1",
+    "links": {
+      "amazon_de": "https://www.amazon.de/Fatal-Trance-Seelmanns-Mysterious-English-ebook/dp/B0DHV3LPL1",
+      "amazon_us": "https://www.amazon.com/-/de/dp/B0DHV3LPL1",
+      "apple_books": "https://books.apple.com/de/author/dirk-werner/id316714929",
+      "books2read": "https://books2read.com/Dirk-Werner-Author"
+    },
+    "language": "en",
+    "bookFormat": {
+      "de": "EBook",
+      "en": "EBook"
+    },
+    "hasAudiobook": true
   },
   {
     "asin": "B0DGRS4PQW",
